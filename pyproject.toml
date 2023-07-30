@@ -61,7 +61,4 @@ addopts = [ "-Werror", "-v", "--cov=ufo_draw", "--cov-config=.coveragerc", "--co
 filterwarnings = [
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning'
 ]
-~                                                                                                                                                              
-~                                                                                                                                                              
-~                                                                                                                                                              
-~                              
+                  
