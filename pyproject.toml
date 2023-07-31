@@ -36,7 +36,7 @@ jupyter = "*"
 pyfeyn2 = ">=2.3.6"
 #pyfeyn2 = {path= "../pyfeyn2", develop = true }
 
-poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
+poetry-dynamic-versioning = {extras = ["plugin"], version = ">=0.21.1,<0.26.0"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
