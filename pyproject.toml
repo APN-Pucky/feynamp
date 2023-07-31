@@ -9,13 +9,11 @@ repository = "https://github.com/APN-Pucky/feynpy"
 [tool.poetry.dependencies]
 python = "^3.8"
 
-#feynml ="*"
-feynml = {path= "../feynml", develop = true }
+feynml =">=0.2.12"
+#feynml = {path= "../feynml", develop = true }
 
-#feynmodel =">=0.0.4"
-feynmodel = {path= "../feynmodel", develop = true }
-
-#pyfeyn2 =">=2.3.1"
+feynmodel =">=0.0.4"
+#feynmodel = {path= "../feynmodel", develop = true }
 
 
 [tool.poetry.group.test]
@@ -35,8 +33,8 @@ pre-commit = "^2.20.0"
 ipython =  "*"
 jupyterlab =  "*"
 jupyter = "*"
-#pyfeyn = "*"
-pyfeyn2 = {path= "../pyfeyn2", develop = true }
+pyfeyn2 = ">=2.3.6"
+#pyfeyn2 = {path= "../pyfeyn2", develop = true }
 
 poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
 
