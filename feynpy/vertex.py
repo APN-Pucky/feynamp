@@ -8,7 +8,7 @@ from feynpy.util import safe_index_replace
 
 def insert_color_types(s):
     s = re.sub(r"T\((.*),(.*),(.*)\)", r"T(Glu(\1),Col(\2),Col(\3))", s)
-    s = re.sub(r"F\((.*),(.*),(.*)\)", r"F(Glu(\1),Glu(\2),Glu(\3))", s)
+    s = re.sub(r"f\((.*),(.*),(.*)\)", r"F(Glu(\1),Glu(\2),Glu(\3))", s)
     return s
 
 
@@ -35,7 +35,7 @@ def get_vertex_math_string(fd, vertex, model):
     return s[:-3]
 
 
-def get_vertex_math(fd, vertex, model):  # TODO subst negative indices
+def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indices
     vv = fd.get_connections(vertex)
     v = find_vertex_in_model(fd, vertex, model)
     if v is None:
@@ -49,7 +49,8 @@ def get_vertex_math(fd, vertex, model):  # TODO subst negative indices
         col = safe_index_replace(col, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
             col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
-        col = insert_color_types(col)
+        if typed:
+            col = insert_color_types(col)
         cret.append(col)
     for k in range(len(v.lorentz)):
         lor = v.lorentz[j].structure
@@ -57,7 +58,8 @@ def get_vertex_math(fd, vertex, model):  # TODO subst negative indices
         lor = safe_index_replace(lor, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
             lor = safe_index_replace(lor, str(i + 1), str(v.connections[i].id))
-        lor = insert_lorentz_types(lor)
+        if typed:
+            lor = insert_lorentz_types(lor)
         lret.append(lor)
     ret = []
     for k, v in v.couplings.items():
