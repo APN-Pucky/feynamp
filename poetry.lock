@@ -4124,6 +4124,53 @@ pure-eval = "*"
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
+name = "symengine"
+version = "0.10.0"
+description = "Python library providing wrappers to SymEngine"
+optional = false
+python-versions = ">=3.7,<4"
+files = [
+    {file = "symengine-0.10.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ef27fef138c364bd96fd16396a81249614d015a9afd98b7ac76b82fcb9b8331d"},
+    {file = "symengine-0.10.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:48b9c76225db65c93e6bce3fe9c65d6e8992e7cf837562818cfac276dfbd716e"},
+    {file = "symengine-0.10.0-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:5a7605b88e68eb28fa66a0570a4a09ad0010788a0454ee2694c583a901c8e907"},
+    {file = "symengine-0.10.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a661626b0dd438fbd9fc9c1329816f3ca2ac78cb015beeaef6ac6873d36baf58"},
+    {file = "symengine-0.10.0-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:e7936e2a26606771967e0a8944c0dcf0120f3280db54b541b1c0334ceb2fd273"},
+    {file = "symengine-0.10.0-cp310-cp310-win_amd64.whl", hash = "sha256:3a9581e7122f66ac5d4e5ee28cf3a4316f1d441fa74fa822c9380c3d63bb81fc"},
+    {file = "symengine-0.10.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:f5699ebd5386d457caaf4b574aa09ed5fc8d9c01201b9fa7a67115ed3129e16e"},
+    {file = "symengine-0.10.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:40c5bbe9fd3ee4e5c7be48c3721347871e29959af49ec76023364a6e8c676406"},
+    {file = "symengine-0.10.0-cp311-cp311-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:b83525d4ca358e60759f3d968d9eb141acc088a4c14516b444a6d530d8515429"},
+    {file = "symengine-0.10.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c6ff5576c51834eca41c0869d424461ac9168933800e95c09cdb740c4a935671"},
+    {file = "symengine-0.10.0-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:8136e347f011004d44a43eadfb2b1bc9d8f2c1a048bb474f62dd7a5ee8701511"},
+    {file = "symengine-0.10.0-cp311-cp311-win_amd64.whl", hash = "sha256:5805aac6ebc08057fe86331206428da3d7e78b91872538b84781fc3766514c34"},
+    {file = "symengine-0.10.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:6559b1d8ac4c3991a0f6a22ceb1eb85bf3fe346689f2c620b693a5bdfa3ea10d"},
+    {file = "symengine-0.10.0-cp37-cp37m-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:f1bc98a8efcb90531a4fead08dae33f03f2cc52edb59f0b788cbbe714b887e55"},
+    {file = "symengine-0.10.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bcb24bc5515c1b2b527c0f7a109f97f81fa9c3e32a47ca88ec31f76489132377"},
+    {file = "symengine-0.10.0-cp37-cp37m-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:a20c73b1d2ce55e03ccc789ebae515d163836c8855cdb5970d22515e92daca27"},
+    {file = "symengine-0.10.0-cp37-cp37m-win_amd64.whl", hash = "sha256:a8ee0a9d187d0309eaaa855b995faa491d95a6f6e4ff558f78d7db8001866215"},
+    {file = "symengine-0.10.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:3f3cd66947e5b814e998782514df048e2d2f69acec4e60028e6a4976f3387920"},
+    {file = "symengine-0.10.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:0371a63f01d6a6964b946592ae23d9c9fa65d5ce33ac48d7ec9228035aa96363"},
+    {file = "symengine-0.10.0-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:eadc47c44bab95778e533f435256fd1c875059db3f787a0079262ddefee42dbd"},
+    {file = "symengine-0.10.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a2831184bbf0798db1ed0d721fbb2c4254ec67cbae6977c3a36de5d31e2e8787"},
+    {file = "symengine-0.10.0-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:1e5da66af97fa5cab1839f84c2cc95bf3d3e87a59c1c73e76c762ff5b639f26a"},
+    {file = "symengine-0.10.0-cp38-cp38-win_amd64.whl", hash = "sha256:d102569c35a2ac8eb1815709001ab2a85ba4922fe0c7cbe439d049072c6f0a11"},
+    {file = "symengine-0.10.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:46a51f70b52b058665752f8539f7b884ed1616afc3bfc4747ea5b6148a719609"},
+    {file = "symengine-0.10.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:d5d1bee03937fd64954bbbf55ccaa4522620caa759181c0f1217aea6ad674082"},
+    {file = "symengine-0.10.0-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:db3e7040addc4ac8f96d0e13994a1e239f1d0442b3c518839b0eade968fb2593"},
+    {file = "symengine-0.10.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fb0416a7cd2297214c3140a289652c80e1e5459f39a8c969abde4f90b094d0b4"},
+    {file = "symengine-0.10.0-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:d5852a0a72d6f2f594d1ba4b3dabbd682f17ad4ea68c31e6306fe60090e28e8f"},
+    {file = "symengine-0.10.0-cp39-cp39-win_amd64.whl", hash = "sha256:525e2fb233091ffd8fe2a27801b9b05341bcb4102db018bbcbeda64065c1fa3c"},
+    {file = "symengine-0.10.0-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:a5fcacc9d6ed3c560c16220368bd2814ef15871a220c7fb9b33e0796f3ea8281"},
+    {file = "symengine-0.10.0-pp38-pypy38_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:73cdbebc2708454692a4d65bcd0de8b5664edc1dfa47a5d654a8a76b42c992df"},
+    {file = "symengine-0.10.0-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e4be4cb2e563e762cc98b0337bf89d5e2aea84b1232a1825fe15fdedfa984851"},
+    {file = "symengine-0.10.0-pp38-pypy38_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:56a9d0ad0e65fa6f8b74cdb0315c1c5a7181f0bb3fab3da06e341d40b516a30a"},
+    {file = "symengine-0.10.0-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:45b748a48a5b4cc5dcfe8158c7ac2411b671b3fa518cecb10f1d066aa1833b59"},
+    {file = "symengine-0.10.0-pp39-pypy39_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:32d1e9b7295f05f9579899c1437776c8ef826e771884e49b7849ff3c0e159353"},
+    {file = "symengine-0.10.0-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ec7d1a219fada1549b4e6a86aea6be35e737760cef46dc96fe422f99a68399e5"},
+    {file = "symengine-0.10.0-pp39-pypy39_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:fa1ad698ea13ab3a44c1b45fc4677feaca5e89360723d96b4ff57b095ba3b676"},
+    {file = "symengine-0.10.0.tar.gz", hash = "sha256:4420e96cc25f01314a6a02ae9f0c39a3e4d2a2e1b31680509a604a04cda22745"},
+]
+
+[[package]]
 name = "sympy"
 version = "1.12"
 description = "Computer algebra system (CAS) in Python"
@@ -4710,4 +4757,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "7b05519da1c5349f07f62b8ca6478888de4608f650c299a82cde52b64c1816a0"
+content-hash = "76ff7f7b294396f0bf54dbeac808309ad33f655747dc942435ccaf65a084641d"
