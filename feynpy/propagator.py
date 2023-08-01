@@ -3,6 +3,10 @@ from feynml.id import generate_new_id
 from feynpy.util import find_particle_in_model
 
 
+def get_propagator_math_string(fd, prop, model):
+    return get_propagator_math(fd, prop, model)
+
+
 def get_propagator_math(fd, prop, model):
     # find the particle in the model
     p = find_propagator_in_model(fd, prop, model)

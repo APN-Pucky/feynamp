@@ -1,6 +1,10 @@
 from feynpy.util import find_particle_in_model
 
 
+def get_leg_math_string(leg, fd, model):
+    return get_leg_math(leg, fd, model)
+
+
 def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
     p = find_leg_in_model(fd, leg, model)
 
