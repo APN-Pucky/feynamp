@@ -14,10 +14,10 @@ def get_propagator_math(fd, prop, model):
     if p.spin == 3:
         nid = generate_new_id()
         # TODO treate denominators differently for loops etc?
-        return f"D({p.particle.id},{p.mass.name})"
+        return f"Denom({p.particle.id},{p.mass.name})"
     if p.spin == 2:  # TODO handle plus minus mass for fermions
         nid = generate_new_id()
-        return f"(P({nid},{p,particle.id})*Gamma({nid},{p.particle.source},{p.particle.target}) + {p.mass.name})*D({p.particle.id},{p.mass.name})"
+        return f"(P({nid},{p,particle.id})*Gamma({nid},{p.particle.source},{p.particle.target}) + {p.mass.name})*Denom({p.particle.id},{p.mass.name})"
 
 
 def find_propagator_in_model(fd, prop, model):

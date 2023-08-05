@@ -29,9 +29,9 @@ def apply_polarisation_sum(expr):
 
 def apply_dirac_trick(expr):
     wa, wb, wc, wd, wi, wj, wk, ww = symbols("wa wb wc wd wi wj wk ww", cls=Wild)
-    di, dj = symbols("di dj", cls=Dummy)
     maps = True
     while maps:
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             u(wb, wa) * u_bar(wc, wa) * ww,
             gamma(di, wb, wc) * P(di, wa) * ww
@@ -40,6 +40,7 @@ def apply_dirac_trick(expr):
         )
     maps = True
     while maps:
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             v(wb, wa) * v_bar(wc, wa) * ww,
             gamma(dj, wb, wc) * P(dj, wa) * ww
@@ -59,9 +60,9 @@ def apply_gammas(expr):
 
 def apply_2_gamma(expr):
     wa, wb, wc, wd, wi, wj, wk, ww = symbols("wa wb wc wd wi wj wk ww", cls=Wild)
-    di, dj = symbols("di dj", cls=Dummy)
     maps = True
     while maps:
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             gamma(wa, wb, wd) * gamma(wa, wd, wc) * ww, -gamma_id(wb, wc) * ww, map=True
         )
@@ -72,9 +73,9 @@ def apply_3_gamma(expr):
     wa, wb, wc, wd, we, wg, wi, wj, wk, ww = symbols(
         "wa wb wc wd we wg wi wj wk ww", cls=Wild
     )
-    di, dj = symbols("di dj", cls=Dummy)
     maps = True
     while maps:
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             gamma(wa, wb, wd) * gamma(wg, wd, wc) * gamma(wa, wc, we) * ww,
             -2 * gamma(wg, wb, we) * ww,
@@ -87,9 +88,9 @@ def apply_4_gamma(expr):
     wa, wb, wc, wd, we, wf, wg, wh, wi, wj, wk, ww = symbols(
         "wa wb wc wd we wf wg wh wi wj wk ww", cls=Wild
     )
-    di, dj = symbols("di dj", cls=Dummy)
     maps = True
     while maps:
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             gamma(wa, wb, wd)
             * gamma(wi, wd, we)
@@ -106,9 +107,10 @@ def apply_5_gamma(expr):
     wa, wb, wc, wd, we, wf, wg, wh, wi, wj, wk, ww = symbols(
         "wa wb wc wd we wf wg wh wi wj wk ww", cls=Wild
     )
-    di, dj = symbols("di dj", cls=Dummy)
     maps = True
     while maps:
+        print(maps)
+        di, dj = symbols("di dj", cls=Dummy)
         expr, maps = expr.replace(
             gamma(wa, wb, wd)
             * gamma(wi, wd, we)

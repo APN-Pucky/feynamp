@@ -15,6 +15,7 @@ feynml = {path= "../feynml", develop = true }
 feynmodel =">=0.0.4"
 #feynmodel = {path= "../feynmodel", develop = true }
 sympy = "*"
+python-form = "*"
 
 
 [tool.poetry.group.test]

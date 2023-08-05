@@ -7,17 +7,17 @@ from feynpy.util import safe_index_replace
 
 
 def insert_color_types(s):
-    s = re.sub(r"T\((.*),(.*),(.*)\)", r"T(Glu(\1),Col(\2),Col(\3))", s)
-    s = re.sub(r"f\((.*),(.*),(.*)\)", r"F(Glu(\1),Glu(\2),Glu(\3))", s)
+    s = re.sub(r"T\((.*),(.*),(.*)\)", r"T(Glu\1,Col\2,Col\3)", s)
+    s = re.sub(r"f\((.*),(.*),(.*)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
     return s
 
 
 def insert_lorentz_types(s):
-    s = re.sub(r"Gamma\((.*),(.*),(.*)\)", r"Gamma(Mu(\1),Spin(\2),Spin(\3))", s)
-    s = re.sub(r"P\((.*),(.*)\)", r"P(Mu(\1),Mom(\2))", s)
-    s = re.sub(r"ProjP\((.*),(.*)\)", r"ProjP(Spin(\1),Spin(\2))", s)
-    s = re.sub(r"ProjM\((.*),(.*)\)", r"ProjM(Spin(\1),Spin(\2))", s)
-    s = re.sub(r"Metric\((.*),(.*)\)", r"Metric(Mu(\1),Mu(\2))", s)
+    s = re.sub(r"Gamma\((.*),(.*),(.*)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
+    s = re.sub(r"P\((.*),(.*)\)", r"P(Mu\1,Mom\2)", s)
+    s = re.sub(r"ProjP\((.*),(.*)\)", r"ProjP(Spin\1,Spin\2)", s)
+    s = re.sub(r"ProjM\((.*),(.*)\)", r"ProjM(Spin\1,Spin\2)", s)
+    s = re.sub(r"Metric\((.*),(.*)\)", r"Metric(Mu\1,Mu\2)", s)
     return s
 
 
