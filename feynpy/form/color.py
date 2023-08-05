@@ -17,7 +17,7 @@ repeat;
    id T(b?,k?,j?)*T(a?,j?,c?)*T(b?,c?,l?)=(Cf-Nc*Tr)*T(a,k,l);
    id T(b?,j?,l?)*T(c?,l?,k?)*f(a?,b?,c?)=i_*Nc*Tr*T(a,j,k);
 * length-two objects that give out df(k,j)
-   id T(a?,c?,j?)*T(a?,k?,l?)=-Nc*df(c, k)*df(j, l)/2 + df(c, l)*df(j, k)/2;
+   id T(a?,c?,j?)*T(a?,k?,l?)=-1/Nc*df(c, k)*df(j, l)/2 + df(c, l)*df(j, k)/2;
    id T(a?,k?,l?)*T(a?,l?,j?)=Cf*df(k,j);
 * length-two objects that give out da(a,b)
    id T(a?,k?,l?)*T(b?,l?,k?)=Tr*da(a,b);
