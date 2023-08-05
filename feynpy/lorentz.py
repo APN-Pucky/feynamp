@@ -21,7 +21,7 @@ P = Function("P")
 def apply_polarisation_sum(expr):
     wmu, wnu, wc, wd, wi, wj, wk, ww = symbols("wmu wnu wc wd wi wj wk ww", cls=Wild)
     expr = expr.replace(
-        eps_star(wmu, wd, wc) * eps(wnu, wd, wc), -gamma(wmu, wnu), map=True
+        eps_star(wmu, wd, wc) * eps(wnu, wi, wc), -metric(wmu, wnu), map=True
     )
     # TODO do the pol sums
     return expr

@@ -2,7 +2,10 @@ import re
 
 import numpy as np
 from feynml.id import generate_new_id
+from feynml.leg import Leg
+from feynml.propagator import Propagator
 
+from feynpy.momentum import insert_momentum
 from feynpy.util import safe_index_replace
 
 
@@ -14,10 +17,17 @@ def insert_color_types(s):
 
 def insert_lorentz_types(s):
     s = re.sub(r"Gamma\((.*),(.*),(.*)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
-    s = re.sub(r"P\((.*),(.*)\)", r"P(Mu\1,Mom\2)", s)
     s = re.sub(r"ProjP\((.*),(.*)\)", r"ProjP(Spin\1,Spin\2)", s)
     s = re.sub(r"ProjM\((.*),(.*)\)", r"ProjM(Spin\1,Spin\2)", s)
     s = re.sub(r"Metric\((.*),(.*)\)", r"Metric(Mu\1,Mu\2)", s)
+    # use insert_momentum to replace the second argument to P
+    m = re.match(r"P\((.*),(.*)\)", s)
+    if m:
+        for g in m.groups():
+            s.replace(
+                "P(" + g[0] + "," + g[1] + ")",
+                "P(Mu" + g[0] + "," + insert_momentum(g[1]) + ")",
+            )
     return s
 
 
@@ -71,7 +81,17 @@ def find_vertex_in_model(fd, vertex, model):
     # TODO handle multiple vertices
     assert vertex in fd.vertices
     cons = np.array(fd.get_connections(vertex))
-    cpd = np.array([c.pdgid for c in cons])
+    aa = []
+    for c in cons:
+        p = c.pdgid
+        # correct for incoming vs outgoing fermion struct
+        if c.is_any_fermion():
+            if c.goes_into(vertex):
+                p = -p
+
+        aa += [p]
+    cpd = np.array(aa)
+
     cmask = np.argsort(cpd)
     particles = cpd[cmask]
     scons = cons[cmask]

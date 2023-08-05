@@ -3,21 +3,31 @@ import re
 import form
 
 count = 0
+dummy = 0
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA;
-AutoDeclare Index Mu,Mom,Spin,Pol,Col,Glu,Propagator;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,Mass,mss,mst,msu;
+AutoDeclare Index Mu,Spin,Pol,Col,Glu,Propagator;
+AutoDeclare Vector Mom;
 Tensors f(antisymmetric),Metric(symmetric),df(symmetric),da(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
-CFunctions T,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA;
-Indices a,o,n,m,tm,tn,beta,b,betap,alphap,a,alpha,ind,delta,k,j,l,c,d;
+CFunctions Den,T,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,GammaId;
+Indices a,o,n,m,tm,tn,beta,b,m,betap,alphap,a,alpha,ind,delta,k,j,l,c,d;
 """
+
+
+def get_dummy_index():
+    global dummy
+    dummy = dummy + 1
+    return f"N{dummy}_?"
 
 
 def string_to_form(s):
     s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
+    s = s.replace("Gamma_Id", "GammaId")
     s = s.replace("u_bar", "ubar")
     s = s.replace("v_bar", "vbar")
     s = s.replace("eps_star", "epstar")
+    s = s.replace("ZERO", "0")
     return s
 
 
