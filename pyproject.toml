@@ -35,8 +35,8 @@ pre-commit = ">=2.20,<4.0"
 ipython =  "*"
 jupyterlab =  "*"
 jupyter = "*"
-#pyfeyn2 = ">=2.3.6"
-pyfeyn2 = {path= "../pyfeyn2", develop = true }
+pyfeyn2 = ">=2.3.6"
+# pyfeyn2 = {path= "../pyfeyn2", develop = true }
 pyqgraf = "*"
 
 poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
