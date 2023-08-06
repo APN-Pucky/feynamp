@@ -31,6 +31,7 @@ def string_to_sympy(s):
 
 
 def multiply(lst_fd1, lst_fd2, feyn_model):
+    # TODO should this care about fermion lines!?
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd1]
     lst_fd2 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd2]
@@ -40,7 +41,7 @@ def multiply(lst_fd1, lst_fd2, feyn_model):
     return s[:-3]
 
 
-def square(lst_fd, feyn_model, tag=True):
+def square(lst_fd, feyn_model, tag=False):
     # TODO handle relative fermion sign (also majorana!) https://cds.cern.ch/record/238903/files/th-6549-92.pdf
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""
@@ -60,5 +61,6 @@ def square(lst_fd, feyn_model, tag=True):
                 ttag = ""
                 if tag:
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
-                s += f"2*(+{sfd1})*({sfd2}){ttag} + "  # TODO this needs Re
+                ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+                s += f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac} + "  # TODO this needs Re!
     return s[:-3]
