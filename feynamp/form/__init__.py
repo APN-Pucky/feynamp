@@ -69,4 +69,4 @@ def sympyfy(string_expr):
     return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
 
 
-# TODO compute functino which coutns legs!!"!!!"
+# TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s

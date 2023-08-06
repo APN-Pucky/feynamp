@@ -1,8 +1,8 @@
 from sympy.parsing.sympy_parser import parse_expr
 
 from feynamp.leg import get_leg_math_string
-from feynamp.lorentz import gamma
 from feynamp.propagator import get_propagator_math_string
+from feynamp.sympy.lorentz import gamma
 from feynamp.vertex import get_vertex_math_string
 
 

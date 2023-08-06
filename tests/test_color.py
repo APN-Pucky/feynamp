@@ -1,4 +1,4 @@
-from feynamp.color import *
+from feynamp.sympy.color import *
 
 
 def test_apply_TT():
