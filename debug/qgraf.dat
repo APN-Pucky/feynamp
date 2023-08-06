@@ -1,0 +1,10 @@
+
+ output= 'output.out' ;
+ style= 'tmp.sty' ;
+ model = 'tmp.model';
+ in= i75i[p1], i755f626172i[p2];
+ out= i75i[p3], i755f626172i[p4];
+ loops= 0;
+ loop_momentum= l;
+ options= notadpole,onshell;
+     

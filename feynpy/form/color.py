@@ -45,9 +45,13 @@ endrepeat;
 """
 
 
+def get_color():
+    return color_sum + color
+
+
 def apply_color(string_expr):
     s = string_to_form(string_expr)
-    return run(init + f"Local TMP = {s};" + color_sum + color)
+    return run(init + f"Local TMP = {s};" + get_color())
 
 
 def apply_color_sum(string_expr):

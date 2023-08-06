@@ -4,6 +4,25 @@ from feynml.momentum import Momentum
 from sympy.parsing.sympy_parser import parse_expr
 
 
+def insert_mass(sname):
+    """
+    Handle strings of added and subtracted masses and place 'Mass' in front of them
+
+    Example:
+    >>> get_mass('0')
+    0
+    >>> get_mass('ZERO')
+    0
+    >>> get_mass('MC')
+    MassMC
+    """
+    assert re.fullmatch(r"[a-zA-Z0-9+-_]+", sname), "Mass name does not match pattern"
+    if sname == "0" or sname == "ZERO":
+        return 0
+    sname = re.sub(r"([a-zA-Z0-9_]+)", r"Mass_\1", sname)
+    return sname
+
+
 def insert_momentum(sname):
     """
     Handle strings of added and subtracted Momenta and place 'Mom' in front of them

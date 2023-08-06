@@ -1,3 +1,4 @@
+import os
 import re
 
 import form
@@ -5,8 +6,9 @@ import form
 count = 0
 dummy = 0
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,Mass,mss,mst,msu;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,mss,mst,msu,MC;
 AutoDeclare Index Mu,Spin,Pol,Col,Glu,Propagator;
+AutoDeclare Symbol Mass,fd;
 AutoDeclare Vector Mom;
 Tensors f(antisymmetric),Metric(symmetric),df(symmetric),da(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
@@ -31,7 +33,7 @@ def string_to_form(s):
     return s
 
 
-def run(s, show=False):
+def run(s, show=False, keep_form_file=True):
     global count
     count = count + 1
     with open("form" + str(count) + ".frm", "w") as frm:
@@ -44,4 +46,27 @@ def run(s, show=False):
             r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
             if show:
                 print(r + "\n")
+            # delete frm file
+            if not keep_form_file:
+                os.remove("form" + str(count) + ".frm")
             return r
+
+
+def sympyfy(string_expr):
+    from sympy import simplify
+    from sympy.parsing.sympy_parser import parse_expr
+
+    ret = simplify(
+        parse_expr(
+            string_expr.replace("Mom_", "")
+            .replace(".", "_")
+            .replace("^", "**")
+            .replace("mss", "s")
+            .replace("msu", "u")
+            .replace("mst", "t")
+        )
+    )
+    return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
+
+
+# TODO compute functino which coutns legs!!"!!!"

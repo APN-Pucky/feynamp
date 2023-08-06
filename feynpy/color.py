@@ -17,11 +17,15 @@ f = Function("f")
 delta_c = Function("delta_c")
 delta_g = Function("delta_g")
 
+VC = Function("VC")
+VA = Function("VA")
+
 
 def apply_color(expr, expand=True):
     # if expr is tuple
     if isinstance(expr, tuple):
         expr = expr[0]
+    expr = apply_color_sum(expr)
     expr = apply_id(expr)
     expr = apply_f(expr)
     expr = apply_TT(expr)
@@ -34,6 +38,13 @@ def apply_color(expr, expand=True):
     expr = apply_f_delta(expr)
     expr = apply_T(expr)
     expr = apply_id(expr)
+    return expr
+
+
+def apply_color_sum(expr):
+    wi, wj, wk, ww = symbols("wi wj wk ww", cls=Wild)
+    expr = expr.replace(VC(wi, wk) * VC(wj, wk) * ww, delta_c(wi, wj))
+    expr = expr.replace(VA(wi, wk) * VA(wj, wk) * ww, delta_g(wi, wj))
     return expr
 
 
@@ -195,7 +206,7 @@ def apply_TT(expr):
     >>> m = T(g,i,j)*T(g,k,l)
     >>> apply_TT(m)
     >>> m
-    -C_A*Color.delta(i, k)*Color.delta(j, l)/2 + Color.delta(i, l)*Color.delta(j, k)/2
+    -1/C_A*Color.delta(i, k)*Color.delta(j, l)/2 + Color.delta(i, l)*Color.delta(j, k)/2
 
     """
     wi, wj, wk, wl, wg, ww = symbols("wi wj wk wl wg ww", cls=Wild)
