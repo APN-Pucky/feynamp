@@ -1,7 +1,7 @@
 from feynml.id import generate_new_id
 
-from feynpy.momentum import insert_mass, insert_momentum
-from feynpy.util import find_particle_in_model
+from feynamp.momentum import insert_mass, insert_momentum
+from feynamp.util import find_particle_in_model
 
 
 def get_propagator_math_string(fd, prop, model):

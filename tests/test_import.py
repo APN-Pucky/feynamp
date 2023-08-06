@@ -1,4 +1,4 @@
-import feynpy
+import feynamp
 
 
 def test_import():

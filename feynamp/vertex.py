@@ -5,8 +5,8 @@ from feynml.id import generate_new_id
 from feynml.leg import Leg
 from feynml.propagator import Propagator
 
-from feynpy.momentum import insert_momentum
-from feynpy.util import safe_index_replace
+from feynamp.momentum import insert_momentum
+from feynamp.util import safe_index_replace
 
 
 def insert_color_types(s):

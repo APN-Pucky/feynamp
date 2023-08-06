@@ -1,6 +1,6 @@
-from feynpy.leg import get_leg_math
-from feynpy.propagator import get_propagator_math
-from feynpy.vertex import get_vertex_math
+from feynamp.leg import get_leg_math
+from feynamp.propagator import get_propagator_math
+from feynamp.vertex import get_vertex_math
 
 
 def get_math(object, fd, model):

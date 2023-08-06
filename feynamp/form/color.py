@@ -1,4 +1,4 @@
-from feynpy.form import *
+from feynamp.form import *
 
 color = """
 **********************************************************

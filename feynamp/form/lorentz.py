@@ -1,4 +1,4 @@
-from feynpy.form import *
+from feynamp.form import *
 
 polsum_phys = """
 *id polsum(mu?,nu?) = -d_(mu,nu) + (pa(mu)*pb(nu)+pa(nu)*pb(mu))/pa.pb;

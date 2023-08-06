@@ -1,1 +1,1 @@
-# FeynPy
+# FeynAmp

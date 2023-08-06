@@ -1,5 +1,5 @@
-from feynpy.momentum import insert_momentum
-from feynpy.util import find_particle_in_model
+from feynamp.momentum import insert_momentum
+from feynamp.util import find_particle_in_model
 
 
 def get_leg_math_string(leg, fd, model):

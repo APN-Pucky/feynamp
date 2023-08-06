@@ -1,9 +1,9 @@
 from sympy.parsing.sympy_parser import parse_expr
 
-from feynpy.leg import get_leg_math_string
-from feynpy.lorentz import gamma
-from feynpy.propagator import get_propagator_math_string
-from feynpy.vertex import get_vertex_math_string
+from feynamp.leg import get_leg_math_string
+from feynamp.lorentz import gamma
+from feynamp.propagator import get_propagator_math_string
+from feynamp.vertex import get_vertex_math_string
 
 
 def feynman_diagram_to_string(feynman_diagram, feyn_model):

@@ -1,6 +1,6 @@
-from feynpy.form import *
-from feynpy.leg import find_leg_in_model
-from feynpy.momentum import insert_mass, insert_momentum
+from feynamp.form import *
+from feynamp.leg import find_leg_in_model
+from feynamp.momentum import insert_mass, insert_momentum
 
 momenta = """
 repeat;
