@@ -6,11 +6,11 @@ import form
 count = 0
 dummy = 0
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,mss,mst,msu,MC;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee;
 AutoDeclare Index Mu,Spin,Pol,Col,Glu,Propagator;
-AutoDeclare Symbol Mass,fd;
+AutoDeclare Symbol Mass,fd,mss,mst,msu;
 AutoDeclare Vector Mom;
-Tensors f(antisymmetric),Metric(symmetric),df(symmetric),da(symmetric);
+Tensors f(antisymmetric),Metric(symmetric),df(symmetric),da(symmetric),Identity(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
 CFunctions Den,T,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,GammaId;
 Indices a,o,n,m,tm,tn,beta,b,m,betap,alphap,a,alpha,ind,delta,k,j,l,c,d;
@@ -28,8 +28,10 @@ def string_to_form(s):
     s = s.replace("Gamma_Id", "GammaId")
     s = s.replace("u_bar", "ubar")
     s = s.replace("v_bar", "vbar")
-    s = s.replace("eps_star", "epstar")
+    s = s.replace("eps_star", "epsstar")
+    s = s.replace("Identity", "df")  # TODO check if this holds or also happens for anti
     s = s.replace("ZERO", "0")
+    s = s.replace(".*", "*")  # handle decimals
     return s
 
 

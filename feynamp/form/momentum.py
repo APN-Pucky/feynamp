@@ -116,6 +116,62 @@ def get_mandelstamm_2_to_2(
     return r
 
 
+def get_mandelstamm_2_to_3(
+    fd,
+    model
+    # , replace_s=False, replace_t=False, replace_u=False
+):
+    r = ""
+    li = []
+    lo = []
+    for f in fd.legs:
+        if f.is_incoming():
+            li.append(f)
+        elif f.is_outgoing():
+            lo.append(f)
+        else:
+            raise ValueError("Leg is neither incoming nor outgoing")
+    l1, l2 = li
+    l3, l4, l5 = lo
+    p1 = find_leg_in_model(fd, l1, model)
+    mom1 = insert_momentum(l1.momentum.name)
+    mass1 = insert_mass(string_to_form(p1.mass.name))
+    p2 = find_leg_in_model(fd, l2, model)
+    mom2 = insert_momentum(l2.momentum.name)
+    mass2 = insert_mass(string_to_form(p2.mass.name))
+    p3 = find_leg_in_model(fd, l3, model)
+    mom3 = insert_momentum(l3.momentum.name)
+    mass3 = insert_mass(string_to_form(p3.mass.name))
+    p4 = find_leg_in_model(fd, l4, model)
+    mom4 = insert_momentum(l4.momentum.name)
+    mass4 = insert_mass(string_to_form(p4.mass.name))
+    p5 = find_leg_in_model(fd, l5, model)
+    mom5 = insert_momentum(l5.momentum.name)
+    mass5 = insert_mass(string_to_form(p5.mass.name))
+
+    # r += f"id {mom5} = {mom1} + {mom2} - {mom3} - {mom4};\n"
+    r += f"id {mom1}.{mom2} = mss12/2-{mass1}^2/2-{mass2}^2/2;\n"
+    r += f"id {mom3}.{mom4} = mss34/2-{mass3}^2/2-{mass4}^2/2;\n"
+    r += f"id {mom3}.{mom5} = mss35/2-{mass3}^2/2-{mass5}^2/2;\n"
+    r += f"id {mom4}.{mom5} = mss45/2-{mass4}^2/2-{mass5}^2/2;\n"
+
+    r += f"id {mom1}.{mom3} = -mst13/2+{mass1}^2/2+{mass3}^2/2;\n"
+    r += f"id {mom1}.{mom4} = -mst14/2+{mass1}^2/2+{mass4}^2/2;\n"
+    r += f"id {mom1}.{mom5} = -mst15/2+{mass1}^2/2+{mass5}^2/2;\n"
+
+    r += f"id {mom2}.{mom3} = -mst23/2+{mass2}^2/2+{mass3}^2/2;\n"
+    r += f"id {mom2}.{mom4} = -mst24/2+{mass2}^2/2+{mass4}^2/2;\n"
+    r += f"id {mom2}.{mom5} = -mst25/2+{mass2}^2/2+{mass5}^2/2;\n"
+
+    # if replace_s:
+    #    r += f"id mss = -msu-mst+{mass2}^2+{mass3}^2+{mass4}^2+{mass1}^2;\n"
+    # if replace_t:
+    #    r += f"id mst = -mss-msu+{mass2}^2+{mass3}^2+{mass4}^2+{mass1}^2;\n"
+    # if replace_u:
+    #    r += f"id msu = -mss-mst+{mass2}^2+{mass3}^2+{mass4}^2+{mass1}^2;\n"
+    return r
+
+
 def apply_mandelstamm_2_to_2(
     string_expr,
     fd,

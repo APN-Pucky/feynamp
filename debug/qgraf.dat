@@ -2,8 +2,8 @@
  output= 'output.out' ;
  style= 'tmp.sty' ;
  model = 'tmp.model';
- in= i75i[p1], i755f626172i[p2];
- out= i75i[p3], i755f626172i[p4];
+ in= i28533896172696947i[p1], i111460582454643i[p2];
+ out= i117i[p3], i504111456626i[p4], i103i[p5];
  loops= 0;
  loop_momentum= l;
  options= notadpole,onshell;

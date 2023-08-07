@@ -1099,11 +1099,9 @@ name = "feynml"
 version = "0.2.13"
 description = "Feynman diagram markup language"
 optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "feynml-0.2.13-py3-none-any.whl", hash = "sha256:809e5bc7c0c7f8321312ef956f157c2b664a968ab5828e2528616d9dffc68070"},
-    {file = "feynml-0.2.13.tar.gz", hash = "sha256:dc0cd6526c0f832b4898e42004eab222bb5fd610625a241882e191dbc24c2979"},
-]
+python-versions = "^3.8"
+files = []
+develop = true
 
 [package.dependencies]
 cssselect = "*"
@@ -1111,16 +1109,20 @@ cssutils = "*"
 deprecated = "*"
 deprecation = "*"
 particle = "*"
-pyhepmc = {version = "*", optional = true, markers = "extra == \"interfaces\""}
-pylhe = {version = "*", optional = true, markers = "extra == \"interfaces\""}
-pyqgraf = {version = ">=0.0.3", optional = true, markers = "extra == \"interfaces\""}
-smpl_doc = ">=1.1.3,<2.0.0"
-smpl_io = ">=1.1.2,<2.0.0"
+pyhepmc = {version = "*", optional = true}
+pylhe = {version = "*", optional = true}
+pyqgraf = {version = ">=0.0.3", optional = true}
+smpl_doc = "^1.1.3"
+smpl_io = "^1.1.2"
 smpl_util = "*"
 xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
 
 [package.extras]
 interfaces = ["pyhepmc", "pylhe", "pyqgraf (>=0.0.3)"]
+
+[package.source]
+type = "directory"
+url = "../feynml"
 
 [[package]]
 name = "feynmodel"
@@ -1375,13 +1377,13 @@ testing = ["flufl.flake8", "importlib-resources (>=1.3)", "packaging", "pyfakefs
 
 [[package]]
 name = "importlib-resources"
-version = "6.0.0"
+version = "6.0.1"
 description = "Read resources from Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "importlib_resources-6.0.0-py3-none-any.whl", hash = "sha256:d952faee11004c045f785bb5636e8f885bed30dc3c940d5d42798a2a4541c185"},
-    {file = "importlib_resources-6.0.0.tar.gz", hash = "sha256:4cf94875a8368bd89531a756df9a9ebe1f150e0f885030b461237bc7f2d905f2"},
+    {file = "importlib_resources-6.0.1-py3-none-any.whl", hash = "sha256:134832a506243891221b88b4ae1213327eea96ceb4e407a00d790bb0626f45cf"},
+    {file = "importlib_resources-6.0.1.tar.gz", hash = "sha256:4359457e42708462b9626a04657c6208ad799ceb41e5c58c57ffa0e6a098a5d4"},
 ]
 
 [package.dependencies]
@@ -1415,13 +1417,13 @@ files = [
 
 [[package]]
 name = "ipykernel"
-version = "6.25.0"
+version = "6.25.1"
 description = "IPython Kernel for Jupyter"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "ipykernel-6.25.0-py3-none-any.whl", hash = "sha256:f0042e867ac3f6bca1679e6a88cbd6a58ed93a44f9d0866aecde6efe8de76659"},
-    {file = "ipykernel-6.25.0.tar.gz", hash = "sha256:e342ce84712861be4b248c4a73472be4702c1b0dd77448bfd6bcfb3af9d5ddf9"},
+    {file = "ipykernel-6.25.1-py3-none-any.whl", hash = "sha256:c8a2430b357073b37c76c21c52184db42f6b4b0e438e1eb7df3c4440d120497c"},
+    {file = "ipykernel-6.25.1.tar.gz", hash = "sha256:050391364c0977e768e354bdb60cbbfbee7cbb943b1af1618382021136ffd42f"},
 ]
 
 [package.dependencies]
@@ -1659,13 +1661,13 @@ files = [
 
 [[package]]
 name = "jsonschema"
-version = "4.18.6"
+version = "4.19.0"
 description = "An implementation of JSON Schema validation for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jsonschema-4.18.6-py3-none-any.whl", hash = "sha256:dc274409c36175aad949c68e5ead0853aaffbe8e88c830ae66bb3c7a1728ad2d"},
-    {file = "jsonschema-4.18.6.tar.gz", hash = "sha256:ce71d2f8c7983ef75a756e568317bf54bc531dc3ad7e66a128eae0d51623d8a3"},
+    {file = "jsonschema-4.19.0-py3-none-any.whl", hash = "sha256:043dc26a3845ff09d20e4420d6012a9c91c9aa8999fa184e7efcfeccb41e32cb"},
+    {file = "jsonschema-4.19.0.tar.gz", hash = "sha256:6e1e7569ac13be8139b2dd2c21a55d350066ee3f80df06c608b398cdc6f30e8f"},
 ]
 
 [package.dependencies]
@@ -3156,13 +3158,13 @@ xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
 
 [[package]]
 name = "pygments"
-version = "2.16.0"
+version = "2.16.1"
 description = "Pygments is a syntax highlighting package written in Python."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "Pygments-2.16.0-py3-none-any.whl", hash = "sha256:90e046f72a58b65edd7e6bd99926ffa1b9d19e23db166905046bea0069c0894d"},
-    {file = "Pygments-2.16.0.tar.gz", hash = "sha256:4f6df32f21dca07a54a0a130bda9a25d2241e9e0a206841d061c85a60cc96145"},
+    {file = "Pygments-2.16.1-py3-none-any.whl", hash = "sha256:13fc09fa63bc8d8671a6d247e1eb303c4b343eaee81d861f3404db2935653692"},
+    {file = "Pygments-2.16.1.tar.gz", hash = "sha256:1daff0494820c69bc8941e407aa20f577374ee88364ee10a98fdbe0aece96e29"},
 ]
 
 [package.extras]
@@ -3294,19 +3296,21 @@ tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [[package]]
 name = "pyqgraf"
-version = "0.0.11"
+version = "0.0.10.2"
 description = "PyQgraf is a Python wrapper for Qgraf, a Feynman diagram generator."
 optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "pyqgraf-0.0.11-py3-none-any.whl", hash = "sha256:676162495eba7c95fece12a93f9732acc6a27c0895fe5c975abdb343425a687d"},
-    {file = "pyqgraf-0.0.11.tar.gz", hash = "sha256:427cfb682bb18979cdc7f6757ecc52d97afe67b5d36a1dc1c63f72e9433ac06a"},
-]
+python-versions = "^3.8"
+files = []
+develop = true
 
 [package.dependencies]
 requests = "*"
 scikit-build = "*"
 smpl_io = "*"
+
+[package.source]
+type = "directory"
+url = "../pyqgraf"
 
 [[package]]
 name = "pytest"
@@ -4721,4 +4725,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "4d431515df197b9b8ffb285b3286456bdbd86678f68df171a66f47f57527a92a"
+content-hash = "cde7863e29d6962c0555952ac3e7b0fb49187e8325c73780fedfb9c385b01932"

@@ -12,6 +12,7 @@ from feynamp.util import safe_index_replace
 def insert_color_types(s):
     s = re.sub(r"T\((.*),(.*),(.*)\)", r"T(Glu\1,Col\2,Col\3)", s)
     s = re.sub(r"f\((.*),(.*),(.*)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
+    s = re.sub(r"Identity\((.*),(.*)\)", r"Identity(Col\1,Col\2)", s)
     return s
 
 
@@ -49,7 +50,8 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
     vv = fd.get_connections(vertex)
     v = find_vertex_in_model(fd, vertex, model)
     if v is None:
-        return None
+        raise Exception(f"Vertex {vertex} not found in model")
+        # return None
     assert len(v.color) == len(v.lorentz)
     cret = []
     lret = []
@@ -58,7 +60,19 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
         nid = generate_new_id()
         col = safe_index_replace(col, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
-            col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
+            if isinstance(v.connections[i], Leg):
+                col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
+            elif isinstance(v.connections[i], Propagator):
+                col = safe_index_replace(
+                    col,
+                    str(i + 1),
+                    ("In" if v.connections[i].goes_into(vertex) else "Out")
+                    + str(v.connections[i].id),
+                )
+            else:
+                raise Exception(
+                    f"Connection {v.connections[i]} not a leg or propagator"
+                )
         if typed:
             col = insert_color_types(col)
         cret.append(col)
@@ -67,7 +81,19 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
         nid = generate_new_id()
         lor = safe_index_replace(lor, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
-            lor = safe_index_replace(lor, str(i + 1), str(v.connections[i].id))
+            if isinstance(v.connections[i], Leg):
+                lor = safe_index_replace(lor, str(i + 1), str(v.connections[i].id))
+            elif isinstance(v.connections[i], Propagator):
+                lor = safe_index_replace(
+                    lor,
+                    str(i + 1),
+                    ("In" if v.connections[i].goes_into(vertex) else "Out")
+                    + str(v.connections[i].id),
+                )
+            else:
+                raise Exception(
+                    f"Connection {v.connections[i]} not a leg or propagator"
+                )
         if typed:
             lor = insert_lorentz_types(lor)
         lret.append(lor)
@@ -106,4 +132,4 @@ def find_vertex_in_model(fd, vertex, model):
                 vc.append(scons[smp.index(ps)])
             v.connections = vc
             return v
-    return None
+    raise Exception(f"Vertex {vertex} with cons {cons} not found in model\naa={aa}")

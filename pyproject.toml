@@ -9,8 +9,8 @@ repository = "https://github.com/APN-Pucky/feynamp"
 [tool.poetry.dependencies]
 python = "^3.8"
 
-feynml =">=0.2.13"
-#feynml = {path= "../feynml", develop = true }
+#feynml =">=0.2.13"
+feynml = {path= "../feynml", develop = true }
 
 feynmodel =">=0.0.4"
 #feynmodel = {path= "../feynmodel", develop = true }
@@ -36,8 +36,9 @@ ipython =  "*"
 jupyterlab =  "*"
 jupyter = "*"
 pyfeyn2 = ">=2.3.6"
-# pyfeyn2 = {path= "../pyfeyn2", develop = true }
-pyqgraf = "*"
+#pyfeyn2 = {path= "../pyfeyn2", develop = true }
+#pyqgraf = "*"
+pyqgraf = {path= "../pyqgraf", develop = true }
 
 poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
 

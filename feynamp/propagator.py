@@ -15,15 +15,22 @@ def get_propagator_math(fd, prop, model):
         raise ValueError("Momentum not set for particle")
     mom = insert_momentum(p.particle.momentum.name)
     mass = insert_mass(p.mass.name)
+    ret = ""
+    if p.color == 3 or p.color == -3:
+        ret += f"df(ColIn{p.particle.id},ColOut{p.particle.id})*"
+    if p.color == 8:
+        ret += f"da(GluIn{p.particle.id},GluOut{p.particle.id})*"
     # if boson just 1/(p^2-m^2)
     if p.spin == 3:
         # nid = generate_new_id()
         # TODO treate denominators differently for loops etc?
-        return f"Denom({mom},{mass})"
-    if p.spin == 2:  # TODO handle plus minus mass for fermions
+        ret += f"Metric(MuIn{p.particle.id},MuOut{p.particle.id})*"
+    elif p.spin == 2:  # TODO handle plus minus mass for fermions
         nid = generate_new_id()
-        return f"(P(Mu{nid},{mom})*Gamma(Mu{nid},Spin{p.particle.source},Spin{p.particle.target}) + {mass}*GammaId(Spin{p.particle.source},Spin{p.particle.target}))*Denom({mom},{mass})"
-    raise ValueError("Spin not set for particle")
+        ret += f"(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id}) + {mass}*GammaId(SpinIn{p.particle.id},SpinIn{p.particle.id}))*"
+    else:
+        raise ValueError("Spin not set for particle")
+    return ret + f"Denom({mom},{mass})"
 
 
 def find_propagator_in_model(fd, prop, model):

@@ -16,6 +16,7 @@ f = Function("f")
 
 delta_c = Function("delta_c")
 delta_g = Function("delta_g")
+identity = Function("Identity")
 
 VC = Function("VC")
 VA = Function("VA")

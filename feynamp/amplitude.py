@@ -1,8 +1,5 @@
-from sympy.parsing.sympy_parser import parse_expr
-
 from feynamp.leg import get_leg_math_string
 from feynamp.propagator import get_propagator_math_string
-from feynamp.sympy.lorentz import gamma
 from feynamp.vertex import get_vertex_math_string
 
 
@@ -18,16 +15,6 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
     for p in fd.propagators:
         pm.append(get_propagator_math_string(fd, p, feyn_model))
     return f"{' * '.join(vm)} * {' * '.join(lm)} * {' * '.join(pm)}"
-
-
-def string_to_sympy(s):
-    s = s.replace(
-        "Gamma", "gamma"
-    )  # we keep string like the ufo, but want lowercase gamma for sympy
-    s = s.replace("Metric", "metric")
-    s = s.replace("complex(0,1)", "I")  # sympy uses I for imaginary unit
-    return parse_expr(s, local_dict={"gamma": gamma})
-    # return parse_expr(s, evaluate=False)
 
 
 def multiply(lst_fd1, lst_fd2, feyn_model):
@@ -63,4 +50,13 @@ def square(lst_fd, feyn_model, tag=False):
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
                 ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
                 s += f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac} + "  # TODO this needs Re!
+    return s[:-3]
+
+
+def add(lst_fd, feyn_model):
+    lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
+    ferm_facs = [lst_fd[0].get_fermion_factor(l) for l in lst_fd]
+    s = ""
+    for i in range(len(lst_fd1)):
+        s += f"({lst_fd1[i]})*{ferm_facs[i]} + "
     return s[:-3]
