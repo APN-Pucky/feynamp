@@ -34,7 +34,12 @@ def insert_momentum(sname):
     'Momp1-Moml2'
     >>> get_momentum('k1')
     'Momk1'
+    >>> get_momentum('$k1$')
+    'Momk1'
+    >>> get_momentum('$p1$-$l2$')
+    'Momp1-Moml2'
     """
+    sname = sname.replace("$", "")
     assert re.fullmatch(
         r"[a-zA-Z0-9+-_]+", sname
     ), "Momentum name does not match pattern"
