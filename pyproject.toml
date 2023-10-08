@@ -37,8 +37,8 @@ jupyterlab =  "*"
 jupyter = "*"
 pyfeyn2 = ">=2.3.6"
 #pyfeyn2 = {path= "../pyfeyn2", develop = true }
-#pyqgraf = "*"
-pyqgraf = {path= "../pyqgraf", develop = true }
+pyqgraf = "*"
+#pyqgraf = {path= "../pyqgraf", develop = true }
 
 poetry-dynamic-versioning = {extras = ["plugin"], version = "^0.21.1"}
 
@@ -59,7 +59,7 @@ format-jinja = "{% if distance == 0 %}{{ base }}{% else %}{{ base }}.{{ distance
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
-addopts = [ "-Werror", "-v", "--cov=feynpy", "--cov-config=.coveragerc","--cov-append", "--cov-report=term", "--cov-report=xml", "--doctest-modules", "--ignore=docs/source/conf.py", "--ignore=debug", "--ignore=debug2" ]
+addopts = [ "-Werror", "-v", "--cov=feynamp", "--cov-config=.coveragerc","--cov-append", "--cov-report=term", "--cov-report=xml", "--doctest-modules", "--ignore=docs/source/conf.py", "--ignore=debug", "--ignore=debug2" ]
 filterwarnings = [
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning'
 ]
