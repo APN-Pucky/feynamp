@@ -3259,13 +3259,13 @@ pyparsing = ">=2.1.4"
 
 [[package]]
 name = "pyfeyn2"
-version = "2.3.7"
+version = "2.3.8"
 description = "PyFeyn is a package which makes drawing Feynman diagrams simple and programmatic.  Feynman diagrams are important constructs in perturbative field theory, so being able to draw them in a programmatic fashion is important if attempting to enumerate a large number of diagram configurations is important. The output quality of PyFeyn diagrams (into PDF or EPS formats) is very high, and special effects can be obtained by using constructs from PyX, which PyFeyn is based around"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyfeyn2-2.3.7-py3-none-any.whl", hash = "sha256:2b2b4fe9a213570e8eeb003c609d0967a7d89fd621175355e915a62aaea857ea"},
-    {file = "pyfeyn2-2.3.7.tar.gz", hash = "sha256:0df0fc95d53b4d2eccc828c1593a90d42d7137a63e56fcbe4680a969e09bdfb4"},
+    {file = "pyfeyn2-2.3.8-py3-none-any.whl", hash = "sha256:3f1cd3f274a74f0af7d3118ba721481a950bfd8d2a9a4190e806f40042f7846d"},
+    {file = "pyfeyn2-2.3.8.tar.gz", hash = "sha256:1e159b9b6a0b04cab00504e836bd8aee3627d4eb9d604d2b95ce7a27a703d60a"},
 ]
 
 [package.dependencies]
