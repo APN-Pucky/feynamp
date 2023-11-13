@@ -3259,13 +3259,13 @@ pyparsing = ">=2.1.4"
 
 [[package]]
 name = "pyfeyn2"
-version = "2.3.7"
+version = "2.3.11"
 description = "PyFeyn is a package which makes drawing Feynman diagrams simple and programmatic.  Feynman diagrams are important constructs in perturbative field theory, so being able to draw them in a programmatic fashion is important if attempting to enumerate a large number of diagram configurations is important. The output quality of PyFeyn diagrams (into PDF or EPS formats) is very high, and special effects can be obtained by using constructs from PyX, which PyFeyn is based around"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyfeyn2-2.3.7-py3-none-any.whl", hash = "sha256:2b2b4fe9a213570e8eeb003c609d0967a7d89fd621175355e915a62aaea857ea"},
-    {file = "pyfeyn2-2.3.7.tar.gz", hash = "sha256:0df0fc95d53b4d2eccc828c1593a90d42d7137a63e56fcbe4680a969e09bdfb4"},
+    {file = "pyfeyn2-2.3.11-py3-none-any.whl", hash = "sha256:157ad834fac75c356136a049581418d7a1693a5282a482655572bf677add0d76"},
+    {file = "pyfeyn2-2.3.11.tar.gz", hash = "sha256:7c9ff4d9fc60654aaa243beeb6e459d49a45c9610bb17f1c53e2979b320e3951"},
 ]
 
 [package.dependencies]
@@ -3276,7 +3276,7 @@ deprecated = "*"
 deprecation = "*"
 dot2tex = "*"
 feynman = ">=2.0,<3.0"
-feynml = {version = ">=0.2.10", extras = ["interfaces"]}
+feynml = {version = ">=0.2.21", extras = ["interfaces"]}
 graphviz = "*"
 iminuit = "*"
 ipyparallel = "*"
