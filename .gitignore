@@ -146,3 +146,8 @@ test.pdf
 
 #qgraf
 *.frm
+
+output.out
+qgraf.dat
+tmp.model
+tmp.sty
