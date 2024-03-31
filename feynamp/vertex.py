@@ -26,13 +26,15 @@ def insert_lorentz_types(s):
     s = re.sub(r"ProjM\((.*?),(.*?)\)", r"ProjM(Spin\1,Spin\2)", s)
     s = re.sub(r"Metric\((.*?),(.*?)\)", r"Metric(Mu\1,Mu\2)", s)
     # use insert_momentum to replace the second argument to P
-    m = re.match(r"P\((.*?),(.*?)\)", s)
-    if m:
-        for g in m.groups():
-            s.replace(
-                "P(" + g[0] + "," + g[1] + ")",
-                "P(Mu" + g[0] + "," + insert_momentum(g[1]) + ")",
-            )
+    matches = re.findall(r"P\((.*?),(.*?)\)", s)
+    debug(f"{matches=}")
+    for g in matches:
+        debug(f"{s=}")
+        s = s.replace(
+            "P(" + g[0] + "," + g[1] + ")",
+            "P(Mu" + g[0] + "," + insert_momentum(g[1]) + ")",
+        )
+        debug(f"{s=}")
     return s
 
 
