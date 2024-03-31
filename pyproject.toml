@@ -9,8 +9,8 @@ repository = "https://github.com/APN-Pucky/feynamp"
 [tool.poetry.dependencies]
 python = "^3.8"
 
-feynml =">=0.2.13"
-#feynml = {path= "../feynml", develop = true }
+#feynml =">=0.2.13"
+feynml = {path= "../feynml", develop = true }
 
 feynmodel =">=0.0.4"
 #feynmodel = {path= "../feynmodel", develop = true }

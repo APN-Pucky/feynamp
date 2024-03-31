@@ -1,6 +1,8 @@
 import re
+from typing import List
 
 import numpy as np
+from feynml.connector import Connector
 from feynml.id import generate_new_id
 from feynml.leg import Leg
 from feynml.propagator import Propagator
@@ -10,7 +12,7 @@ from feynamp.momentum import insert_momentum
 from feynamp.util import safe_index_replace
 
 
-def insert_color_types(s):
+def insert_color_types(s: str):
     """ """
     # We use the non greedy .*? to match multiple occurances individually
     s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Glu\1,Col\2,Col\3)", s)
@@ -19,7 +21,7 @@ def insert_color_types(s):
     return s
 
 
-def insert_lorentz_types(s):
+def insert_lorentz_types(s: str, connections: List[Connector]):
     # We use the non greedy .*? to match multiple occurances individually
     s = re.sub(r"Gamma\((.*?),(.*?),(.*?)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
     s = re.sub(r"ProjP\((.*?),(.*?)\)", r"ProjP(Spin\1,Spin\2)", s)
@@ -30,9 +32,19 @@ def insert_lorentz_types(s):
     debug(f"{matches=}")
     for g in matches:
         debug(f"{s=}")
+        # find connection with g[1] id in connections
+        thec = None
+        for c in connections:
+            if c.id == g[1] or "In" + str(c.id) == g[1] or "Out" + str(c.id) == g[1]:
+                thec = c
+                break
+        if thec is None:
+            raise Exception(
+                f"Connection with id {g[1]} not found in connections {connections}"
+            )
         s = s.replace(
             "P(" + g[0] + "," + g[1] + ")",
-            "P(Mu" + g[0] + "," + insert_momentum(g[1]) + ")",
+            "P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + ")",
         )
         debug(f"{s=}")
     return s
@@ -53,6 +65,8 @@ def get_vertex_math_string(fd, vertex, model):
 
 
 def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indices
+    if not typed:
+        raise NotImplementedError("Only typed vertices are supported")
     vv = fd.get_connections(vertex)
     v = find_vertex_in_model(fd, vertex, model)
     if v is None:
@@ -108,7 +122,7 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
                     f"Connection {v.connections[i]} not a leg or propagator"
                 )
         if typed:
-            lor = insert_lorentz_types(lor)
+            lor = insert_lorentz_types(lor, v.connections)
         lret.append(lor)
     ret = []
     for k, v in v.couplings.items():

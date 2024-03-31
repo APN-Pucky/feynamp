@@ -1,7 +1,13 @@
 import os
 import re
+from typing import List
 
 import form
+import sympy
+from feynml.feynmandiagram import FeynmanDiagram
+from feynmodel.feyn_model import FeynModel
+
+import feynamp
 
 count = 0
 dummy = 0
@@ -72,3 +78,41 @@ def sympyfy(string_expr):
 
 
 # TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s
+
+
+def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel):
+    dims = fds[0].get_externals_size()
+    for fd in fds:
+        assert (
+            dims == fd.get_externals_size()
+        ), "All FeynmanDiagrams must have the same external legs"
+    s2 = feynamp.amplitude.square(fds, fm, tag=False)
+    fs = ""
+    fs += feynamp.form.lorentz.get_gammas()
+    fs += feynamp.form.color.get_color()
+    fs += feynamp.form.momentum.get_kinematics()
+    fs += feynamp.form.momentum.get_onshell(fds, fm)
+    fs += feynamp.form.momentum.get_mandelstamm(fds, fm)
+
+    rs = feynamp.form.momentum.apply(s2, fs)
+
+    rr = feynamp.form.momentum.apply_den(
+        rs,
+        feynamp.form.momentum.get_onshell(fds, fm)
+        + feynamp.form.momentum.get_mandelstamm(fds, fm),
+    )
+
+    ret = sympy.simplify(
+        sympy.parse_expr(
+            rr.replace("Mom_", "")
+            .replace(".", "_")
+            .replace("^", "**")
+            .replace("mss", "s")
+            .replace("msu", "u")
+            .replace("mst", "t")
+        ).subs({"Nc": "3", "Cf": "4/3"})
+        * sympy.parse_expr(
+            "*".join([*feynamp.get_color_average(fds), *feynamp.get_spin_average(fds)])
+        )
+    )
+    return ret

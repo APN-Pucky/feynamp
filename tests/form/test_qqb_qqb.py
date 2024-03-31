@@ -8,6 +8,7 @@ from sympy import Symbol, simplify
 from sympy.parsing.sympy_parser import parse_expr
 from xsdata.formats.dataclass.parsers import XmlParser
 
+import feynamp
 from feynamp.amplitude import multiply, square
 from feynamp.form.color import get_color
 from feynamp.form.lorentz import get_gammas
@@ -87,3 +88,27 @@ def test_form_qqb_qqb():
     g = Symbol("G")
 
     assert (ret / g**4).equals(ref.table_7_1_qqb_qqb.subs("u", "-t-s"))
+
+
+def test_form_qqb_qqb_automatic():
+    fm = load_ufo_model("ufo_sm")
+    qfm = feynmodel_to_qgraf(fm, True, False)
+
+    qgraf.install("3.6.5")
+    xml_string = qgraf.run(
+        "u[p1], u_bar[p2]",
+        "u[p3], u_bar[p4]",
+        loops=0,
+        loop_momentum="l",
+        model=qfm,
+        style=style,
+    )
+
+    parser = XmlParser()
+    fml = parser.from_string(xml_string, FeynML)
+
+    fds = [fml.diagrams[2], fml.diagrams[-1]]
+
+    ret = feynamp.form.compute_squared(fds, fm)
+    g = Symbol("G")
+    assert (ret / g**4).equals(ref.table_7_1_qqb_qqb)
