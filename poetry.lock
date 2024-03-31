@@ -161,6 +161,82 @@ tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
 tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "awkward"
+version = "2.6.2"
+description = "Manipulate JSON-like data with NumPy-like idioms."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "awkward-2.6.2-py3-none-any.whl", hash = "sha256:c79c293a7f278ba316959b2246f682f338a4e5caff152bd9b4c45cc7ff8dc0e1"},
+    {file = "awkward-2.6.2.tar.gz", hash = "sha256:1ad21528f96a444c409c9110ff5d7620e29296931bba85056d212c53a6372cc0"},
+]
+
+[package.dependencies]
+awkward-cpp = "30"
+fsspec = ">=2022.11.0"
+importlib-metadata = {version = ">=4.13.0", markers = "python_version < \"3.12\""}
+numpy = ">=1.18.0"
+packaging = "*"
+typing-extensions = {version = ">=4.1.0", markers = "python_version < \"3.11\""}
+
+[[package]]
+name = "awkward-cpp"
+version = "30"
+description = "CPU kernels and compiled extensions for Awkward Array"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "awkward-cpp-30.tar.gz", hash = "sha256:5be94ca7351d8e421cb9478a9b71016fa7673621fa122d477d0b07bb68aa7d4c"},
+    {file = "awkward_cpp-30-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:0d3309561529c217c3a65b10bde81cb720623501b08c4272c94376663f5ef560"},
+    {file = "awkward_cpp-30-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:71fcc5d7859e003c37333ad33d0daf481f4a87f66ef594e860e810537e270a3b"},
+    {file = "awkward_cpp-30-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4f1d2a01d4d9a22b7b6b8eb5577fb17aeca0fae12ccca1415aefae1218d78ac6"},
+    {file = "awkward_cpp-30-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:33192eca0dfc2b8439ac4e91e1a4b0847595f66d4c643da7e844cbd3115c2d0f"},
+    {file = "awkward_cpp-30-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:3e78de0a1d8ffe90a47450768221bf289bc98cff779d0062b4417f9b8225279f"},
+    {file = "awkward_cpp-30-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:7c2d7632c67e19d4e9bf71975d5499b812444d5997cabe8ac142d930b2d5ffdf"},
+    {file = "awkward_cpp-30-cp310-cp310-win_amd64.whl", hash = "sha256:9b9230d3ffd23f40379196454ada6305302cdaa3a2a1b4117d744c351ab0269f"},
+    {file = "awkward_cpp-30-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:99a29de8e54d31107363ba793e3fcb6a6a5ac7ad112b6ff02138b3e77b6e8bca"},
+    {file = "awkward_cpp-30-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:5bd0788adb2bde842f7966fad26c402b30e82e1fada8e1e80c170029804d8165"},
+    {file = "awkward_cpp-30-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c542e88c84129749795d23810a7b17855fc62692064eb400b3647a3aac278bed"},
+    {file = "awkward_cpp-30-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8a364d777988fa33d091478ef08b1885f49328942846b9bdc759ffea71103533"},
+    {file = "awkward_cpp-30-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:c1d8f6073afe4ff22adbc348304095d4bca13383d0835bf3c6967b2112c3d0f1"},
+    {file = "awkward_cpp-30-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:7077ddbc22146ddb04987e73d0d9b00e7913d29af3d4143151d220dd7652edc7"},
+    {file = "awkward_cpp-30-cp311-cp311-win_amd64.whl", hash = "sha256:f1be11ce4fe228281e63514c8ff0ca91bc70afdda90374ef56bb1f352c2134ff"},
+    {file = "awkward_cpp-30-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:d195a8845df1c569f8705a82b24c2d915451c09daa5c9462ee7a585de5cb5f8f"},
+    {file = "awkward_cpp-30-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:e7a6e3e95a6d1fbc2fbcef07b8299cb9585d6a737b87251e54c405f22cecad72"},
+    {file = "awkward_cpp-30-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:647c1384eb32a5eb5c194a55504d8889fd7cf9b56ec36f9360b08cb4f3a49d43"},
+    {file = "awkward_cpp-30-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b26823adeaf9e49bba94a7e248a7099c951b2a6e561f52316e7c62e6355cb36f"},
+    {file = "awkward_cpp-30-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:0a76ee4ebfa135930a84cbbec1b856070d7286551c98399ef9fc8743ca50c78b"},
+    {file = "awkward_cpp-30-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:7f71ab8451b6402e6669537de172555867cd052f574dc6a4d3d6e9c1ab1fe8b8"},
+    {file = "awkward_cpp-30-cp312-cp312-win_amd64.whl", hash = "sha256:14e1472bb66d6c9e368cfbddb8fef7a1f666680a810eab2bf83f3f00127473dc"},
+    {file = "awkward_cpp-30-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:3563309e784a07dc13db50b726df825e8c78e75d6f837850991bf03794750a40"},
+    {file = "awkward_cpp-30-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:7f107beeb4ed2d0429c9c3ea1e69caf52f3bf63a8542ddc3c79a77d35a7042d4"},
+    {file = "awkward_cpp-30-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0b77c28915f80322ce7bee7e32966322b3bb0e628c5ed875bf0a41dff5fb8f6d"},
+    {file = "awkward_cpp-30-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d223409b1103f7f763370eb32dedd5960cc1d25bfc483879367b1fc772b0c0f6"},
+    {file = "awkward_cpp-30-cp38-cp38-musllinux_1_1_aarch64.whl", hash = "sha256:7688088815d3816479fc7c6c8d0d611d985400d17031f8997b11d0c17d245152"},
+    {file = "awkward_cpp-30-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:1d9d5d44998053f4a18ac5859c3a250df472912017693d7d106d9b9102916c78"},
+    {file = "awkward_cpp-30-cp38-cp38-win32.whl", hash = "sha256:28eedab6fc58be44add5b59001aae429e6d134fd28b5796c6d6928b84b25e420"},
+    {file = "awkward_cpp-30-cp38-cp38-win_amd64.whl", hash = "sha256:041ce9a70c732364d94933d436823ecdd1e520b8736c2ad380907adad1ed955c"},
+    {file = "awkward_cpp-30-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:e1ed5c6c6351eb67e80a6930e64baa9701ea01cdcba376893f20a4284d74f615"},
+    {file = "awkward_cpp-30-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:317c745f21e6b34cc5259d1b01d0bf999ef4693a35bc8dfc5289a835edbc78db"},
+    {file = "awkward_cpp-30-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c1a2a50cda6ac9e73ffba88b55c23488cf6e7bc97bc77fcf1baf4d025f07a475"},
+    {file = "awkward_cpp-30-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dab0f6f351f0955f0bd5251f2aba7c621f146182cd86f1752357ccb2f1e62017"},
+    {file = "awkward_cpp-30-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:08a583482819bcfe4a2067ed29dab83e78bba598e840269c6683ac96a20d04ab"},
+    {file = "awkward_cpp-30-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:f8929bc727041ac0896bf67e6a4397e729ab44ccd0dde2e7a1a5d1571bdce8d1"},
+    {file = "awkward_cpp-30-cp39-cp39-win32.whl", hash = "sha256:4d0fc31239c3b3cba09b5cfde0dbe3d36025006e99d85be2b7c1608b98d8cb40"},
+    {file = "awkward_cpp-30-cp39-cp39-win_amd64.whl", hash = "sha256:4ccdb25269f1a4474cf7ba85525bee8389a92324d2abdf69f58406b20817521d"},
+    {file = "awkward_cpp-30-pp310-pypy310_pp73-macosx_10_9_x86_64.whl", hash = "sha256:702cbc955cf3f27472b4427310e19d244794bfc611ee6a21732da215b8324f40"},
+    {file = "awkward_cpp-30-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8946b7ae9cb3b32f0dc9f91dd945e6a2934a09c13adba207790341efe6ef6339"},
+    {file = "awkward_cpp-30-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:9163ad6d3ccf3f49086ea014228003be70d24f622f3a60439c4346c1bec9e1d9"},
+    {file = "awkward_cpp-30-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0de665b6d4ad83aae0e327b2f5f99045f6824c464b02622b5142fcf944f6aa33"},
+    {file = "awkward_cpp-30-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:991928fb03f516f1dcc00e2b6f0b2a8d9400eae5b29019324c978e3616223aef"},
+    {file = "awkward_cpp-30-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:19c7995b61b09f3337095e4b418cdf565be4574e23a89d2ae0037348784d169a"},
+]
+
+[package.dependencies]
+importlib_resources = {version = "*", markers = "python_version < \"3.9\""}
+numpy = ">=1.18.0"
+
+[[package]]
 name = "babel"
 version = "2.14.0"
 description = "Internationalization utilities"
@@ -1160,13 +1236,28 @@ name = "feynml"
 version = "0.2.26"
 description = "Feynman diagram markup language"
 optional = false
-python-versions = "*"
-files = []
-develop = true
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "feynml-0.2.26-py3-none-any.whl", hash = "sha256:84e67feb377bc9952558bd68a16184b027edcc4df3684663b997bdb5c36db3eb"},
+    {file = "feynml-0.2.26.tar.gz", hash = "sha256:c955b5a398165443a622e928077d3ef92c63f0371bc2aa84b139b4e0c6c3d548"},
+]
 
-[package.source]
-type = "directory"
-url = "../feynml"
+[package.dependencies]
+cssselect = "*"
+cssutils = "*"
+deprecated = "*"
+deprecation = "*"
+particle = "*"
+pyhepmc = {version = "*", optional = true, markers = "extra == \"interfaces\""}
+pylhe = {version = "*", optional = true, markers = "extra == \"interfaces\""}
+pyqgraf = {version = ">=0.0.3", optional = true, markers = "extra == \"interfaces\""}
+smpl_doc = ">=1.1.3,<2.0.0"
+smpl_io = ">=1.1.2,<2.0.0"
+smpl_util = ">=1.0.0,<2.0.0"
+xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
+
+[package.extras]
+interfaces = ["pyhepmc", "pylhe", "pyqgraf (>=0.0.3)"]
 
 [[package]]
 name = "feynmodel"
@@ -1281,6 +1372,41 @@ files = [
     {file = "fqdn-1.5.1-py3-none-any.whl", hash = "sha256:3a179af3761e4df6eb2e026ff9e1a3033d3587bf980a0b1b2e1e5d08d7358014"},
     {file = "fqdn-1.5.1.tar.gz", hash = "sha256:105ed3677e767fb5ca086a0c1f4bb66ebc3c100be518f0e0d755d9eae164d89f"},
 ]
+
+[[package]]
+name = "fsspec"
+version = "2024.3.1"
+description = "File-system specification"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "fsspec-2024.3.1-py3-none-any.whl", hash = "sha256:918d18d41bf73f0e2b261824baeb1b124bcf771767e3a26425cd7dec3332f512"},
+    {file = "fsspec-2024.3.1.tar.gz", hash = "sha256:f39780e282d7d117ffb42bb96992f8a90795e4d0fb0f661a70ca39fe9c43ded9"},
+]
+
+[package.extras]
+abfs = ["adlfs"]
+adl = ["adlfs"]
+arrow = ["pyarrow (>=1)"]
+dask = ["dask", "distributed"]
+devel = ["pytest", "pytest-cov"]
+dropbox = ["dropbox", "dropboxdrivefs", "requests"]
+full = ["adlfs", "aiohttp (!=4.0.0a0,!=4.0.0a1)", "dask", "distributed", "dropbox", "dropboxdrivefs", "fusepy", "gcsfs", "libarchive-c", "ocifs", "panel", "paramiko", "pyarrow (>=1)", "pygit2", "requests", "s3fs", "smbprotocol", "tqdm"]
+fuse = ["fusepy"]
+gcs = ["gcsfs"]
+git = ["pygit2"]
+github = ["requests"]
+gs = ["gcsfs"]
+gui = ["panel"]
+hdfs = ["pyarrow (>=1)"]
+http = ["aiohttp (!=4.0.0a0,!=4.0.0a1)"]
+libarchive = ["libarchive-c"]
+oci = ["ocifs"]
+s3 = ["s3fs"]
+sftp = ["paramiko"]
+smb = ["smbprotocol"]
+ssh = ["paramiko"]
+tqdm = ["tqdm"]
 
 [[package]]
 name = "gprof2dot"
@@ -3393,6 +3519,49 @@ plugins = ["importlib-metadata"]
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pyhepmc"
+version = "2.13.4"
+description = "Pythonic interface to the HepMC3 C++ library licensed under LGPL-v3."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyhepmc-2.13.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:99804a5d83a301ee6ae268d3464002358df15f558ffd1dcba072d39ed7e3daa5"},
+    {file = "pyhepmc-2.13.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:4781db288ad2617aa248c5e06fee9e6c9a2a65d7ab949b3d2155f20fa3dbf205"},
+    {file = "pyhepmc-2.13.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f0f52115923b2b97fe145471e0a4e7c4a95743c58b8dc682f7e63ac73794d1f2"},
+    {file = "pyhepmc-2.13.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c1576515a3aa5a675e1935403275ca2f3e7e7796ee1cc0a951367e5081419485"},
+    {file = "pyhepmc-2.13.4-cp310-cp310-win_amd64.whl", hash = "sha256:9af1c3890ee4cca1c1c44626e0f96059ef143fadc1eab25379c5a6ce438f4e6b"},
+    {file = "pyhepmc-2.13.4-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:e1da32dad71b8ee89192e36365c95a68e0c194514cfe8bf1cfc718271afd79c6"},
+    {file = "pyhepmc-2.13.4-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:4f493c06d28d7c88c613ec498a3f7100b01d38dab1744a2dfdfb60df0eff2fa2"},
+    {file = "pyhepmc-2.13.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3933f4922b1683e326a5a74f2c464ada71cf4a174bac6124260e2e2bc6d4ddf4"},
+    {file = "pyhepmc-2.13.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:73eee798ed44b71a7c3f7987f3e113c4236bfd62a4ef732c9d02f34e87901240"},
+    {file = "pyhepmc-2.13.4-cp311-cp311-win_amd64.whl", hash = "sha256:aad38d51ff7b02602484cb94b4f26532cc1e81881068a303ccb171821d8d0bd4"},
+    {file = "pyhepmc-2.13.4-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:2690d4c768e5b5a7c00c88aaa0fe4fe545c2d925a7053a792a4f7adf070fca23"},
+    {file = "pyhepmc-2.13.4-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:bbe50566405275e5241da5c3670ebb679949edcb12a2b0da822678bc2441ae58"},
+    {file = "pyhepmc-2.13.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b6180d431f1d55fc80535ceac2d13613ed60b8ead01ebf096cfcdaef175d6598"},
+    {file = "pyhepmc-2.13.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:23f5aa8dbb9fb0a29efa9c9661b9a0b1b6e6110c147802afea277fdb4c15d339"},
+    {file = "pyhepmc-2.13.4-cp312-cp312-win_amd64.whl", hash = "sha256:60222ed494a661936551b7c2905865971c5eb1a01b77508be63149416ba50374"},
+    {file = "pyhepmc-2.13.4-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:ca1734494b288f6dac8453906c7edc3fc3323560ea8f09566031abfa61e990b7"},
+    {file = "pyhepmc-2.13.4-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:3850eba782eabf1f4265f609b9429aa969de1d9013f0b62602924034593988e7"},
+    {file = "pyhepmc-2.13.4-cp38-cp38-win32.whl", hash = "sha256:ff1e7bd359ab0f00c09f47266436e07421d1d6057368aaab6897321268d0f8f3"},
+    {file = "pyhepmc-2.13.4-cp38-cp38-win_amd64.whl", hash = "sha256:a5c19c363b8fbd00a427cc1cb793303d327201b97facb85b60561d0d1e354128"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:a7462236caea11ac227c753ed96362b2bd660236f4bc500bd63e92cffebbf03d"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:58937744ebd8415a23efa026dd9d0510acdd0d580f7d85cea7bc1a0ba1535d0f"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:bb649e77c46c8b7622fc0e60880e0ccc9045802da86f62396e5343613f5be448"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:434d19743b2db497395da9c61ec40c1f7462d2c6ef1e54db159a203d327e9fdd"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b405bfcb673c9f0f99574e207765d9200bf6a119d1af53ea86feda2eaf20339d"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-win32.whl", hash = "sha256:dbc731ee3ec096bfc4b4d06bf1f52cee2578be8f2497da65fb8a4e9eaece5c96"},
+    {file = "pyhepmc-2.13.4-cp39-cp39-win_amd64.whl", hash = "sha256:1b05172236cb5297336600cab53ae72414b2ef848e3243da1ae84b3b20bf5255"},
+    {file = "pyhepmc-2.13.4.tar.gz", hash = "sha256:5570b451eff4d11962b4f6155f5157eda5427c9db0f8193c644043ce3fc6af73"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[package.extras]
+doc = ["ipykernel", "ipython", "nbsphinx", "sphinx", "sphinx-rtd-theme"]
+test = ["matplotlib", "particle", "pytest"]
+
+[[package]]
 name = "pylatex"
 version = "1.4.2"
 description = "A Python library for creating LaTeX files and snippets"
@@ -3423,6 +3592,29 @@ python-versions = "*"
 files = [
     {file = "pylatexenc-2.10.tar.gz", hash = "sha256:3dd8fd84eb46dc30bee1e23eaab8d8fb5a7f507347b23e5f38ad9675c84f40d3"},
 ]
+
+[[package]]
+name = "pylhe"
+version = "0.8.0"
+description = "small package to get structured data out of Les Houches Event files"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pylhe-0.8.0-py3-none-any.whl", hash = "sha256:51383b942b5cb864df16a7c363581f023d243508b12974a63bee4851b618a5b0"},
+    {file = "pylhe-0.8.0.tar.gz", hash = "sha256:cbae891b8cbbef977c2d80797e37a5d81dd70d0cc97baa694403c60e840113d6"},
+]
+
+[package.dependencies]
+awkward = ">=1.2.0"
+graphviz = ">=0.12.0"
+particle = ">=0.16"
+vector = ">=0.8.1"
+
+[package.extras]
+complete = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)", "twine"]
+develop = ["black", "check-manifest", "flake8", "pre-commit", "pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)", "tbump (>=6.7.0)", "twine"]
+lint = ["black", "flake8"]
+test = ["pydocstyle", "pytest (>=6.0,<7.0)", "pytest-cov (>=2.5.1)", "scikit-hep-testdata (>=0.4.36)"]
 
 [[package]]
 name = "pyparsing"
@@ -4593,6 +4785,29 @@ brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
 h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
+
+[[package]]
+name = "vector"
+version = "1.3.1"
+description = "Vector classes and utilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "vector-1.3.1-py3-none-any.whl", hash = "sha256:5ab5bc968451704987b5315e84ec7a815b107c6e6ff164c5dcb768827bea8386"},
+    {file = "vector-1.3.1.tar.gz", hash = "sha256:1a94210c21a5d38d36d0fa36c1afb92c2857ba1d09c824b0d4b8615d51f4f2e5"},
+]
+
+[package.dependencies]
+numpy = ">=1.13.3"
+packaging = ">=19"
+
+[package.extras]
+awkward = ["awkward (>=1.2)"]
+dev = ["awkward (>=1.2)", "dask-awkward", "nox", "numba (>=0.57)", "papermill (>=2.4)", "pytest (>=6)", "pytest-cov (>=3)", "pytest-doctestplus"]
+docs = ["awkward (>=1.2)", "ipykernel", "myst-parser (>0.13)", "nbsphinx", "sphinx (>=4)", "sphinx-book-theme (>=0.0.42)", "sphinx-copybutton", "sphinx-math-dollar"]
+numba = ["numba (>=0.57)"]
+test = ["dask-awkward", "nox", "papermill (>=2.4)", "pytest (>=6)", "pytest-cov (>=3)", "pytest-doctestplus"]
+test-extras = ["spark-parser", "uncompyle6"]
 
 [[package]]
 name = "virtualenv"
