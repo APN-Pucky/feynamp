@@ -1,4 +1,10 @@
+from typing import List
+
+from feynml.feynmandiagram import FeynmanDiagram
+from feynmodel.feyn_model import FeynModel
+
 from feynamp.leg import get_leg_math_string
+from feynamp.log import debug
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
 
@@ -9,15 +15,26 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
     lm = []
     pm = []
     for v in fd.vertices:
-        vm.append(get_vertex_math_string(fd, v, feyn_model))
+        vm.append("(" + get_vertex_math_string(fd, v, feyn_model) + ")")
     for l in fd.legs:
-        lm.append(get_leg_math_string(fd, l, feyn_model))
+        lm.append("(" + get_leg_math_string(fd, l, feyn_model) + ")")
     for p in fd.propagators:
-        pm.append(get_propagator_math_string(fd, p, feyn_model))
-    return f"{' * '.join(vm)} * {' * '.join(lm)} * {' * '.join(pm)}"
+        pm.append("(" + get_propagator_math_string(fd, p, feyn_model) + ")")
+
+    ret = ""
+    if len(vm) > 0:
+        ret += f"{' * '.join(vm)} * "
+    if len(lm) > 0:
+        ret += f"{' * '.join(lm)} * "
+    if len(pm) > 0:
+        ret += f"{' * '.join(pm)} * "
+    debug(f"{ret=}")
+    return ret[0:-3]
 
 
-def multiply(lst_fd1, lst_fd2, feyn_model):
+def multiply(
+    lst_fd1: List[FeynmanDiagram], lst_fd2: List[FeynmanDiagram], feyn_model: FeynModel
+):
     # TODO should this care about fermion lines!?
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd1]
@@ -28,7 +45,15 @@ def multiply(lst_fd1, lst_fd2, feyn_model):
     return s[:-3]
 
 
-def square(lst_fd, feyn_model, tag=False):
+def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
+    """
+    Squares the list of feynman diagrams taking the fermion sign into account.
+    """
+    dims = lst_fd[0].get_externals_size()
+    for fd in lst_fd:
+        assert (
+            dims == fd.get_externals_size()
+        ), "All FeynmanDiagrams must have the same external legs"
     # TODO handle relative fermion sign (also majorana!) https://cds.cern.ch/record/238903/files/th-6549-92.pdf
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""

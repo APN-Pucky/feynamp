@@ -1,3 +1,6 @@
+# Utilities for feynamp
+
+
 def safe_index_replace(string, old, new):
     string = string.replace("," + old + ",", "," + new + ",")
     string = string.replace("(" + old + ",", "(" + new + ",")

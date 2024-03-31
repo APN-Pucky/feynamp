@@ -4,8 +4,8 @@
   output= 'output.out' ;
   style= 'tmp.sty' ;
   model = 'tmp.model';
-  in= i28533896172696947i[p1], i111460582454643i[p2];
-  out= i117i[p3], i504111456626i[p4], i103i[p5];
+  in= i103i[p1], i103i[p2];
+  out= i103i[p3], i103i[p4];
   loops= 0;
   loop_momentum= l;
   options= notadpole,onshell;
@@ -19,7 +19,7 @@
  <diagram
           id="Diagram1"
           incoming="2"
-          outgoing="3"
+          outgoing="2"
           sign="+"
           symmmetry_factor="1"
  >
@@ -28,16 +28,10 @@
   <vertex id="Vert1">
   </vertex>
 
-  <vertex id="Vert2">
-  </vertex>
-
-  <vertex id="Vert3">
-  </vertex>
-
 
 
   <leg id="In1">
-        <name>i28533896172696947i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -46,7 +40,7 @@
   </leg>
 
   <leg id="In2">
-        <name>i111460582454643i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -57,51 +51,24 @@
 
 
   <leg id="Out1">
-        <name>i117i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
-        <target>Vert2</target>
+        <target>Vert1</target>
         <momentum>
           <name>p3</name>
         </momentum>
   </leg>
 
   <leg id="Out2">
-        <name>i504111456626i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
-        <target>Vert3</target>
+        <target>Vert1</target>
         <momentum>
           <name>p4</name>
         </momentum>
   </leg>
 
-  <leg id="Out3">
-        <name>i103i</name>
-        <sense>outgoing</sense>
-        <target>Vert2</target>
-        <momentum>
-          <name>p5</name>
-        </momentum>
-  </leg>
 
-
-
-  <propagator id="Prop1">
-        <name>i444016192865i</name>
-        <source>Vert3</source>
-        <target>Vert1</target>
-        <momentum>
-          <name>-p1-p2</name>
-        </momentum>
-  </propagator>
-
-  <propagator id="Prop2">
-        <name>i117i</name>
-        <source>Vert3</source>
-        <target>Vert2</target>
-        <momentum>
-          <name>p3+p5</name>
-        </momentum>
-  </propagator>
 
 
  </diagram>
@@ -109,7 +76,7 @@
  <diagram
           id="Diagram2"
           incoming="2"
-          outgoing="3"
+          outgoing="2"
           sign="+"
           symmmetry_factor="1"
  >
@@ -121,13 +88,10 @@
   <vertex id="Vert2">
   </vertex>
 
-  <vertex id="Vert3">
-  </vertex>
-
 
 
   <leg id="In1">
-        <name>i28533896172696947i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -136,7 +100,7 @@
   </leg>
 
   <leg id="In2">
-        <name>i111460582454643i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -147,7 +111,7 @@
 
 
   <leg id="Out1">
-        <name>i117i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
         <target>Vert2</target>
         <momentum>
@@ -156,40 +120,22 @@
   </leg>
 
   <leg id="Out2">
-        <name>i504111456626i</name>
-        <sense>outgoing</sense>
-        <target>Vert3</target>
-        <momentum>
-          <name>p4</name>
-        </momentum>
-  </leg>
-
-  <leg id="Out3">
         <name>i103i</name>
         <sense>outgoing</sense>
         <target>Vert2</target>
         <momentum>
-          <name>p5</name>
+          <name>p4</name>
         </momentum>
   </leg>
 
 
 
   <propagator id="Prop1">
-        <name>i5922608i</name>
-        <source>Vert3</source>
+        <name>i103i</name>
+        <source>Vert2</source>
         <target>Vert1</target>
         <momentum>
           <name>-p1-p2</name>
-        </momentum>
-  </propagator>
-
-  <propagator id="Prop2">
-        <name>i117i</name>
-        <source>Vert3</source>
-        <target>Vert2</target>
-        <momentum>
-          <name>p3+p5</name>
         </momentum>
   </propagator>
 
@@ -199,7 +145,7 @@
  <diagram
           id="Diagram3"
           incoming="2"
-          outgoing="3"
+          outgoing="2"
           sign="+"
           symmmetry_factor="1"
  >
@@ -211,13 +157,10 @@
   <vertex id="Vert2">
   </vertex>
 
-  <vertex id="Vert3">
-  </vertex>
-
 
 
   <leg id="In1">
-        <name>i28533896172696947i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -226,9 +169,9 @@
   </leg>
 
   <leg id="In2">
-        <name>i111460582454643i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
-        <target>Vert1</target>
+        <target>Vert2</target>
         <momentum>
           <name>p2</name>
         </momentum>
@@ -237,16 +180,16 @@
 
 
   <leg id="Out1">
-        <name>i117i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
-        <target>Vert3</target>
+        <target>Vert1</target>
         <momentum>
           <name>p3</name>
         </momentum>
   </leg>
 
   <leg id="Out2">
-        <name>i504111456626i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
         <target>Vert2</target>
         <momentum>
@@ -254,32 +197,14 @@
         </momentum>
   </leg>
 
-  <leg id="Out3">
-        <name>i103i</name>
-        <sense>outgoing</sense>
-        <target>Vert2</target>
-        <momentum>
-          <name>p5</name>
-        </momentum>
-  </leg>
-
 
 
   <propagator id="Prop1">
-        <name>i444016192865i</name>
-        <source>Vert3</source>
+        <name>i103i</name>
+        <source>Vert2</source>
         <target>Vert1</target>
         <momentum>
-          <name>-p1-p2</name>
-        </momentum>
-  </propagator>
-
-  <propagator id="Prop2">
-        <name>i117i</name>
-        <source>Vert2</source>
-        <target>Vert3</target>
-        <momentum>
-          <name>-p4-p5</name>
+          <name>-p1+p3</name>
         </momentum>
   </propagator>
 
@@ -289,7 +214,7 @@
  <diagram
           id="Diagram4"
           incoming="2"
-          outgoing="3"
+          outgoing="2"
           sign="+"
           symmmetry_factor="1"
  >
@@ -301,13 +226,10 @@
   <vertex id="Vert2">
   </vertex>
 
-  <vertex id="Vert3">
-  </vertex>
-
 
 
   <leg id="In1">
-        <name>i28533896172696947i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
         <target>Vert1</target>
         <momentum>
@@ -316,9 +238,9 @@
   </leg>
 
   <leg id="In2">
-        <name>i111460582454643i</name>
+        <name>i103i</name>
         <sense>incoming</sense>
-        <target>Vert1</target>
+        <target>Vert2</target>
         <momentum>
           <name>p2</name>
         </momentum>
@@ -327,49 +249,31 @@
 
 
   <leg id="Out1">
-        <name>i117i</name>
+        <name>i103i</name>
         <sense>outgoing</sense>
-        <target>Vert3</target>
+        <target>Vert2</target>
         <momentum>
           <name>p3</name>
         </momentum>
   </leg>
 
   <leg id="Out2">
-        <name>i504111456626i</name>
-        <sense>outgoing</sense>
-        <target>Vert2</target>
-        <momentum>
-          <name>p4</name>
-        </momentum>
-  </leg>
-
-  <leg id="Out3">
         <name>i103i</name>
         <sense>outgoing</sense>
-        <target>Vert2</target>
+        <target>Vert1</target>
         <momentum>
-          <name>p5</name>
+          <name>p4</name>
         </momentum>
   </leg>
 
 
 
   <propagator id="Prop1">
-        <name>i5922608i</name>
-        <source>Vert3</source>
+        <name>i103i</name>
+        <source>Vert2</source>
         <target>Vert1</target>
         <momentum>
-          <name>-p1-p2</name>
-        </momentum>
-  </propagator>
-
-  <propagator id="Prop2">
-        <name>i117i</name>
-        <source>Vert2</source>
-        <target>Vert3</target>
-        <momentum>
-          <name>-p4-p5</name>
+          <name>-p1+p4</name>
         </momentum>
   </propagator>
 

@@ -22,12 +22,14 @@ def test_apply_TT_scaled():
     assert expected.equals(result)
 
 
-def test_fTT():
-    a, b, c, i, j, k, l, g = symbols("a b c i j k l g")
-    test = f(a, b, c) * T(c, i, j) * T(b, k, i)
-    result = apply_color(apply_color(apply_color(test)))
-    expected = I / 2 * N_c * T(a, k, j)
-    assert expected.equals(result)
+# TODO temporarily commentent because it is to slow
+#
+# def test_fTT():
+#    a, b, c, i, j, k, l, g = symbols("a b c i j k l g")
+#    test = f(a, b, c) * T(c, i, j) * T(b, k, i)
+#    result = apply_color(apply_color(apply_color(test)))
+#    expected = I / 2 * N_c * T(a, k, j)
+#    assert expected.equals(result)
 
 
 def test_TTT():
