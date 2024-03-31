@@ -8,21 +8,21 @@ repository = "https://github.com/APN-Pucky/feynamp"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-
-#feynml =">=0.2.13"
-feynml = {path= "../feynml", develop = true }
-
-#feynmodel =">=0.0.4"
-feynmodel = {path= "../feynmodel", develop = true }
 sympy = "*"
 python-form = "*"
 
+feynml = ">=0.2.26"
+#feynml = {path= "../feynml", develop = true }
+
+feynmodel = ">=0.0.5"
+#feynmodel = {path= "../feynmodel", develop = true }
 
 [tool.poetry.group.test]
 optional = true
 
 [tool.poetry.group.test.dependencies]
-equation-database = {path="../equation-database", develop = true}
+equation-database = ">=2024.3.30"
+#equation-database = {path="../equation-database", develop = true}
 pytest = "*"
 pytest-cov =  "*"
 pytest-profiling =  "*"
