@@ -5,6 +5,7 @@ from feynml.id import generate_new_id
 from feynml.leg import Leg
 from feynml.propagator import Propagator
 
+from feynamp.log import debug
 from feynamp.momentum import insert_momentum
 from feynamp.util import safe_index_replace
 
@@ -57,10 +58,14 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
     lret = []
     for j in range(len(v.color)):
         col = v.color[j]
+        debug(f"{col=}")
         nid = generate_new_id()
+        debug(f"{nid=}")
         col = safe_index_replace(col, str(-1), str(nid))
+        debug(f"{col=}")
         for i, vv in enumerate(v.particles):
             if isinstance(v.connections[i], Leg):
+                debug(f"{v.connections[i]=}")
                 col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
             elif isinstance(v.connections[i], Propagator):
                 col = safe_index_replace(
@@ -73,6 +78,7 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
                 raise Exception(
                     f"Connection {v.connections[i]} not a leg or propagator"
                 )
+            debug(f"{col=}")
         if typed:
             col = insert_color_types(col)
         cret.append(col)
@@ -104,32 +110,55 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
 
 
 def find_vertex_in_model(fd, vertex, model):
-    # TODO handle multiple vertices
+    """
+    Finds the model vertex corresponding to the given FeynmanDiagram vertex
+
+    Note: Sorting is to check for the correct particles in a vertex given they can be in any order and have duplicates
+    """
     assert vertex in fd.vertices
     cons = np.array(fd.get_connections(vertex))
-    aa = []
+    debug(f"{cons=}")
+    pdg_ids_list = []
+
+    # correct for incoming vs outgoing fermion struct
     for c in cons:
         p = c.pdgid
-        # correct for incoming vs outgoing fermion struct
         if c.is_any_fermion():
             if c.goes_into(vertex):
                 p = -p
+        pdg_ids_list += [p]
+    pdg_ids_array = np.array(pdg_ids_list)
 
-        aa += [p]
-    cpd = np.array(aa)
-
-    cmask = np.argsort(cpd)
-    particles = cpd[cmask]
-    scons = cons[cmask]
+    sort_mask = np.argsort(pdg_ids_array)
+    particles = pdg_ids_array[sort_mask]
+    scons = cons[sort_mask]
+    debug(f"{scons=}")
+    ret = None
     for v in model.vertices:
         if len(v.particles) != len(particles):
             continue
-        pp = np.array([p.pdg_code for p in v.particles])
-        smp = sorted(pp)
-        if np.array_equal(smp, particles):
+        model_particle_ids = np.array([p.pdg_code for p in v.particles])
+        model_sort_mask = np.argsort(model_particle_ids)
+        # By sorting based on the indices we reproduce the order of the particles in the vertex
+        inverted_model_sort_mask = np.argsort(model_sort_mask)
+        sorted_model_particle_ids = model_particle_ids[model_sort_mask]
+        if np.array_equal(sorted_model_particle_ids, particles):
             vc = []
-            for i, ps in enumerate(pp):
-                vc.append(scons[smp.index(ps)])
+            for i, ps in enumerate(model_particle_ids):
+                con = scons[inverted_model_sort_mask[i]]
+                debug(f"{sorted_model_particle_ids}")
+                debug(f"{con=}")
+                vc.append(con)
             v.connections = vc
-            return v
-    raise Exception(f"Vertex {vertex} with cons {cons} not found in model\naa={aa}")
+            ret = v
+            break
+
+    # Make sure all connections are in the vertex
+    for c in cons:
+        assert c in ret.connections
+
+    if ret is None:
+        raise Exception(
+            f"Vertex {vertex} with cons {cons} not found in model\n{pdg_ids_list=}"
+        )
+    return ret
