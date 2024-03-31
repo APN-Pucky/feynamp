@@ -11,6 +11,8 @@ repeat;
 * identity
     id Gamma(Mua?,Spinb?,Spinc?) * GammaId(Spinc?,Spind?) = Gamma(Mua,Spinb,Spind);
     id Gamma(Mua?,Spinb?,Spinc?) * GammaId(Spind?,Spinb?) = Gamma(Mua,Spind,Spinc);
+    id GammaId(Spina?,Spinb?) * GammaId(Spinb?,Spind?) = GammaId(Spina,Spind);
+    id GammaId(Spina?,Spina?) = 4;
 * Metric
     id Metric(Mua?,Mub?) * Gamma(Mua?,Spind?,Spinf?) = Gamma(Mub,Spind,Spinf);
     id Metric(Mua?,Mub?) * P(Mua?,Momd?) = P(Mub,Momd);
