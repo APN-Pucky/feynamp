@@ -18,7 +18,7 @@ repeat;
     id Metric(Mua?,Mub?) * Metric(Mub?,Muc?) = Metric(Mua,Muc);
     id Metric(Mua?,Mua?) = 4;
 * standard Gamma algebra
-    id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mua?,Spinc?,Spind?) = -GammaId(Mub,Mud);
+    id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mua?,Spinc?,Spind?) = -GammaId(Spinb,Spind);
     id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mud?,Spinc?,Spine?)*Gamma(Mua?,Spine?,Spinf?) = -2*Gamma(Mud,Spinb,Spinf);
     id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mud?,Spinc?,Spine?)*Gamma(Muf?,Spine?,Spinm?)*Gamma(Mua?,Spinm?,Spink?) = 4*Metric(Mud,Muf)*GammaId(Spinb,Spink);
     id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mud?,Spinc?,Spine?)*Gamma(Muf?,Spine?,Spinm?)*Gamma(Muk?,Spinm?,Spinl?)*Gamma(Mua?,Spinl?,Spinj?) = -2*Gamma(Muk,Spinb,Spinc)*Gamma(Muf,Spinc,Spinl)*Gamma(Mud,Spinl,Spinj);
