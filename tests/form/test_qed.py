@@ -13,7 +13,7 @@ import feynamp
 def test_compton():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
-    qgraf.install("3.6.5")
+    qgraf.install()
     xml_string = qgraf.run(
         "e_minus[p1], gamma[p2]",
         "e_minus[p3], gamma[p4]",
@@ -38,7 +38,7 @@ def test_emu_emu():
     fm.remove_object(fm.get_particle("Z"))
     fm.remove_object(fm.get_particle("H"))
     qfm = feynmodel_to_qgraf(fm, True, False)
-    qgraf.install("3.6.5")
+    qgraf.install()
     xml_string = qgraf.run(
         "e_minus[p1], mu_minus[p2]",
         "e_minus[p3], mu_minus[p4]",

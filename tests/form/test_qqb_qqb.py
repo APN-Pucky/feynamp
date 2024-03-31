@@ -25,7 +25,7 @@ def test_form_qqb_qqb():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
 
-    qgraf.install("3.6.5")
+    qgraf.install()
     xml_string = qgraf.run(
         "u[p1], u_bar[p2]",
         "u[p3], u_bar[p4]",
@@ -94,7 +94,7 @@ def test_form_qqb_qqb_automatic():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
 
-    qgraf.install("3.6.5")
+    qgraf.install()
     xml_string = qgraf.run(
         "u[p1], u_bar[p2]",
         "u[p3], u_bar[p4]",
