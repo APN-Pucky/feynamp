@@ -11,17 +11,20 @@ from feynamp.util import safe_index_replace
 
 
 def insert_color_types(s):
-    s = re.sub(r"T\((.*),(.*),(.*)\)", r"T(Glu\1,Col\2,Col\3)", s)
-    s = re.sub(r"f\((.*),(.*),(.*)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
-    s = re.sub(r"Identity\((.*),(.*)\)", r"Identity(Col\1,Col\2)", s)
+    """ """
+    # We use the non greedy .*? to match multiple occurances individually
+    s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Glu\1,Col\2,Col\3)", s)
+    s = re.sub(r"f\((.*?),(.*?),(.*?)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
+    s = re.sub(r"Identity\((.*?),(.*?)\)", r"Identity(Col\1,Col\2)", s)
     return s
 
 
 def insert_lorentz_types(s):
-    s = re.sub(r"Gamma\((.*),(.*),(.*)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
-    s = re.sub(r"ProjP\((.*),(.*)\)", r"ProjP(Spin\1,Spin\2)", s)
-    s = re.sub(r"ProjM\((.*),(.*)\)", r"ProjM(Spin\1,Spin\2)", s)
-    s = re.sub(r"Metric\((.*),(.*)\)", r"Metric(Mu\1,Mu\2)", s)
+    # We use the non greedy .*? to match multiple occurances individually
+    s = re.sub(r"Gamma\((.*?),(.*?),(.*?)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
+    s = re.sub(r"ProjP\((.*?),(.*?)\)", r"ProjP(Spin\1,Spin\2)", s)
+    s = re.sub(r"ProjM\((.*?),(.*?)\)", r"ProjM(Spin\1,Spin\2)", s)
+    s = re.sub(r"Metric\((.*?),(.*?)\)", r"Metric(Mu\1,Mu\2)", s)
     # use insert_momentum to replace the second argument to P
     m = re.match(r"P\((.*),(.*)\)", s)
     if m:
@@ -43,7 +46,7 @@ def get_vertex_math_string(fd, vertex, model):
     vv = get_vertex_math(fd, vertex, model)
     s = ""
     for v in vv:
-        s += f"{v[0]}*{v[1]}*{v[2]} + "
+        s += f"({v[0]})*({v[1]})*({v[2]}) + "
     return s[:-3]
 
 
@@ -65,9 +68,9 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
         debug(f"{col=}")
         for i, vv in enumerate(v.particles):
             if isinstance(v.connections[i], Leg):
-                debug(f"{v.connections[i]=}")
                 col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
             elif isinstance(v.connections[i], Propagator):
+                debug(f"{v.connections[i]=}")
                 col = safe_index_replace(
                     col,
                     str(i + 1),
@@ -78,9 +81,10 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
                 raise Exception(
                     f"Connection {v.connections[i]} not a leg or propagator"
                 )
-            debug(f"{col=}")
+        debug(f"{col=}")
         if typed:
             col = insert_color_types(col)
+        debug(f"{col=}")
         cret.append(col)
     for k in range(len(v.lorentz)):
         lor = v.lorentz[j].structure
@@ -117,7 +121,7 @@ def find_vertex_in_model(fd, vertex, model):
     """
     assert vertex in fd.vertices
     cons = np.array(fd.get_connections(vertex))
-    debug(f"{cons=}")
+    # debug(f"{cons=}")
     pdg_ids_list = []
 
     # correct for incoming vs outgoing fermion struct
@@ -132,7 +136,7 @@ def find_vertex_in_model(fd, vertex, model):
     sort_mask = np.argsort(pdg_ids_array)
     particles = pdg_ids_array[sort_mask]
     scons = cons[sort_mask]
-    debug(f"{scons=}")
+    # debug(f"{scons=}")
     ret = None
     for v in model.vertices:
         if len(v.particles) != len(particles):
@@ -146,8 +150,6 @@ def find_vertex_in_model(fd, vertex, model):
             vc = []
             for i, ps in enumerate(model_particle_ids):
                 con = scons[inverted_model_sort_mask[i]]
-                debug(f"{sorted_model_particle_ids}")
-                debug(f"{con=}")
                 vc.append(con)
             v.connections = vc
             ret = v
