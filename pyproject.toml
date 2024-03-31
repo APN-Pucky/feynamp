@@ -38,7 +38,7 @@ jupyterlab =  "*"
 jupyter = "*"
 pyfeyn2 = ">=2.3.6"
 #pyfeyn2 = {path= "../pyfeyn2", develop = true }
-pyqgraf = "*"
+pyqgraf = ">=0.0.14"
 #pyqgraf = {path= "../pyqgraf", develop = true }
 
 poetry-dynamic-versioning = {extras = ["plugin"], version = ">=0.21.1,<1.3.0"}
