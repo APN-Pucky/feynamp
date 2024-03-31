@@ -64,6 +64,6 @@ addopts = [ "-v", "--cov=feynamp", "--cov-config=.coveragerc","--cov-append", "-
 filterwarnings = [
     'error',
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning',
-    "ignore: Deprecated call to `pkg_resources.declare_namespace('mpl_toolkits')`"
+    "ignore: Deprecated call to `pkg_resources.declare_namespace('mpl_toolkits')`:DeprecationWarning"
 ]
                   
