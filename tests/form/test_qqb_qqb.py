@@ -9,7 +9,7 @@ from sympy.parsing.sympy_parser import parse_expr
 from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
-from feynamp.amplitude import multiply, square
+from feynamp.amplitude import square
 from feynamp.form.color import get_color
 from feynamp.form.lorentz import get_gammas
 from feynamp.form.momentum import (
