@@ -3,7 +3,7 @@ from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
 from feynmodel.interface.ufo import load_ufo_model
 from pyfeyn2.feynmandiagram import FeynML
-from pyqgraf import model, qgraf
+from pyqgraf import qgraf
 from sympy import Symbol, simplify
 from sympy.parsing.sympy_parser import parse_expr
 from xsdata.formats.dataclass.parsers import XmlParser

@@ -7,7 +7,6 @@ from feynml.id import generate_new_id
 from feynml.leg import Leg
 from feynml.propagator import Propagator
 
-from feynamp.log import debug
 from feynamp.momentum import insert_momentum
 from feynamp.util import safe_index_replace
 
@@ -162,7 +161,7 @@ def find_vertex_in_model(fd, vertex, model):
         sorted_model_particle_ids = model_particle_ids[model_sort_mask]
         if np.array_equal(sorted_model_particle_ids, particles):
             vc = []
-            for i, ps in enumerate(model_particle_ids):
+            for i, _ in enumerate(model_particle_ids):
                 con = scons[inverted_model_sort_mask[i]]
                 vc.append(con)
             v.connections = vc

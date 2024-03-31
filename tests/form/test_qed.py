@@ -4,22 +4,10 @@ from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
 from feynmodel.interface.ufo import load_ufo_model
 from pyfeyn2.feynmandiagram import FeynML
-from pyqgraf import model, qgraf
+from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
-import feynamp.amplitude as famp
-import feynamp.form.momentum as m
-import feynamp.vertex as fvert
-from feynamp.amplitude import feynman_diagram_to_string, multiply, square
-from feynamp.form.color import apply_color, get_color
-from feynamp.form.lorentz import apply_gammas, get_gammas
-from feynamp.form.momentum import (
-    apply,
-    get_kinematics,
-    get_mandelstamm_2_to_2,
-    get_onshell,
-)
 
 
 def test_compton():

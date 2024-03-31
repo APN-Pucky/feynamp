@@ -1,6 +1,5 @@
 from equation_database import isbn_9780511628788 as ref
 from feynml.feynmandiagram import FeynmanDiagram
-from feynml.feynml import FeynML, Head, Meta
 from feynml.leg import Leg
 from feynml.momentum import Momentum
 from feynml.propagator import Propagator

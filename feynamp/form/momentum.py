@@ -1,3 +1,8 @@
+import re
+from typing import List
+
+from feynml.feynmandiagram import FeynmanDiagram
+
 from feynamp.form import *
 from feynamp.leg import find_leg_in_model
 from feynamp.log import warning
