@@ -2,8 +2,10 @@ import re
 from typing import List
 
 from feynml.feynmandiagram import FeynmanDiagram
+from feynmodel.feyn_model import FeynModel
 
-from feynamp.form import *
+# from feynamp.form import *
+from feynamp.form import init, run, string_to_form
 from feynamp.leg import find_leg_in_model
 from feynamp.log import warning
 from feynamp.momentum import insert_mass, insert_momentum
