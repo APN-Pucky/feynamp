@@ -29,9 +29,7 @@ def insert_lorentz_types(s: str, connections: List[Connector]):
     s = re.sub(r"Metric\((.*?),(.*?)\)", r"Metric(Mu\1,Mu\2)", s)
     # use insert_momentum to replace the second argument to P
     matches = re.findall(r"P\((.*?),(.*?)\)", s)
-    debug(f"{matches=}")
     for g in matches:
-        debug(f"{s=}")
         # find connection with g[1] id in connections
         thec = None
         for c in connections:
@@ -46,7 +44,6 @@ def insert_lorentz_types(s: str, connections: List[Connector]):
             "P(" + g[0] + "," + g[1] + ")",
             "P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + ")",
         )
-        debug(f"{s=}")
     return s
 
 
@@ -64,6 +61,13 @@ def get_vertex_math_string(fd, vertex, model):
     return s[:-3]
 
 
+def get_index_prefix(connection: Connector, vertex):
+    if connection.goes_into(vertex):
+        return "In"
+    else:
+        return "Out"
+
+
 def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indices
     if not typed:
         raise NotImplementedError("Only typed vertices are supported")
@@ -77,34 +81,27 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
     lret = []
     for j in range(len(v.color)):
         col = v.color[j]
-        debug(f"{col=}")
         nid = generate_new_id()
-        debug(f"{nid=}")
         col = safe_index_replace(col, str(-1), str(nid))
-        debug(f"{col=}")
         for i, vv in enumerate(v.particles):
             if isinstance(v.connections[i], Leg):
                 col = safe_index_replace(col, str(i + 1), str(v.connections[i].id))
             elif isinstance(v.connections[i], Propagator):
-                debug(f"{v.connections[i]=}")
                 col = safe_index_replace(
                     col,
                     str(i + 1),
-                    ("In" if v.connections[i].goes_into(vertex) else "Out")
+                    get_index_prefix(v.connections[i], vertex)
                     + str(v.connections[i].id),
                 )
             else:
                 raise Exception(
                     f"Connection {v.connections[i]} not a leg or propagator"
                 )
-        debug(f"{col=}")
         if typed:
             col = insert_color_types(col)
-        debug(f"{col=}")
         cret.append(col)
     for k in range(len(v.lorentz)):
         lor = v.lorentz[j].structure
-        debug(f"{lor=}")
         nid = generate_new_id()
         lor = safe_index_replace(lor, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
@@ -114,7 +111,7 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
                 lor = safe_index_replace(
                     lor,
                     str(i + 1),
-                    ("In" if v.connections[i].goes_into(vertex) else "Out")
+                    get_index_prefix(v.connections[i], vertex)
                     + str(v.connections[i].id),
                 )
             else:
@@ -175,7 +172,7 @@ def find_vertex_in_model(fd, vertex, model):
     # Make sure all connections are in the vertex
     for c in cons:
         assert c in ret.connections
-    debug(f"{ret=}")
+    # debug(f"{ret=}")
     if ret is None:
         raise Exception(
             f"Vertex {vertex} with cons {cons} not found in model\n{pdg_ids_list=}"

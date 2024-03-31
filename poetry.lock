@@ -1265,14 +1265,12 @@ url = "../feynml"
 
 [[package]]
 name = "feynmodel"
-version = "0.0.4"
+version = "0.0.4.4"
 description = "Models for constructing Feynman diagrams"
 optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "feynmodel-0.0.4-py3-none-any.whl", hash = "sha256:395ad9dd3a526078313a3e2b1a598c51ac8ec4751a2d46dbeaac13181f2183ab"},
-    {file = "feynmodel-0.0.4.tar.gz", hash = "sha256:39fc2692604ecf5c117dc17f8064610374167ff1c99aff07c154bfde17b7ec97"},
-]
+python-versions = "^3.8"
+files = []
+develop = true
 
 [package.dependencies]
 deprecated = "*"
@@ -1284,6 +1282,10 @@ smpl_util = "*"
 ufo_mssm = "*"
 ufo_sm = "*"
 xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
+
+[package.source]
+type = "directory"
+url = "../feynmodel"
 
 [[package]]
 name = "filelock"

@@ -4,6 +4,7 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
 from feynamp.leg import get_leg_math_string
+from feynamp.log import debug
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
 
@@ -27,10 +28,13 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
         ret += f"{' * '.join(lm)} * "
     if len(pm) > 0:
         ret += f"{' * '.join(pm)} * "
+    debug(f"{ret=}")
     return ret[0:-3]
 
 
-def multiply(lst_fd1, lst_fd2, feyn_model):
+def multiply(
+    lst_fd1: List[FeynmanDiagram], lst_fd2: List[FeynmanDiagram], feyn_model: FeynModel
+):
     # TODO should this care about fermion lines!?
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd1]

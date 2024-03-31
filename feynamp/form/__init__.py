@@ -8,6 +8,7 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
 import feynamp
+from feynamp.log import debug
 
 count = 0
 dummy = 0
@@ -38,6 +39,7 @@ def string_to_form(s):
     s = s.replace("Identity", "df")  # TODO check if this holds or also happens for anti
     s = s.replace("ZERO", "0")
     s = s.replace(".*", "*")  # handle decimals
+    s = s.replace(".)", ")")  # handle decimals
     return s
 
 
@@ -87,6 +89,7 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel):
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
     s2 = feynamp.amplitude.square(fds, fm, tag=False)
+    debug(f"{s2=}")
     fs = ""
     fs += feynamp.form.lorentz.get_gammas()
     fs += feynamp.form.color.get_color()
@@ -95,12 +98,14 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel):
     fs += feynamp.form.momentum.get_mandelstamm(fds, fm)
 
     rs = feynamp.form.momentum.apply(s2, fs)
+    debug(f"{rs=}")
 
     rr = feynamp.form.momentum.apply_den(
         rs,
         feynamp.form.momentum.get_onshell(fds, fm)
         + feynamp.form.momentum.get_mandelstamm(fds, fm),
     )
+    debug(f"{rr=}")
 
     ret = sympy.simplify(
         sympy.parse_expr(

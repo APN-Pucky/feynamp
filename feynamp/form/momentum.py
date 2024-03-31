@@ -52,7 +52,7 @@ def apply(string_expr, str_a):
 def apply_den(string_expr, str_f):
     # re match all Dens
     s = string_expr
-    res = re.findall(r"Den\(([a-zA-Z0-9_+*-\.]+)\)", string_expr)
+    res = re.findall(r"Den\(([a-zA-Z0-9_+*-\.^]+)\)", string_expr)
     if res:
         for og in res:  # TODO parallelize? each as one var in form?
             g = apply(og, str_f)
