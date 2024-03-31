@@ -26,7 +26,7 @@ def insert_lorentz_types(s):
     s = re.sub(r"ProjM\((.*?),(.*?)\)", r"ProjM(Spin\1,Spin\2)", s)
     s = re.sub(r"Metric\((.*?),(.*?)\)", r"Metric(Mu\1,Mu\2)", s)
     # use insert_momentum to replace the second argument to P
-    m = re.match(r"P\((.*),(.*)\)", s)
+    m = re.match(r"P\((.*?),(.*?)\)", s)
     if m:
         for g in m.groups():
             s.replace(
@@ -88,6 +88,7 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
         cret.append(col)
     for k in range(len(v.lorentz)):
         lor = v.lorentz[j].structure
+        debug(f"{lor=}")
         nid = generate_new_id()
         lor = safe_index_replace(lor, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
@@ -158,7 +159,7 @@ def find_vertex_in_model(fd, vertex, model):
     # Make sure all connections are in the vertex
     for c in cons:
         assert c in ret.connections
-
+    debug(f"{ret=}")
     if ret is None:
         raise Exception(
             f"Vertex {vertex} with cons {cons} not found in model\n{pdg_ids_list=}"
