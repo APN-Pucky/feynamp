@@ -27,7 +27,7 @@ def get_propagator_math(fd, prop, model):
         ret += f"Metric(MuIn{p.particle.id},MuOut{p.particle.id})*"
     elif p.spin == 2:  # TODO handle plus minus mass for fermions
         nid = generate_new_id()
-        ret += f"(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id}) + {mass}*GammaId(SpinIn{p.particle.id},SpinIn{p.particle.id}))*"
+        ret += f"(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id}) + {mass}*GammaId(SpinIn{p.particle.id},SpinOut{p.particle.id}))*"
     else:
         raise ValueError("Spin not set for particle")
     return ret + f"Denom({mom},{mass})"
