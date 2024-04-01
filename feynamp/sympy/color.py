@@ -44,8 +44,8 @@ def apply_color(expr, expand=True):
 
 def apply_color_sum(expr):
     wi, wj, wk, ww = symbols("wi wj wk ww", cls=Wild)
-    expr = expr.replace(VC(wi, wk) * VC(wj, wk) * ww, delta_c(wi, wj))
-    expr = expr.replace(VA(wi, wk) * VA(wj, wk) * ww, delta_g(wi, wj))
+    expr = expr.replace(VC(wi, wk) * VC(wj, wk) * ww, ww * delta_c(wi, wj))
+    expr = expr.replace(VA(wi, wk) * VA(wj, wk) * ww, ww * delta_g(wi, wj))
     return expr
 
 
