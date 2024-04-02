@@ -21,8 +21,8 @@ feynmodel = ">=0.0.5"
 optional = true
 
 [tool.poetry.group.test.dependencies]
-equation-database = ">=2024.3.30"
-#equation-database = {path="../equation-database", develop = true}
+#equation-database = ">=2024.3.30"
+equation-database = {path="../equation-database", develop = true}
 pytest = "*"
 pytest-cov =  "*"
 pytest-profiling =  "*"
@@ -64,6 +64,7 @@ addopts = [ "-v", "--cov=feynamp", "--cov-config=.coveragerc","--cov-append", "-
 filterwarnings = [
     'error',
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning',
-    'ignore: Deprecated call to:DeprecationWarning'
+    'ignore: Deprecated call to:DeprecationWarning',
+    "ignore: 'cgi' is deprecated:DeprecationWarning",
 ]
                   

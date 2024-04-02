@@ -1,4 +1,4 @@
-from feynamp.form import *
+from feynamp.form.form import init, run, string_to_form
 
 color = """
 **********************************************************
@@ -8,7 +8,8 @@ color = """
 repeat;
 * remove df(k,j)
    id df(k?,l?)*df(l?,j?)=df(k,j);
-   id T(a?,k?,l?)*df(k?,j?)=T(a,j,l);id T(a?,k?,l?)*df(l?,j?)=T(a,k,j);
+   id T(a?,k?,l?)*df(k?,j?)=T(a,j,l);
+   id T(a?,k?,l?)*df(l?,j?)=T(a,k,j);
 * remove da(a,b)
    id da(a?,b?)*da(b?,c?)=da(a,c);
    id T(a?,k?,l?)*da(a?,b?)=T(b,k,l);

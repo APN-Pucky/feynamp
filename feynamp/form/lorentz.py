@@ -1,4 +1,4 @@
-from feynamp.form import *
+from feynamp.form.form import init, run, string_to_form, get_dummy_index
 
 polsum_phys = """
 *id polsum(mu?,nu?) = -d_(mu,nu) + (pa(mu)*pb(nu)+pa(nu)*pb(mu))/pa.pb;
