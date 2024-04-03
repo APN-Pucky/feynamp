@@ -4,7 +4,7 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
 from feynamp.leg import get_leg_math_string
-from feynamp.log import debug
+from feynamp.log import debug, info
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
 
@@ -59,6 +59,7 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
     lst_fd2 = [feynman_diagram_to_string(l.conjugated(), feyn_model) for l in lst_fd]
+    debug(f"{lst_fd1=}")
     # TODO this could also be done in multiply by comparing the diagrams
     for i in range(len(lst_fd1)):
         for j in range(i, len(lst_fd2)):

@@ -34,7 +34,7 @@ repeat;
    id Tr^-1=2;
 * double f(a,b,c) simplify
 *  id f(a?,b?,e?)*f(c?,d?,e?)=-2 * { [T(a), T(b)] [T(c), T(d)]};
-   id f(a?,b?,e?)*f(c?,d?,e?)=-2 * (T(a,e,N1_?)*T(b,N1_?,N2_?) - T(b,e,N1_?)*T(a,N1_?,N2_?))*(T(c,N2_?,N3_?)*T(d,N3_?,e)-T(d,N2_?,N3_?)*T(c,N3_?,e));
+*   id f(a?,b?,e?)*f(c?,d?,e?)=-2 * (T(a,e,N1_?)*T(b,N1_?,N2_?) - T(b,e,N1_?)*T(a,N1_?,N2_?))*(T(c,N2_?,N3_?)*T(d,N3_?,e)-T(d,N2_?,N3_?)*T(c,N3_?,e));
 endrepeat;
 """
 

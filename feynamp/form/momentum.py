@@ -74,6 +74,7 @@ def get_onshell(fds: List[FeynmanDiagram], model: FeynModel):
         )
         fds = [fds]
     r = ""
+    # TODO might be redundant
     for fd in fds:
         for l in fd.legs:
             p = find_leg_in_model(fd, l, model)
