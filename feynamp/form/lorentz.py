@@ -49,6 +49,24 @@ repeat;
            + Metric(Mua,Muf)*Metric(Mub,Muc)*Metric(Mud,Mue)
            - Metric(Mua,Muf)*Metric(Mub,Mud)*Metric(Muc,Mue)
            + Metric(Mua,Muf)*Metric(Mub,Mue)*Metric(Muc,Mud));
+*    id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mub?,Spinc?,Spind?)*Gamma(Muc?,Spind?,Spine?)*Gamma(Mud?,Spine?,Spinf?)*Gamma(Mue?,Spinf?,Sping?)*Gamma(Muf?,Sping?,Spinh?)*Gamma(Mug?,Spinh?,Spini?)*Gamma(Muh?,Spini?,Spinb?)
+*        = 4*(Metric(Mua,Mub)*Metric(Muc,Mud)*Metric(Mue,Muf)*Metric(Mug,Muh) 
+*           - Metric(Mua,Mub)*Metric(Muc,Mue)*Metric(Mud,Muf)*Metric(Mug,Muh) 
+*           + Metric(Mua,Mub)*Metric(Muc,Muf)*Metric(Mud,Mue)*Metric(Mug,Muh) 
+*           - Metric(Mua,Muc)*Metric(Mub,Mud)*Metric(Mue,Muf)*Metric(Mug,Muh) 
+*           + Metric(Mua,Muc)*Metric(Mub,Mue)*Metric(Mud,Muf)*Metric(Mug,Muh) 
+*           - Metric(Mua,Muc)*Metric(Mub,Muf)*Metric(Mud,Mue)*Metric(Mug,Muh) 
+*           + Metric(Mua,Mud)*Metric(Mub,Muc)*Metric(Mue,Muf)*Metric(Mug,Muh) 
+*           - Metric(Mua,Mud)*Metric(Mub,Mue)*Metric(Muc,Muf)*Metric(Mug,Muh) 
+*           + Metric(Mua,Mud)*Metric(Mub,Muf)*Metric(Muc,Mue)*Metric(Mug,Muh)
+*           - Metric(Mua,Mue)*Metric(Mub,Muc)*Metric(Mud,Muf)*Metric(Mug,Muh)
+*           + Metric(Mua,Mue)*Metric(Mub,Mud)*Metric(Muc,Muf)*Metric(Mug,Muh)
+*           - Metric(Mua,Mue)*Metric(Mub,Muf)*Metric(Muc,Mud)*Metric(Mug,Muh)
+*           + Metric(Mua,Muf)*Metric(Mub,Muc)*Metric(Mud,Mue)*Metric(Mug,Muh)
+*           - Metric(Mua,Muf)*Metric(Mub,Mud)*Metric(Muc,Mue)*Metric(Mug,Muh)
+*           + Metric(Mua,Muf)*Metric(Mub,Mue)*Metric(Muc,Mud)*Metric(Mug,Muh)
+*           ...
+*           );
 endrepeat;
 """
 
@@ -61,8 +79,34 @@ endrepeat;
 """
 
 # TODO implement collecting of gammas and form calc solving of it
+# idea: GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
+gamma_collect = """
+repeat;
+id Metric(Mua?,Mub?) = d_(Mua,Mub);
+endrepeat;
+#do i = 1, 10
+once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
+repeat;
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*Gamma(Mux?, Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus, Mux);
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*GammaId(Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus)*gi_(`i');
+endrepeat;
+id GammaCollect(`i',Spin1?,Spin1?,?mus) = g_(`i',?mus);
+trace4, `i';
+#enddo
+#do i = 11, 21
+once GammaId(Spin1?,Spin2?) = GammaIdCollect(`i',Spin1,Spin2);
+repeat;
+id GammaIdCollect(`i',Spin1?,Spin2?)*GammaId(Spin2?,Spin3?) = GammaIdCollect(`i',Spin1,Spin3)*gi_(`i');
+endrepeat;
+id GammaIdCollect(`i',Spin1?,Spin1?) = 1;
+trace4, `i';
+#enddo
+"""
 
 def get_gammas():
+    return get_dirac_trick() + gamma_collect
+
+def old_get_gammas():
     return get_dirac_trick() + gammas
 
 def apply_gammas(string_expr):
@@ -113,11 +157,8 @@ def get_polarisation_sum_feynman(mom_a):
     return pol_sum
 
 def get_polarisation_sum_physical(mom_a, mom_b):
-    dummy = get_dummy_index()
-    dummy2 = get_dummy_index()
-    dummy3 = get_dummy_index()
     pol_sum= f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})* Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
     """
     return pol_sum
 
