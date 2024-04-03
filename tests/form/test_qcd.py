@@ -11,7 +11,7 @@ from feynamp.form import compute_squared
 import logging
 
 logger = logging.getLogger("feynamp")
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
 
 def test_compton():
     fm = load_ufo_model("ufo_sm")
@@ -28,13 +28,21 @@ def test_compton():
     parser = XmlParser()
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
-    fds = [fds[0]]
+    #fds = [fds[0]]
+    #fds = [fds[1]]
     #fds = [fds[1],fds[2]]
     #for fd in fds:
     #    fd.render(render="ascii")
 
-    ret = compute_squared(fds, fm)
-    res = sympy.simplify(ret.subs({"s" : "-t-u", "Nc" : "3" , "Cf" : "4/3"}))
+    ret = compute_squared(fds, fm,tag = True)
+    res = sympy.simplify(ret.subs({"s" : "-t-u", "Nc" : "3" , "Cf" : "4/3", "G" : 1, 
+                                   "fdDiagram1" : 1, "fdDiagram2" : 1, "fdDiagram3" : 1,
+                                   "fdDiagram1fdDiagram1" : -1,
+                                   "fdDiagram1fdDiagram2" : 1,
+                                   "fdDiagram1fdDiagram3" : 1,
+                                   "fdDiagram2fdDiagram3" : 1,
+                                   "fdDiagram2fdDiagram2" : 1,
+                                   "fdDiagram3fdDiagram3" : 1,
+                                   }))
     #print(res.expand())
-    G,t,u = sympy.symbols("G t u")
-    assert res.equals(G**4/2/3*(t**2+u**2)/(t*u)) # result from 
+    assert res.equals(ref.table_7_1["gluon_gluon_to_quark_quarkbar"].subs({"s":"-t-u"})) # result from 

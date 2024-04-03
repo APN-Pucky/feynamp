@@ -11,6 +11,9 @@ from feynamp.vertex import get_vertex_math_string
 
 def feynman_diagram_to_string(feynman_diagram, feyn_model):
     fd = feynman_diagram
+    # TODO use these informations from qgraf, might need to be implemented in feynml
+    #sign = fd.get_sign()
+    #symmetry = fd.get_symmetry_factor()
     vm = []
     lm = []
     pm = []
@@ -55,6 +58,7 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
     # TODO handle relative fermion sign (also majorana!) https://cds.cern.ch/record/238903/files/th-6549-92.pdf
+    # TODO also multiply by the symmetry factor from qgraf
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]

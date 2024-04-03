@@ -17,13 +17,13 @@ from feynamp.form.momentum import get_kinematics, get_onshell, get_mandelstamm, 
 # TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s
 
 
-def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel):
+def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag =False):
     dims = fds[0].get_externals_size()
     for fd in fds:
         assert (
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
-    s2 = amplitude.square(fds, fm, tag=False)
+    s2 = amplitude.square(fds, fm, tag=tag)
     debug(f"{s2=}")
     fs = ""
     fs += get_polarisation_sums(fds, fm)

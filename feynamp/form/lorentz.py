@@ -49,24 +49,6 @@ repeat;
            + Metric(Mua,Muf)*Metric(Mub,Muc)*Metric(Mud,Mue)
            - Metric(Mua,Muf)*Metric(Mub,Mud)*Metric(Muc,Mue)
            + Metric(Mua,Muf)*Metric(Mub,Mue)*Metric(Muc,Mud));
-*    id Gamma(Mua?,Spinb?,Spinc?)*Gamma(Mub?,Spinc?,Spind?)*Gamma(Muc?,Spind?,Spine?)*Gamma(Mud?,Spine?,Spinf?)*Gamma(Mue?,Spinf?,Sping?)*Gamma(Muf?,Sping?,Spinh?)*Gamma(Mug?,Spinh?,Spini?)*Gamma(Muh?,Spini?,Spinb?)
-*        = 4*(Metric(Mua,Mub)*Metric(Muc,Mud)*Metric(Mue,Muf)*Metric(Mug,Muh) 
-*           - Metric(Mua,Mub)*Metric(Muc,Mue)*Metric(Mud,Muf)*Metric(Mug,Muh) 
-*           + Metric(Mua,Mub)*Metric(Muc,Muf)*Metric(Mud,Mue)*Metric(Mug,Muh) 
-*           - Metric(Mua,Muc)*Metric(Mub,Mud)*Metric(Mue,Muf)*Metric(Mug,Muh) 
-*           + Metric(Mua,Muc)*Metric(Mub,Mue)*Metric(Mud,Muf)*Metric(Mug,Muh) 
-*           - Metric(Mua,Muc)*Metric(Mub,Muf)*Metric(Mud,Mue)*Metric(Mug,Muh) 
-*           + Metric(Mua,Mud)*Metric(Mub,Muc)*Metric(Mue,Muf)*Metric(Mug,Muh) 
-*           - Metric(Mua,Mud)*Metric(Mub,Mue)*Metric(Muc,Muf)*Metric(Mug,Muh) 
-*           + Metric(Mua,Mud)*Metric(Mub,Muf)*Metric(Muc,Mue)*Metric(Mug,Muh)
-*           - Metric(Mua,Mue)*Metric(Mub,Muc)*Metric(Mud,Muf)*Metric(Mug,Muh)
-*           + Metric(Mua,Mue)*Metric(Mub,Mud)*Metric(Muc,Muf)*Metric(Mug,Muh)
-*           - Metric(Mua,Mue)*Metric(Mub,Muf)*Metric(Muc,Mud)*Metric(Mug,Muh)
-*           + Metric(Mua,Muf)*Metric(Mub,Muc)*Metric(Mud,Mue)*Metric(Mug,Muh)
-*           - Metric(Mua,Muf)*Metric(Mub,Mud)*Metric(Muc,Mue)*Metric(Mug,Muh)
-*           + Metric(Mua,Muf)*Metric(Mub,Mue)*Metric(Muc,Mud)*Metric(Mug,Muh)
-*           ...
-*           );
 endrepeat;
 """
 
