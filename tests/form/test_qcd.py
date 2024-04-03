@@ -37,7 +37,7 @@ def test_compton():
     ret = compute_squared(fds, fm,tag = True)
     res = sympy.simplify(ret.subs({"s" : "-t-u", "Nc" : "3" , "Cf" : "4/3", "G" : 1, 
                                    "fdDiagram1" : 1, "fdDiagram2" : 1, "fdDiagram3" : 1,
-                                   "fdDiagram1fdDiagram1" : -1,
+                                   "fdDiagram1fdDiagram1" : 1,
                                    "fdDiagram1fdDiagram2" : 1,
                                    "fdDiagram1fdDiagram3" : 1,
                                    "fdDiagram2fdDiagram3" : 1,
