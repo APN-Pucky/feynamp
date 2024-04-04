@@ -1,3 +1,5 @@
+import logging
+
 import equation_database.isbn_9780471887416 as ref
 import sympy
 from feynml.interface.qgraf import style
@@ -8,6 +10,10 @@ from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
+from feynamp.form import compute_squared
+
+logger = logging.getLogger("feynamp")
+logger.setLevel(logging.DEBUG)
 
 
 def test_compton():
@@ -26,7 +32,7 @@ def test_compton():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = feynamp.form.compute_squared(fds, fm)
+    ret = compute_squared(fds, fm)
     res = sympy.simplify(ret.subs({"Mass_Me": 0, "t": "-u-s", "ee": "e"}))
 
     assert res.equals(ref.equation_6_113)
@@ -51,7 +57,7 @@ def test_emu_emu():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = feynamp.form.compute_squared(fds, fm)
+    ret = compute_squared(fds, fm)
     res = sympy.simplify(ret.subs({"Mass_Me": 0, "Mass_MM": 0, "ee": "e"}))
 
     assert res.equals(ref.equation_6_30)

@@ -109,6 +109,6 @@ def test_form_qqb_qqb_automatic():
 
     fds = [fml.diagrams[2], fml.diagrams[-1]]
 
-    ret = feynamp.form.compute_squared(fds, fm)
+    ret = feynamp.form.compute_squared(fds, fm).subs("Nc", "3").subs("Cf", "4/3")
     g = Symbol("G")
     assert (ret / g**4).equals(ref.table_7_1_qqb_qqb)
