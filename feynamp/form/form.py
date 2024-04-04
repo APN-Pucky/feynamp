@@ -36,15 +36,12 @@ def string_to_form(s):
     return s
 
 
-def run_parallel(
-    init, cmds, variables, show=False, write=False, keep_form_file=True, threads=None
-):
+def run_parallel(init, cmds, variables, show=False, keep_form_file=False, threads=None):
     global count
     count = count + 1
     rets = []
     if threads is None:
         threads = os.cpu_count()
-    with open("form" + str(count) + ".frm", "w") as frm:
         with form.open(keep_log=1000, args=["tform", f"-w{threads}"]) as f:
             txt = "" + init
             for i, s in enumerate(variables):
@@ -53,8 +50,9 @@ def run_parallel(
             for i, s in enumerate(variables):
                 txt += f"print TMP{i};.sort;"
             f.write(txt)
-            if write:
-                frm.write(txt)
+            if keep_form_file:
+                with open("form" + str(count) + ".frm", "w") as frm:
+                    frm.write(txt)
             for i, s in enumerate(variables):
                 rets.append(f.read(f"TMP{i}"))
             # What is this ?
@@ -62,30 +60,27 @@ def run_parallel(
             if show:
                 for r in rets:
                     print(r + "\n")
-            # delete frm file
-            if not keep_form_file:
-                os.remove("form" + str(count) + ".frm")
             assert len(rets) == len(variables)
             return rets
 
 
-def run(s, show=False, keep_form_file=True):
+def run(s, show=False, keep_form_file=False):
     global count
     count = count + 1
-    with open("form" + str(count) + ".frm", "w") as frm:
-        with form.open(keep_log=1000, args=["tform", "-w16"]) as f:
-            local = s.split("Local")[1].split("=")[0].strip()
-            txt = s + "print " + local + ";.sort;"
-            f.write(txt)
-            # frm.write(txt)
-            r = f.read("" + local)
-            r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
-            if show:
-                print(r + "\n")
-            # delete frm file
-            if not keep_form_file:
-                os.remove("form" + str(count) + ".frm")
-            return r
+    with form.open(keep_log=1000, args=["tform", "-w16"]) as f:
+        local = s.split("Local")[1].split("=")[0].strip()
+        txt = s + "print " + local + ";.sort;"
+        f.write(txt)
+        # frm.write(txt)
+        r = f.read("" + local)
+        r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
+        if show:
+            print(r + "\n")
+        # delete frm file
+        if keep_form_file:
+            with open("form" + str(count) + ".frm", "w") as frm:
+                frm.write(txt)
+        return r
 
 
 def sympyfy(string_expr):

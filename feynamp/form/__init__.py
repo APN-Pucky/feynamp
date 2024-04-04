@@ -50,15 +50,12 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
     )
     debug(f"{rr=}")
 
-    ret = sympy.simplify(
-        sympy.parse_expr(
-            rr.replace("Mom_", "")
-            .replace(".", "_")
-            .replace("^", "**")
-            .replace("mss", "s")
-            .replace("msu", "u")
-            .replace("mst", "t")
-        )
-        * sympy.parse_expr("*".join([*get_color_average(fds), *get_spin_average(fds)]))
-    )
+    ret = sympy.parse_expr(
+        rr.replace("Mom_", "")
+        .replace(".", "_")
+        .replace("^", "**")
+        .replace("mss", "s")
+        .replace("msu", "u")
+        .replace("mst", "t")
+    ) * sympy.parse_expr("*".join([*get_color_average(fds), *get_spin_average(fds)]))
     return ret
