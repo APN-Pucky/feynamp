@@ -1,6 +1,5 @@
 import os
 import re
-from typing import List
 
 import form
 
@@ -42,11 +41,11 @@ def run(s, show=False, keep_form_file=True):
     count = count + 1
     with open("form" + str(count) + ".frm", "w") as frm:
         with form.open(keep_log=1000) as f:
-            l = s.split("Local")[1].split("=")[0].strip()
-            txt = s + "print " + l + ";.sort;"
+            local = s.split("Local")[1].split("=")[0].strip()
+            txt = s + "print " + local + ";.sort;"
             f.write(txt)
             frm.write(txt)
-            r = f.read("" + l)
+            r = f.read("" + local)
             r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
             if show:
                 print(r + "\n")

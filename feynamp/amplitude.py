@@ -4,7 +4,7 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
 from feynamp.leg import get_leg_math_string
-from feynamp.log import debug, info
+from feynamp.log import debug
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
 

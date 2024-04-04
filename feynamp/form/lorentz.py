@@ -7,7 +7,7 @@ from feynmodel.feyn_model import FeynModel
 from feynamp.form.form import get_dummy_index, init, run, string_to_form
 from feynamp.leg import find_leg_in_model
 from feynamp.log import debug
-from feynamp.momentum import insert_mass, insert_momentum
+from feynamp.momentum import insert_momentum
 
 gammas = """
 repeat;
@@ -100,10 +100,11 @@ def get_orthogonal_polarisation_momentum(
     leg: Leg, fds: List[FeynmanDiagram], model: FeynModel
 ):
     for fd in [fds[0]]:
-        for l in fd.legs:
-            p = find_leg_in_model(fd, l, model)
-            if l.particle.mass == 0 and l != leg:
-                mom = insert_momentum(l.momentum.name)
+        for leg in fd.legs:
+            # TODO maybe this is not needed
+            p = find_leg_in_model(fd, leg, model)
+            if leg.particle.mass == 0 and leg != leg:
+                mom = insert_momentum(leg.momentum.name)
                 return mom
     raise ValueError("No orthogonal momentum found")
 
@@ -147,7 +148,9 @@ def get_polarisation_sum_feynman(mom_a):
 
 def get_polarisation_sum_physical(mom_a, mom_b):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) 
+    + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) 
+    - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
     """
     return pol_sum
 
