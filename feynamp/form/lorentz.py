@@ -7,7 +7,8 @@ from feynmodel.feyn_model import FeynModel
 from feynamp.form.form import get_dummy_index, init, run, string_to_form
 from feynamp.leg import find_leg_in_model
 from feynamp.log import debug
-from feynamp.momentum import insert_mass, insert_momentum
+from feynamp.momentum import insert_momentum
+from feynamp.util import is_mass_zero
 
 gammas = """
 repeat;
@@ -100,10 +101,10 @@ def get_orthogonal_polarisation_momentum(
     leg: Leg, fds: List[FeynmanDiagram], model: FeynModel
 ):
     for fd in [fds[0]]:
-        for l in fd.legs:
-            p = find_leg_in_model(fd, l, model)
-            if l.particle.mass == 0 and l != leg:
-                mom = insert_momentum(l.momentum.name)
+        for fleg in fd.legs:
+            p = find_leg_in_model(fd, fleg, model)
+            if is_mass_zero(p) and fleg != leg:
+                mom = insert_momentum(fleg.momentum.name)
                 return mom
     raise ValueError("No orthogonal momentum found")
 
@@ -117,7 +118,7 @@ def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
             mom = insert_momentum(l.momentum.name)
             # mass = insert_mass(string_to_form(p.mass.name))
             if p.spin == 3:
-                if p.mass.name == "ZERO" or float(p.mass.value) == 0.0:
+                if is_mass_zero(p):
                     if p.color == 8:
                         mom_n = get_orthogonal_polarisation_momentum(l, fds, model)
                         pol_sums += get_polarisation_sum_physical(mom, mom_n)
@@ -147,7 +148,9 @@ def get_polarisation_sum_feynman(mom_a):
 
 def get_polarisation_sum_physical(mom_a, mom_b):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) 
+    + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) 
+    - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
     """
     return pol_sum
 
