@@ -12,8 +12,8 @@ from feynamp.vertex import get_vertex_math_string
 def feynman_diagram_to_string(feynman_diagram, feyn_model):
     fd = feynman_diagram
     # TODO use these informations from qgraf, might need to be implemented in feynml
-    #sign = fd.get_sign()
-    #symmetry = fd.get_symmetry_factor()
+    # sign = fd.get_sign()
+    # symmetry = fd.get_symmetry_factor()
     vm = []
     lm = []
     pm = []

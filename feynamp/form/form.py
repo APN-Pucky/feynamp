@@ -71,4 +71,3 @@ def sympyfy(string_expr):
         )
     )
     return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
-

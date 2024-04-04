@@ -7,17 +7,23 @@ import sympy
 from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
-from feynamp import get_color_average, get_spin_average
 import feynamp.amplitude as amplitude
-from feynamp.log import debug
+from feynamp import get_color_average, get_spin_average
 from feynamp.form.color import get_color
 from feynamp.form.lorentz import get_gammas, get_polarisation_sums
-from feynamp.form.momentum import get_kinematics, get_onshell, get_mandelstamm, apply, apply_den
+from feynamp.form.momentum import (
+    apply,
+    apply_den,
+    get_kinematics,
+    get_mandelstamm,
+    get_onshell,
+)
+from feynamp.log import debug
 
 # TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s
 
 
-def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag =False):
+def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
     dims = fds[0].get_externals_size()
     for fd in fds:
         assert (
@@ -38,8 +44,7 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag =False):
 
     rr = apply_den(
         rs,
-        get_onshell(fds, fm)
-        + get_mandelstamm(fds, fm),
+        get_onshell(fds, fm) + get_mandelstamm(fds, fm),
     )
     debug(f"{rr=}")
 
@@ -52,8 +57,6 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag =False):
             .replace("msu", "u")
             .replace("mst", "t")
         )
-        * sympy.parse_expr(
-            "*".join([*get_color_average(fds), *get_spin_average(fds)])
-        )
+        * sympy.parse_expr("*".join([*get_color_average(fds), *get_spin_average(fds)]))
     )
     return ret

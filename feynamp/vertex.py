@@ -5,8 +5,8 @@ import numpy as np
 from feynml.connector import Connector
 from feynml.id import generate_new_id
 from feynml.leg import Leg
-from feynml.vertex import Vertex
 from feynml.propagator import Propagator
+from feynml.vertex import Vertex
 
 from feynamp.momentum import insert_momentum
 from feynamp.util import safe_index_replace
@@ -21,7 +21,7 @@ def insert_color_types(s: str):
     return s
 
 
-def insert_lorentz_types(s: str, connections : List[Connector], vertex : Vertex):
+def insert_lorentz_types(s: str, connections: List[Connector], vertex: Vertex):
     # We use the non greedy .*? to match multiple occurances individually
     s = re.sub(r"Gamma\((.*?),(.*?),(.*?)\)", r"Gamma(Mu\1,Spin\2,Spin\3)", s)
     s = re.sub(r"ProjP\((.*?),(.*?)\)", r"ProjP(Spin\1,Spin\2)", s)
@@ -39,20 +39,19 @@ def insert_lorentz_types(s: str, connections : List[Connector], vertex : Vertex)
                     repl = "P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + ")"
                     break
                 else:
-                    repl = "(-P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                    repl = (
+                        "(-P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                    )
                     break
         if repl is None:
             raise Exception(
                 f"Connection with id {g[1]} not found in connections {connections}"
             )
-        s = s.replace(
-            "P(" + g[0] + "," + g[1] + ")",
-            repl
-        )
+        s = s.replace("P(" + g[0] + "," + g[1] + ")", repl)
     return s
 
 
-#def insert_index_types(s):
+# def insert_index_types(s):
 #    s = insert_color_types(s)
 #    s = insert_lorentz_types(s)
 #    return s
@@ -124,7 +123,7 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
                     f"Connection {v.connections[i]} not a leg or propagator"
                 )
         if typed:
-            lor = insert_lorentz_types(lor, v.connections,vertex)
+            lor = insert_lorentz_types(lor, v.connections, vertex)
         lret.append(lor)
     ret = []
     for k, v in v.couplings.items():
