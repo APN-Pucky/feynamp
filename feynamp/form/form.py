@@ -65,7 +65,7 @@ def run_parallel(
             # delete frm file
             if not keep_form_file:
                 os.remove("form" + str(count) + ".frm")
-            assert len(rets) == len(vars)
+            assert len(rets) == len(variables)
             return rets
 
 
