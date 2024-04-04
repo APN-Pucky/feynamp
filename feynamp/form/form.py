@@ -36,12 +36,14 @@ def string_to_form(s):
     return s
 
 
-def run_parallel(init, cmds, vars, show=False, keep_form_file=True):
+def run_parallel(init, cmds, vars, show=False, keep_form_file=True, threads=None):
     global count
     count = count + 1
     rets = []
+    if threads is None:
+        threads = os.cpu_count()
     with open("form" + str(count) + ".frm", "w") as frm:
-        with form.open(keep_log=1000, args=["tform", "-w16"]) as f:
+        with form.open(keep_log=1000, args=["tform", f"-w{threads}"]) as f:
             txt = "" + init
             for i, s in enumerate(vars):
                 txt += f"Local TMP{i} = {s};\n"
