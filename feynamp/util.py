@@ -1,4 +1,5 @@
 # Utilities for feynamp
+from feynmodel.particle import Particle
 
 
 def safe_index_replace(string, old, new):
@@ -14,3 +15,7 @@ def find_particle_in_model(particle, model):
             pp.particle = particle
             return pp
     return None
+
+
+def is_mass_zero(p: Particle):
+    return p.mass.name == "ZERO" or float(p.mass.value) == 0.0
