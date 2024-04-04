@@ -1,10 +1,7 @@
 import logging
 
+debug = logging.getLogger("feynamp").debug
 
-def debug(*args, **kwargs):
-    if __debug__:
-        logging.getLogger("feynamp").debug(*args, **kwargs)
+warning = logging.getLogger("feynamp").warning
 
-
-def warning(*args, **kwargs):
-    logging.getLogger("feynamp").warning(*args, **kwargs)
+info = logging.getLogger("feynamp").info

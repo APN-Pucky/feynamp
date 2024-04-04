@@ -1,10 +1,13 @@
-from feynamp.form import *
+from typing import List
 
-polsum_phys = """
-*id polsum(mu?,nu?) = -d_(mu,nu) + (pa(mu)*pb(nu)+pa(nu)*pb(mu))/pa.pb;
-*id polsum(mu?,nu?) = -d_(mu,nu) + ax*((q(mu)*pb(nu)+q(nu)*pb(mu))/q.pb - q.q*pb(mu)*pb(nu)/q.pb/q.pb);
-id polsum(mu?,nu?) = -d_(mu,nu) + ((q(mu)*pb(nu)+q(nu)*pb(mu))/q.pb - q.q*pb(mu)*pb(nu)/q.pb/q.pb);
-"""
+from feynml.feynmandiagram import FeynmanDiagram
+from feynml.leg import Leg
+from feynmodel.feyn_model import FeynModel
+
+from feynamp.form.form import get_dummy_index, init, run, string_to_form
+from feynamp.leg import find_leg_in_model
+from feynamp.log import debug
+from feynamp.momentum import insert_mass, insert_momentum
 
 gammas = """
 repeat;
@@ -49,19 +52,43 @@ repeat;
 endrepeat;
 """
 
-# TODO figure out why this does not work but manual dummies work
-dirac_trick = """
-repeat;
-    id u(Spinc?,Momb?)*ubar(Spina?,Momb?) = Gamma(N5_?,Spinc,Spina) * P(N5_?,Momb) + GammaId(Spinc,Spina) * P(N5_?,Momb) * P(N5_?,Momb);
-    id vbar(Spinc?,Momb?)*v(Spina?,Momb?) = Gamma(N7_?,Spinc,Spina) * P(N7_?,Momb) - GammaId(Spinc,Spina) * P(N7_?,Momb) * P(N7_?,Momb);
-endrepeat;
-"""
 
 # TODO implement collecting of gammas and form calc solving of it
+# idea: GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
+gamma_collect = """
+repeat;
+id Metric(Mua?,Mub?) = d_(Mua,Mub);
+endrepeat;
+#do i = 1, 10
+once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
+repeat;
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*Gamma(Mux?, Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus, Mux);
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*GammaId(Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus)*gi_(`i');
+endrepeat;
+id GammaCollect(`i',Spin1?,Spin1?,?mus) = g_(`i',?mus);
+trace4, `i';
+#enddo
+#do i = 11, 21
+once GammaId(Spin1?,Spin2?) = GammaIdCollect(`i',Spin1,Spin2);
+repeat;
+id GammaIdCollect(`i',Spin1?,Spin2?)*GammaId(Spin2?,Spin3?) = GammaIdCollect(`i',Spin1,Spin3)*gi_(`i');
+endrepeat;
+id GammaIdCollect(`i',Spin1?,Spin1?) = 1;
+trace4, `i';
+#enddo
+"""
 
 
 def get_gammas():
-    return get_polarisation_sum() + get_dirac_trick() + gammas
+    return new_get_gammas()
+
+
+def new_get_gammas():
+    return get_dirac_trick() + gamma_collect
+
+
+def get_gammas_v1():
+    return get_polarisation_sum_v1() + get_dirac_trick() + gammas
 
 
 def apply_gammas(string_expr):
@@ -69,7 +96,75 @@ def apply_gammas(string_expr):
     return run(init + f"Local TMP = {s};" + get_gammas())
 
 
-def get_polarisation_sum():
+def get_orthogonal_polarisation_momentum(
+    leg: Leg, fds: List[FeynmanDiagram], model: FeynModel
+):
+    for fd in [fds[0]]:
+        for l in fd.legs:
+            p = find_leg_in_model(fd, l, model)
+            if l.particle.mass == 0 and l != leg:
+                mom = insert_momentum(l.momentum.name)
+                return mom
+    raise ValueError("No orthogonal momentum found")
+
+
+def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
+    pol_sums = ""
+    # TODO might want to loop over all fds?
+    for fd in [fds[0]]:
+        for l in fd.legs:
+            p = find_leg_in_model(fd, l, model)
+            mom = insert_momentum(l.momentum.name)
+            # mass = insert_mass(string_to_form(p.mass.name))
+            if p.spin == 3:
+                if p.mass.name == "ZERO" or float(p.mass.value) == 0.0:
+                    if p.color == 8:
+                        mom_n = get_orthogonal_polarisation_momentum(l, fds, model)
+                        pol_sums += get_polarisation_sum_physical(mom, mom_n)
+                        # pol_sums += get_polarisation_sum_feynman(mom)
+                        debug(f"mom: {mom}, mom_n: {mom_n}")
+                    elif p.color == 1:
+                        pol_sums += get_polarisation_sum_feynman(mom)
+                else:
+                    pol_sums += get_polarisation_sum_massive(mom)
+    debug(f"pol_sums: {pol_sums}")
+    return pol_sums
+
+
+def get_polarisation_sum_massive(mom_a):
+    pol_sum = f"""
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc) + (P(Mul,{mom_a})*P(Muc,{mom_a}))*Den({mom_a}.{mom_a});
+    """
+    return pol_sum
+
+
+def get_polarisation_sum_feynman(mom_a):
+    pol_sum = f"""
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc);
+    """
+    return pol_sum
+
+
+def get_polarisation_sum_physical(mom_a, mom_b):
+    pol_sum = f"""
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
+    """
+    return pol_sum
+
+
+def get_polarisation_sum(mom_a, mom_b=None):
+    if mom_b is None:
+        # massive case
+        return get_polarisation_sum_massive(mom_a)
+    elif mom_b == 0:
+        # photon massless case
+        return get_polarisation_sum_feynman(mom_a)
+    else:
+        # gluon massless case
+        return get_polarisation_sum_physical(mom_a, mom_b)
+
+
+def get_polarisation_sum_v1():
     polsum_feyn = """
     id epsstar(Muc?,Polb?,Moma?) * eps(Mul?,Pold?,Moma?) = -Metric(Muc,Mul);
     """
@@ -79,9 +174,13 @@ def get_polarisation_sum():
     return polsum_feyn
 
 
-# TODO: look above
-# def get_dirac_trick():
-#    return dirac_trick
+# TODO figure out why this does not work but manual dummies work
+dirac_trick = """
+repeat;
+    id u(Spinc?,Momb?)*ubar(Spina?,Momb?) = Gamma(N5_?,Spinc,Spina) * P(N5_?,Momb) + GammaId(Spinc,Spina) * P(N5_?,Momb) * P(N5_?,Momb);
+    id vbar(Spinc?,Momb?)*v(Spina?,Momb?) = Gamma(N7_?,Spinc,Spina) * P(N7_?,Momb) - GammaId(Spinc,Spina) * P(N7_?,Momb) * P(N7_?,Momb);
+endrepeat;
+"""
 
 
 def get_dirac_trick(N=10):
@@ -99,6 +198,11 @@ def get_dirac_trick(N=10):
     """
         ret += dirac_trick
     return ret
+
+
+# TODO: look above
+# def get_dirac_trick():
+#    return dirac_trick
 
 
 def apply_dirac_trick(string_expr):

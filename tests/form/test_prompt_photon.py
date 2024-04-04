@@ -1,6 +1,5 @@
-import logging
-
-import equation_database.isbn_9780471887416 as ref
+import equation_database.isbn_9780201483628 as ref
+import equation_database.isbn_9780511628788 as ref2
 import sympy
 from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
@@ -9,20 +8,16 @@ from pyfeyn2.feynmandiagram import FeynML
 from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
-import feynamp
 from feynamp.form import compute_squared
 
-logger = logging.getLogger("feynamp")
-logger.setLevel(logging.DEBUG)
 
-
-def test_compton():
+def test_prompt_photon():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
     qgraf.install()
     xml_string = qgraf.run(
-        "e_minus[p1], gamma[p2]",
-        "e_minus[p3], gamma[p4]",
+        "u[p1], u_bar[p2]",
+        "g[p3], gamma[p4]",
         loops=0,
         loop_momentum="l",
         model=qfm,
@@ -33,21 +28,25 @@ def test_compton():
     fds = fml.diagrams
 
     ret = compute_squared(fds, fm)
-    res = sympy.simplify(ret.subs({"Mass_Me": 0, "t": "-u-s", "ee": "e"}))
+    res = sympy.simplify(ret.subs({"s": "-u-t", "Nc": 3, "Cf": "4/3", "ee": 1, "G": 1}))
 
-    assert res.equals(ref.equation_6_113)
+    assert res.equals(
+        ref2.table_7_2["quark_quarkbar_to_gammastar_gluon"].subs({"s": "-u-t", "N": 3})
+        # multiply missing charge of quark
+        * 2
+        / 3
+        * 2
+        / 3
+    )
 
 
-def test_emu_emu():
+def test_crossed_prompt_photon():
     fm = load_ufo_model("ufo_sm")
-    fm.remove_object(fm.get_particle("G0"))
-    fm.remove_object(fm.get_particle("Z"))
-    fm.remove_object(fm.get_particle("H"))
     qfm = feynmodel_to_qgraf(fm, True, False)
     qgraf.install()
     xml_string = qgraf.run(
-        "e_minus[p1], mu_minus[p2]",
-        "e_minus[p3], mu_minus[p4]",
+        "g[p3], gamma[p4]",
+        "u[p1], u_bar[p2]",
         loops=0,
         loop_momentum="l",
         model=qfm,
@@ -58,6 +57,14 @@ def test_emu_emu():
     fds = fml.diagrams
 
     ret = compute_squared(fds, fm)
-    res = sympy.simplify(ret.subs({"Mass_Me": 0, "Mass_MM": 0, "ee": "e"}))
+    res = sympy.simplify(ret.subs({"s": "-u-t", "Nc": 3, "Cf": "4/3"}))
 
-    assert res.equals(ref.equation_6_30)
+    # We have to multiply by two here since
+    # the averaging is only over massless initials polarizations
+    # but the photon here is considered as a massive particle
+    # in the reference. Soe we cancel the previous averaging of multiplying with 1/2
+    res = res * 2
+
+    assert res.equals(
+        ref.equation_4_3_20.subs({"Q": 0, "e_q": "2/3", "e": "ee", "g_s": "G"})
+    )
