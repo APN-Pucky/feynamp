@@ -14,6 +14,7 @@ from feynamp.form.lorentz import get_gammas, get_polarisation_sums
 from feynamp.form.momentum import (
     apply,
     apply_den,
+    apply_parallel,
     get_kinematics,
     get_mandelstamm,
     get_onshell,
@@ -29,7 +30,7 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
         assert (
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
-    s2 = amplitude.square(fds, fm, tag=tag)
+    s2 = amplitude.square_parallel(fds, fm, tag=tag)
     debug(f"{s2=}")
     fs = ""
     fs += get_polarisation_sums(fds, fm)
@@ -39,7 +40,8 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)
 
-    rs = apply(s2, fs)
+    rs = apply_parallel(s2, fs)
+    rs = " + ".join([f"({r})" for r in rs])
     debug(f"{rs=}")
 
     rr = apply_den(

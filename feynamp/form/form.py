@@ -36,15 +36,43 @@ def string_to_form(s):
     return s
 
 
+def run_parallel(init, cmds, vars, show=False, keep_form_file=True):
+    global count
+    count = count + 1
+    rets = []
+    with open("form" + str(count) + ".frm", "w") as frm:
+        with form.open(keep_log=1000, args=["tform", "-w16"]) as f:
+            txt = "" + init
+            for i, s in enumerate(vars):
+                txt += f"Local TMP{i} = {s};\n"
+            txt += cmds
+            for i, s in enumerate(vars):
+                txt += f"print TMP{i};.sort;"
+            f.write(txt)
+            # frm.write(txt)
+            for i, s in enumerate(vars):
+                rets.append(f.read(f"TMP{i}"))
+            # What is this ?
+            # r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
+            if show:
+                for r in rets:
+                    print(r + "\n")
+            # delete frm file
+            if not keep_form_file:
+                os.remove("form" + str(count) + ".frm")
+            assert len(rets) == len(vars)
+            return rets
+
+
 def run(s, show=False, keep_form_file=True):
     global count
     count = count + 1
     with open("form" + str(count) + ".frm", "w") as frm:
-        with form.open(keep_log=1000) as f:
+        with form.open(keep_log=1000, args=["tform", "-w16"]) as f:
             local = s.split("Local")[1].split("=")[0].strip()
             txt = s + "print " + local + ";.sort;"
             f.write(txt)
-            frm.write(txt)
+            # frm.write(txt)
             r = f.read("" + local)
             r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
             if show:

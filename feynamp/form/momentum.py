@@ -5,7 +5,7 @@ from feynml.feynmandiagram import FeynmanDiagram
 from feynmodel.feyn_model import FeynModel
 
 # from feynamp.form import *
-from feynamp.form.form import init, run, string_to_form
+from feynamp.form.form import init, run, run_parallel, string_to_form
 from feynamp.leg import find_leg_in_model
 from feynamp.log import warning
 from feynamp.momentum import insert_mass, insert_momentum
@@ -51,6 +51,10 @@ def apply_denominators(string_expr):
     return run(init + f"Local TMP = {s};" + denominators)
 
 
+def apply_parallel(amps: List[str], operations: str):
+    return run_parallel(init, operations, [string_to_form(a) for a in amps])
+
+
 def apply(string_expr, str_a):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + str_a)
@@ -61,8 +65,8 @@ def apply_den(string_expr, str_f):
     s = string_expr
     res = re.findall(r"Den\(([a-zA-Z0-9_+*-\.^]+)\)", string_expr)
     if res:
-        for og in res:  # TODO parallelize? each as one var in form?
-            g = apply(og, str_f)
+        new_gs = apply_parallel(res, str_f)
+        for og, g in zip(res, new_gs):
             s = s.replace("Den(" + og + ")", "1/(" + g + ")")
     return s
 
