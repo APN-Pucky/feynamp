@@ -36,7 +36,9 @@ def string_to_form(s):
     return s
 
 
-def run_parallel(init, cmds, vars, show=False, keep_form_file=True, threads=None):
+def run_parallel(
+    init, cmds, variables, show=False, write=False, keep_form_file=True, threads=None
+):
     global count
     count = count + 1
     rets = []
@@ -45,14 +47,15 @@ def run_parallel(init, cmds, vars, show=False, keep_form_file=True, threads=None
     with open("form" + str(count) + ".frm", "w") as frm:
         with form.open(keep_log=1000, args=["tform", f"-w{threads}"]) as f:
             txt = "" + init
-            for i, s in enumerate(vars):
+            for i, s in enumerate(variables):
                 txt += f"Local TMP{i} = {s};\n"
             txt += cmds
-            for i, s in enumerate(vars):
+            for i, s in enumerate(variables):
                 txt += f"print TMP{i};.sort;"
             f.write(txt)
-            # frm.write(txt)
-            for i, s in enumerate(vars):
+            if write:
+                frm.write(txt)
+            for i, s in enumerate(variables):
                 rets.append(f.read(f"TMP{i}"))
             # What is this ?
             # r = re.sub(r"\+factor_\^?[0-9]*", r"", r).strip("*")
