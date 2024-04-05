@@ -3,7 +3,7 @@ import logging
 import numpy as np
 from equation_database import doi_10_1103_PhysRevD_16_3251 as ref
 from feynml.interface.qgraf import style
-from pyqgraf import model, qgraf
+from pyqgraf import qgraf
 
 logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
@@ -13,10 +13,8 @@ from feynmodel.interface.qgraf import feynmodel_to_qgraf
 from feynmodel.interface.ufo import load_ufo_model
 from pyfeyn2.feynmandiagram import FeynML
 from sympy import simplify
-from sympy.parsing.sympy_parser import parse_expr
 from xsdata.formats.dataclass.parsers import XmlParser
 
-from feynamp.amplitude import multiply, square_parallel
 from feynamp.form import compute_squared
 
 
@@ -41,7 +39,7 @@ def test_ee_qqg():
     fd1, fd2 = np.array(fml.diagrams)[[f.has_pdgid(22) for f in fml.diagrams]]
     fds = [fd1, fd2]
 
-    ret = compute_squared([fd1, fd2], fm, tag=False)
+    ret = compute_squared(fds, fm, tag=False)
 
     # ret.subs("Nc","3").subs("Cf","4/3").subs("s34","-t13-t23-s35").subs("Mass_Me" , 0).simplify()
 

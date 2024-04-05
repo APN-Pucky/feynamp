@@ -26,8 +26,8 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
     pm = []
     for v in fd.vertices:
         vm.append("(" + get_vertex_math_string(fd, v, feyn_model) + ")")
-    for l in fd.legs:
-        lm.append("(" + get_leg_math_string(fd, l, feyn_model) + ")")
+    for leg in fd.legs:
+        lm.append("(" + get_leg_math_string(fd, leg, feyn_model) + ")")
     for p in fd.propagators:
         pm.append("(" + get_propagator_math_string(fd, p, feyn_model) + ")")
 
@@ -86,11 +86,9 @@ def square_parallel(
     debug(f"{lst_fd2=}")
     ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
-    for i in range(len(lst_fd1)):
+    for i, sfd1 in enumerate(lst_fd1):
         # TODO reenable loop from i
-        for j in range(len(lst_fd2)):
-            sfd1 = lst_fd1[i]
-            sfd2 = lst_fd2[j]
+        for j, sfd2 in enumerate(lst_fd2):
             # TODO reenable
             # if i == j:
             ttag = ""
