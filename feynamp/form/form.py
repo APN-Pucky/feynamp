@@ -144,7 +144,8 @@ def run(s, show=False, keep_form_file=True, threads=1):
         threads = os.cpu_count()
     with form.open(keep_log=1000, args=["tform", f"-w{threads}"]) as f:
         local = s.split("Local")[1].split("=")[0].strip()
-        txt = s + "print " + local + ";"
+        # no clue why sort
+        txt = s + "print " + local + ";.sort;"
         if keep_form_file:
             with open("form" + str(count) + ".frm", "w") as frm:
                 frm.write(txt)
