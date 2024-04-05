@@ -40,7 +40,7 @@ def insert_lorentz_types(s: str, connections: List[Connector], vertex: Vertex):
                     break
                 else:
                     repl = (
-                        "(P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                        "(-P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
                     )
                     break
         if repl is None:

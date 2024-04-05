@@ -10,9 +10,10 @@ from pyqgraf import model, qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
+from feynamp.form import compute_squared
 
 logger = logging.getLogger("feynamp")
-# logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.DEBUG)
 
 
 def test_qqb_gg():
@@ -31,7 +32,7 @@ def test_qqb_gg():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = feynamp.form.compute_squared(fds, fm).subs("Nc", "3").subs("Cf", "4/3")
+    ret = compute_squared(fds, fm).subs("Nc", "3").subs("Cf", "4/3")
 
     g = sympy.Symbol("G")
 
