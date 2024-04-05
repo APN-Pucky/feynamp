@@ -48,7 +48,16 @@ def multiply(
     return s[:-3]
 
 
-def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
+def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False) -> str:
+    """
+    Squares the list of feynman diagrams taking the fermion sign into account.
+    """
+    return " + ".join(square_parallel(lst_fd, feyn_model, tag))
+
+
+def square_parallel(
+    lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False
+) -> List[str]:
     """
     Squares the list of feynman diagrams taking the fermion sign into account.
     """
@@ -64,6 +73,7 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
     lst_fd2 = [feynman_diagram_to_string(l.conjugated(), feyn_model) for l in lst_fd]
     debug(f"{lst_fd1=}")
+    ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
     for i in range(len(lst_fd1)):
         for j in range(i, len(lst_fd2)):
@@ -73,14 +83,16 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False):
                 ttag = ""
                 if tag:
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[i].id}fd{lst_fd[i].id}"
-                s += f"({sfd1})*({sfd2}){ttag} + "
+                ret_lst.append(f"({sfd1})*({sfd2}){ttag}")
             elif i < j:
                 ttag = ""
                 if tag:
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
                 ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
-                s += f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac} + "  # TODO this needs Re!
-    return s[:-3]
+                ret_lst.append(
+                    f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
+                )  # TODO this needs Re!
+    return ret_lst
 
 
 def add(lst_fd, feyn_model):
