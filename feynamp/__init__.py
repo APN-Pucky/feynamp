@@ -1,4 +1,4 @@
-from .amplitude import feynman_diagram_to_string
+from .amplitude import complex_conjugate, feynman_diagram_to_string
 from .log import debug
 from .propagator import find_propagator_in_model, get_propagator_math
 from .vertex import find_vertex_in_model, get_vertex_math
@@ -18,7 +18,7 @@ def get_spin_average(fds):
             r += ["1/2"]
         else:
             raise ValueError(f"TODO: Unknown color average for pdgid {leg.pdgid}")
-    print(f"get_spin_average():{r}")
+    debug(f"get_spin_average():{r}")
     return r
 
 
@@ -41,5 +41,5 @@ def get_color_average(fds):
             r += ["1"]
         else:
             raise ValueError(f"TODO: Unknown color average for pdgid {leg.pdgid}")
-    print(f"get_color_average():{r}")
+    debug(f"get_color_average():{r}")
     return r

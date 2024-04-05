@@ -12,6 +12,7 @@ from feynamp.vertex import get_vertex_math_string
 
 def complex_conjugate(s: str):
     """"""
+    # return s
     return re.sub(r"complex\((.*?),(.*?)\)", r"complex(\1,-\2)", s)
 
 
@@ -82,28 +83,32 @@ def square_parallel(
         for l in lst_fd
     ]
     debug(f"{lst_fd1=}")
+    debug(f"{lst_fd2=}")
     ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
     for i in range(len(lst_fd1)):
-        for j in range(i, len(lst_fd2)):
+        # TODO reenable loop from i
+        for j in range(len(lst_fd2)):
             sfd1 = lst_fd1[i]
             sfd2 = lst_fd2[j]
-            if i == j:
-                ttag = ""
-                if tag:
-                    ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[i].id}fd{lst_fd[i].id}"
-                ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
-                debug(f"{ferm_fac=}")
-                ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
-            elif i < j:
-                ttag = ""
-                if tag:
-                    ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
-                ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
-                debug(f"{ferm_fac=}")
-                ret_lst.append(
-                    f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
-                )  # TODO this needs Re!
+            # TODO reenable
+            # if i == j:
+            ttag = ""
+            if tag:
+                ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+            ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+            debug(f"{ferm_fac=}")
+            ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
+            # TODO reenable
+            # elif i < j:
+            #    ttag = ""
+            #    if tag:
+            #        ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+            #    ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+            #    debug(f"{ferm_fac=}")
+            #    ret_lst.append(
+            #        f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
+            #    )  # TODO this needs Re!
     return ret_lst
 
 

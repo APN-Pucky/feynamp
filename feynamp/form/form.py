@@ -5,8 +5,9 @@ import form
 
 count = 0
 dummy = 0
+# TODO auto generate symbols
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart;
 AutoDeclare Index Mu,Spin,Pol,Col,Glu,Propagator;
 AutoDeclare Symbol Mass,fd,mss,mst,msu;
 AutoDeclare Vector Mom;
@@ -24,7 +25,7 @@ def get_dummy_index():
 
 
 def string_to_form(s):
-    s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*\2)", s)
+    s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*(\2))", s)
     # s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
     s = s.replace("Gamma_Id", "GammaId")
     s = s.replace("u_bar", "ubar")
