@@ -77,10 +77,10 @@ def square_parallel(
     # TODO also multiply by the symmetry factor from qgraf
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""
-    lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
+    lst_fd1 = [feynman_diagram_to_string(fd, feyn_model) for fd in lst_fd]
     lst_fd2 = [
-        complex_conjugate(feynman_diagram_to_string(l.conjugated(), feyn_model))
-        for l in lst_fd
+        complex_conjugate(feynman_diagram_to_string(fd.conjugated(), feyn_model))
+        for fd in lst_fd
     ]
     debug(f"{lst_fd1=}")
     debug(f"{lst_fd2=}")
