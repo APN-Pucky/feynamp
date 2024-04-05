@@ -52,7 +52,7 @@ def test_qqb_qpqpb():
 
     a = fp.feynman_diagram_to_string(fd, fm)
     ca = apply_color(a)
-    b = fp.feynman_diagram_to_string(cfd, fm)
+    b = fp.complex_conjugate(fp.feynman_diagram_to_string(cfd, fm))
     cb = apply_color(b)
 
     m2c = apply_color(f"({ca})*({cb})")
