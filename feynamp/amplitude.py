@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from feynml.feynmandiagram import FeynmanDiagram
@@ -7,6 +8,11 @@ from feynamp.leg import get_leg_math_string
 from feynamp.log import debug
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
+
+
+def complex_conjugate(s: str):
+    """"""
+    return re.sub(r"complex\((.*?),(.*?)\)", r"complex(\1,-\2)", s)
 
 
 def feynman_diagram_to_string(feynman_diagram, feyn_model):
@@ -71,7 +77,10 @@ def square_parallel(
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""
     lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
-    lst_fd2 = [feynman_diagram_to_string(l.conjugated(), feyn_model) for l in lst_fd]
+    lst_fd2 = [
+        complex_conjugate(feynman_diagram_to_string(l.conjugated(), feyn_model))
+        for l in lst_fd
+    ]
     debug(f"{lst_fd1=}")
     ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
@@ -83,12 +92,15 @@ def square_parallel(
                 ttag = ""
                 if tag:
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[i].id}fd{lst_fd[i].id}"
-                ret_lst.append(f"({sfd1})*({sfd2}){ttag}")
+                ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+                debug(f"{ferm_fac=}")
+                ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
             elif i < j:
                 ttag = ""
                 if tag:
                     ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
                 ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+                debug(f"{ferm_fac=}")
                 ret_lst.append(
                     f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
                 )  # TODO this needs Re!

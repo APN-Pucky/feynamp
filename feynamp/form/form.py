@@ -24,7 +24,8 @@ def get_dummy_index():
 
 
 def string_to_form(s):
-    s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
+    s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*\2)", s)
+    # s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
     s = s.replace("Gamma_Id", "GammaId")
     s = s.replace("u_bar", "ubar")
     s = s.replace("v_bar", "vbar")
