@@ -1,4 +1,22 @@
-from feynamp.form.form import init, run, string_to_form
+from typing import List
+
+from feynamp.form.form import init, run, run_parallel, string_to_form
+
+from .colorh import colorh
+
+colorh_init = f"""
+{colorh}
+AutoDeclare Index Color=NR;
+AutoDeclare Index Glu=NA;
+"""
+
+color_init = """
+AutoDeclare Index Color;
+AutoDeclare Index Glu;
+Tensors f(antisymmetric);
+CFunctions T;
+Symbols NA,I2R;
+"""
 
 color_ids = """
 repeat;
@@ -39,6 +57,8 @@ color_simplify = """
 *   id Nc^-2=2-Nc^2+Cf^2*Tr^-2;
 *   id Nc^2=1+Nc*Cf/Tr;
    id NA=Nc*Cf/Tr;
+   id cA=Nc;
+   id cR=Cf;
    id I2R=1/2;
    id Tr=1/2;
    id Tr^-1=2;
@@ -84,22 +104,36 @@ endrepeat;
 """
 
 
+def rep(s: str):
+    return f"""
+repeat;
+   {s}
+endrepeat;
+"""
+
+
 def get_color():
-    return get_color_v1()
+    # return get_color_v1()
     return get_color_new()
 
 
 def get_color_new():
-    return color_sum + colorh_ids + color + colorh_ids + color_simplify
+    return color_sum + colorh_ids + color + colorh_ids + rep(color_simplify)
 
 
 def get_color_v1():
     return color_sum + color_ids + old_color
 
 
+def apply_color_parallel(string_exprs: List[str]):
+    return run_parallel(
+        init + colorh_init, get_color(), [string_to_form(a) for a in string_exprs]
+    )
+
+
 def apply_color(string_expr):
     s = string_to_form(string_expr)
-    return run(init + f"Local TMP = {s};" + get_color())
+    return run(init + colorh_init + f"Local TMP = {s};" + get_color())
 
 
 def apply_color_sum(string_expr):

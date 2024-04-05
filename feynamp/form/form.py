@@ -14,14 +14,6 @@ count = 0
 dummy = 0
 # TODO auto generate symbols
 init = """
-*#include color.h
-*AutoDeclare Index Color=NR;
-*AutoDeclare Index Glu=NA;
-AutoDeclare Index Color;
-AutoDeclare Index Glu;
-Tensors f(antisymmetric);
-CFunctions T;
-Symbols NA,I2R;
 Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart;
 AutoDeclare Index Mu,Spin,Pol,Propagator;
 AutoDeclare Symbol Mass,fd,mss,mst,msu;
@@ -54,6 +46,7 @@ def string_to_form(s):
 
 
 def run_parallel(*args, **kwargs):
+    # return run_parallel_v1(*args, **kwargs)
     return run_parallel_new(*args, **kwargs)
 
 
@@ -120,7 +113,7 @@ def run_bare(s, show=False, keep_form_file=True):
         "w", suffix=".frm", delete=not keep_form_file
     ) as f:
         local = s.split("Local")[1].split("=")[0].strip()
-        txt = s + "print " + local + ";"
+        txt = s + "print " + local + ";.sort;"
         f.write(txt)
         # flush it
         f.flush()
