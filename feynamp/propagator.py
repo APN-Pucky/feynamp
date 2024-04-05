@@ -17,7 +17,7 @@ def get_propagator_math(fd, prop, model):
     mass = insert_mass(p.mass.name)
     ret = ""
     if p.color == 3 or p.color == -3:
-        ret += f"df(ColIn{p.particle.id},ColOut{p.particle.id})*"
+        ret += f"df(ColorIn{p.particle.id},ColorOut{p.particle.id})*"
     if p.color == 8:
         ret += f"da(GluIn{p.particle.id},GluOut{p.particle.id})*"
     # if boson just 1/(p^2-m^2)

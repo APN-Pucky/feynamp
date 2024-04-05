@@ -15,9 +15,11 @@ from feynamp.util import safe_index_replace
 def insert_color_types(s: str):
     """ """
     # We use the non greedy .*? to match multiple occurances individually
-    s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Glu\1,Col\2,Col\3)", s)
+    s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Glu\1,Color\2,Color\3)", s)
+    # TODO do we want this? Or above
+    # s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Color\2,Color\3,Glu\1)", s)
     s = re.sub(r"f\((.*?),(.*?),(.*?)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
-    s = re.sub(r"Identity\((.*?),(.*?)\)", r"Identity(Col\1,Col\2)", s)
+    s = re.sub(r"Identity\((.*?),(.*?)\)", r"Identity(Color\1,Color\2)", s)
     return s
 
 

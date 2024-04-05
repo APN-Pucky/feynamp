@@ -17,6 +17,33 @@ repeat;
 endrepeat;
 """
 
+colorh_ids = """
+repeat;
+* remove df(k,j)
+   id df(k?,l?)*df(l?,j?)=df(k,j);
+   id T(k?,l?,a?)*df(k?,j?)=T(j,l,a);
+   id T(k?,l?,a?)*df(l?,j?)=T(k,j,a);
+* remove da(a,b)
+   id da(a?,b?)*da(b?,c?)=da(a,c);
+   id T(k?,l?,a?)*da(a?,b?)=T(k,l,b);
+   id f(b?,c?,a?)*da(a?,d?)=f(b,c,d);
+* simplify traces
+   id T(k?,k?,b?)=0;
+   id da(a?,a?)=Nc*Cf/Tr;
+   id df(a?,a?)=Nc;
+endrepeat;
+"""
+
+color_simplify = """
+* simplify combination of factors
+*   id Nc^-2=2-Nc^2+Cf^2*Tr^-2;
+*   id Nc^2=1+Nc*Cf/Tr;
+   id NA=Nc*Cf/Tr;
+   id I2R=1/2;
+   id Tr=1/2;
+   id Tr^-1=2;
+"""
+
 old_color = f"""
 **********************************************************
 *                  COLOUR STRUCTURE SIMPLIFY             *
@@ -33,11 +60,7 @@ repeat;
 * length-two objects that give out da(a,b)
    id T(a?,k?,l?)*T(b?,l?,k?)=(Tr*da(a,b));
    id f(a?,b?,c?)*f(d?,b?,c?)=Nc*da(a,d); 
-* simplify combination of factors
-*   id Nc^-2=2-Nc^2+Cf^2*Tr^-2;
-*   id Nc^2=1+Nc*Cf/Tr;
-   id Tr=1/2;
-   id Tr^-1=2;
+{color_simplify}
 * double f(a,b,c) simplify
 *  id f(a?,b?,e?)*f(c?,d?,e?)=-2 * {{ [T(a), T(b)] [T(c), T(d)]}};
    id f(a?,b?,e?)*f(c?,d?,e?)=-2 * (T(a,e,N1_?)*T(b,N1_?,N2_?) - T(b,e,N1_?)*T(a,N1_?,N2_?))*(T(c,N2_?,N3_?)*T(d,N3_?,e)-T(d,N2_?,N3_?)*T(c,N3_?,e));
@@ -56,12 +79,21 @@ color_sum = """
 **********************************************************
 repeat;
   id VA(Glua?,Momb?)*VA(Gluc?,Momb?) = da(Glua,Gluc);
-  id VC(Cola?,Momb?)*VC(Colc?,Momb?) = df(Cola,Colc);
+  id VC(Colora?,Momb?)*VC(Colorc?,Momb?) = df(Colora,Colorc);
 endrepeat;
 """
 
 
 def get_color():
+    return get_color_v1()
+    return get_color_new()
+
+
+def get_color_new():
+    return color_sum + colorh_ids + color + colorh_ids + color_simplify
+
+
+def get_color_v1():
     return color_sum + color_ids + old_color
 
 

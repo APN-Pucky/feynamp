@@ -19,7 +19,7 @@ def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
         ret += f"VA(Glu{p.particle.id},{mom})*"
     if p.color == 3 or p.color == -3:
         # if particle is a quark give it a fundamental color function
-        ret += f"VC(Col{p.particle.id},{mom})*"
+        ret += f"VC(Color{p.particle.id},{mom})*"
 
     if p.spin == 3:
         if leg.is_incoming():
