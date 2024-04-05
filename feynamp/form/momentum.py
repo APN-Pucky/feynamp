@@ -63,7 +63,10 @@ def apply(string_expr, str_a):
 def apply_den(string_expr, str_f):
     # re match all Dens
     s = string_expr
+    # find all denominators
     res = re.findall(r"Den\(([a-zA-Z0-9_+*-\.^]+)\)", string_expr)
+    # only keep unique
+    res = list(set(res))
     if res:
         new_gs = apply_parallel(res, str_f)
         for og, g in zip(res, new_gs):
