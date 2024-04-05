@@ -1,10 +1,6 @@
 from feynamp.form.form import init, run, string_to_form
 
-color = """
-**********************************************************
-*                  COLOUR STRUCTURE SIMPLIFY             *
-**********************************************************
-    
+color_ids = """
 repeat;
 * remove df(k,j)
    id df(k?,l?)*df(l?,j?)=df(k,j);
@@ -14,6 +10,20 @@ repeat;
    id da(a?,b?)*da(b?,c?)=da(a,c);
    id T(a?,k?,l?)*da(a?,b?)=T(b,k,l);
    id f(a?,b?,c?)*da(a?,d?)=f(d,b,c);
+* simplify traces
+   id T(b?,k?,k?)=0;
+   id da(a?,a?)=Nc*Cf/Tr;
+   id df(a?,a?)=Nc;
+endrepeat;
+"""
+
+old_color = f"""
+**********************************************************
+*                  COLOUR STRUCTURE SIMPLIFY             *
+**********************************************************
+    
+repeat;
+{color_ids}
 * length-three objects simplify:
    id T(b?,k?,j?)*T(a?,j?,c?)*T(b?,c?,l?)=(-Tr/Nc*T(a,k,l));
    id T(b?,j?,l?)*T(c?,l?,k?)*f(a?,b?,c?)=(i_*Nc*Tr*T(a,j,k));
@@ -23,20 +33,22 @@ repeat;
 * length-two objects that give out da(a,b)
    id T(a?,k?,l?)*T(b?,l?,k?)=(Tr*da(a,b));
    id f(a?,b?,c?)*f(d?,b?,c?)=Nc*da(a,d); 
-* simplify traces
-   id T(b?,k?,k?)=0;
-   id da(a?,a?)=Nc*Cf/Tr;
-   id df(a?,a?)=Nc;
 * simplify combination of factors
 *   id Nc^-2=2-Nc^2+Cf^2*Tr^-2;
 *   id Nc^2=1+Nc*Cf/Tr;
    id Tr=1/2;
    id Tr^-1=2;
 * double f(a,b,c) simplify
-*  id f(a?,b?,e?)*f(c?,d?,e?)=-2 * { [T(a), T(b)] [T(c), T(d)]};
-*   id f(a?,b?,e?)*f(c?,d?,e?)=-2 * (T(a,e,N1_?)*T(b,N1_?,N2_?) - T(b,e,N1_?)*T(a,N1_?,N2_?))*(T(c,N2_?,N3_?)*T(d,N3_?,e)-T(d,N2_?,N3_?)*T(c,N3_?,e));
+*  id f(a?,b?,e?)*f(c?,d?,e?)=-2 * {{ [T(a), T(b)] [T(c), T(d)]}};
+   id f(a?,b?,e?)*f(c?,d?,e?)=-2 * (T(a,e,N1_?)*T(b,N1_?,N2_?) - T(b,e,N1_?)*T(a,N1_?,N2_?))*(T(c,N2_?,N3_?)*T(d,N3_?,e)-T(d,N2_?,N3_?)*T(c,N3_?,e));
 endrepeat;
 """
+
+
+color = """
+#call docolor
+"""
+# TODO do the color stuff manually (cf. MG) since the simplifications here are very expensive
 
 color_sum = """
 **********************************************************
@@ -50,7 +62,7 @@ endrepeat;
 
 
 def get_color():
-    return color_sum + color
+    return color_sum + color_ids + old_color
 
 
 def apply_color(string_expr):
