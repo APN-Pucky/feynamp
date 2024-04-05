@@ -12,7 +12,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from feynamp.form import compute_squared
 
 logger = logging.getLogger("feynamp")
-# logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.DEBUG)
 
 
 def test_compton():
@@ -47,16 +47,31 @@ def test_compton():
                 "fdDiagram1": 1,
                 "fdDiagram2": 1,
                 "fdDiagram3": 1,
+                "fdDiagram4": 1,
                 "fdDiagram1fdDiagram1": 1,
                 "fdDiagram1fdDiagram2": 1,
+                "fdDiagram2fdDiagram1": 1,
                 "fdDiagram1fdDiagram3": 1,
+                "fdDiagram3fdDiagram1": 1,
+                "fdDiagram1fdDiagram4": 1,
+                "fdDiagram4fdDiagram1": 1,
                 "fdDiagram2fdDiagram3": 1,
+                "fdDiagram3fdDiagram2": 1,
                 "fdDiagram2fdDiagram2": 1,
+                "fdDiagram2fdDiagram4": 1,
+                "fdDiagram4fdDiagram2": 1,
                 "fdDiagram3fdDiagram3": 1,
+                "fdDiagram3fdDiagram4": 1,
+                "fdDiagram4fdDiagram3": 1,
+                "fdDiagram4fdDiagram4": 1,
             }
         )
     )
     # print(res.expand())
     assert res.equals(
-        ref.table_7_1["gluon_gluon_to_quark_quarkbar"].subs({"s": "-t-u"})
+        ref.table_7_1["gluon_gluon_to_quark_quarkbar"].subs({"s": "-t-u"}).simplify()
     )  # result from
+
+
+if __name__ == "__main__":
+    test_compton()

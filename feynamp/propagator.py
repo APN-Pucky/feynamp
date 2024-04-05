@@ -24,10 +24,10 @@ def get_propagator_math(fd, prop, model):
     if p.spin == 3:
         # nid = generate_new_id()
         # TODO treate denominators differently for loops etc?
-        ret += f"Metric(MuIn{p.particle.id},MuOut{p.particle.id})*"
+        ret += f"(-1)*complex(0,1)*Metric(MuIn{p.particle.id},MuOut{p.particle.id})*"
     elif p.spin == 2:  # TODO handle plus minus mass for fermions
         nid = generate_new_id()
-        ret += f"(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id})"
+        ret += f"complex(0,1)*(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id})"
         ret += f" + {mass}*GammaId(SpinIn{p.particle.id},SpinOut{p.particle.id}))*"
     else:
         raise ValueError("Spin not set for particle")

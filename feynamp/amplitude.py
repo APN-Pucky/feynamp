@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from feynml.feynmandiagram import FeynmanDiagram
@@ -7,6 +8,12 @@ from feynamp.leg import get_leg_math_string
 from feynamp.log import debug
 from feynamp.propagator import get_propagator_math_string
 from feynamp.vertex import get_vertex_math_string
+
+
+def complex_conjugate(s: str):
+    """"""
+    # return s
+    return re.sub(r"complex\((.*?),(.*?)\)", r"complex(\1,-\2)", s)
 
 
 def feynman_diagram_to_string(feynman_diagram, feyn_model):
@@ -19,8 +26,8 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
     pm = []
     for v in fd.vertices:
         vm.append("(" + get_vertex_math_string(fd, v, feyn_model) + ")")
-    for l in fd.legs:
-        lm.append("(" + get_leg_math_string(fd, l, feyn_model) + ")")
+    for leg in fd.legs:
+        lm.append("(" + get_leg_math_string(fd, leg, feyn_model) + ")")
     for p in fd.propagators:
         pm.append("(" + get_propagator_math_string(fd, p, feyn_model) + ")")
 
@@ -70,28 +77,36 @@ def square_parallel(
     # TODO also multiply by the symmetry factor from qgraf
     # return multiply(lst_fd,[l.conjugated() for l in lst_fd],feyn_model)
     s = ""
-    lst_fd1 = [feynman_diagram_to_string(l, feyn_model) for l in lst_fd]
-    lst_fd2 = [feynman_diagram_to_string(l.conjugated(), feyn_model) for l in lst_fd]
+    lst_fd1 = [feynman_diagram_to_string(fd, feyn_model) for fd in lst_fd]
+    lst_fd2 = [
+        complex_conjugate(feynman_diagram_to_string(fd.conjugated(), feyn_model))
+        for fd in lst_fd
+    ]
     debug(f"{lst_fd1=}")
+    debug(f"{lst_fd2=}")
     ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
-    for i in range(len(lst_fd1)):
-        for j in range(i, len(lst_fd2)):
-            sfd1 = lst_fd1[i]
-            sfd2 = lst_fd2[j]
-            if i == j:
-                ttag = ""
-                if tag:
-                    ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[i].id}fd{lst_fd[i].id}"
-                ret_lst.append(f"({sfd1})*({sfd2}){ttag}")
-            elif i < j:
-                ttag = ""
-                if tag:
-                    ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
-                ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
-                ret_lst.append(
-                    f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
-                )  # TODO this needs Re!
+    for i, sfd1 in enumerate(lst_fd1):
+        # TODO reenable loop from i
+        for j, sfd2 in enumerate(lst_fd2):
+            # TODO reenable
+            # if i == j:
+            ttag = ""
+            if tag:
+                ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+            ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+            debug(f"{ferm_fac=}")
+            ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
+            # TODO reenable
+            # elif i < j:
+            #    ttag = ""
+            #    if tag:
+            #        ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+            #    ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
+            #    debug(f"{ferm_fac=}")
+            #    ret_lst.append(
+            #        f"2*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}"
+            #    )  # TODO this needs Re!
     return ret_lst
 
 

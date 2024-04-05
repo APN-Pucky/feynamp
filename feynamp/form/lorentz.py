@@ -103,7 +103,11 @@ def get_orthogonal_polarisation_momentum(
     for fd in [fds[0]]:
         for fleg in fd.legs:
             p = find_leg_in_model(fd, fleg, model)
-            if is_mass_zero(p) and fleg != leg:
+            if (
+                is_mass_zero(p)
+                and fleg != leg
+                and leg.is_incoming() == fleg.is_incoming()
+            ):
                 mom = insert_momentum(fleg.momentum.name)
                 return mom
     raise ValueError("No orthogonal momentum found")

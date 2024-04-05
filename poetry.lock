@@ -1162,13 +1162,13 @@ files = [
 
 [[package]]
 name = "equation-database"
-version = "2024.4.4"
+version = "2024.4.5"
 description = "A collection of equations"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "equation_database-2024.4.4-py3-none-any.whl", hash = "sha256:532cde87964f4c21d6e360bad21f343edc72e2cc504b2485a6b4ad59d9fd92d1"},
-    {file = "equation_database-2024.4.4.tar.gz", hash = "sha256:f5fb62cdee9ffc98c8bb2e14eb7999128a29da9f7d235de8f6ceb1f166696e20"},
+    {file = "equation_database-2024.4.5-py3-none-any.whl", hash = "sha256:2c13e94a5370f44cf05bb9854d16b60df9a242d5b35e8b5b12ec1040cafb799b"},
+    {file = "equation_database-2024.4.5.tar.gz", hash = "sha256:be6c5496c557e3456bac18acdcb7490490d6c69195c22a0a4abf341d03373f1d"},
 ]
 
 [package.dependencies]
@@ -1668,13 +1668,13 @@ test = ["flaky", "ipyparallel", "pre-commit", "pytest (>=7.0)", "pytest-asyncio 
 
 [[package]]
 name = "ipyparallel"
-version = "8.7.0"
+version = "8.8.0"
 description = "Interactive Parallel Computing with IPython"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "ipyparallel-8.7.0-py3-none-any.whl", hash = "sha256:7748d0ca42b5ac04374316846df4858bd8f495fff58536d91d988ed367eb1c3c"},
-    {file = "ipyparallel-8.7.0.tar.gz", hash = "sha256:403c0971ae56c2b6a39ffe8f35f31c7fd170ce127924629459cdd7f7a0b4e7c3"},
+    {file = "ipyparallel-8.8.0-py3-none-any.whl", hash = "sha256:d2db60fd8baea09e02e7a13a761e1798868c0a717e3e2fa8fb52ffc037cccd35"},
+    {file = "ipyparallel-8.8.0.tar.gz", hash = "sha256:2404d59f86a3aaa3bd27bf6b57df777bff5c1363c1c6e60403759d16ed42dc7b"},
 ]
 
 [package.dependencies]
@@ -1682,7 +1682,7 @@ decorator = "*"
 entrypoints = "*"
 ipykernel = ">=4.4"
 ipython = ">=4"
-jupyter-client = "*"
+jupyter-client = ">=5"
 psutil = "*"
 python-dateutil = ">=2.1"
 pyzmq = ">=18"
@@ -2869,19 +2869,19 @@ webpdf = ["playwright"]
 
 [[package]]
 name = "nbformat"
-version = "5.10.3"
+version = "5.10.4"
 description = "The Jupyter Notebook format"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "nbformat-5.10.3-py3-none-any.whl", hash = "sha256:d9476ca28676799af85385f409b49d95e199951477a159a576ef2a675151e5e8"},
-    {file = "nbformat-5.10.3.tar.gz", hash = "sha256:60ed5e910ef7c6264b87d644f276b1b49e24011930deef54605188ddeb211685"},
+    {file = "nbformat-5.10.4-py3-none-any.whl", hash = "sha256:3b48d6c8fbca4b299bf3982ea7db1af21580e4fec269ad087b9e81588891200b"},
+    {file = "nbformat-5.10.4.tar.gz", hash = "sha256:322168b14f937a5d11362988ecac2a4952d3d8e3a2cbeb2319584631226d5b3a"},
 ]
 
 [package.dependencies]
-fastjsonschema = "*"
+fastjsonschema = ">=2.15"
 jsonschema = ">=2.6"
-jupyter-core = "*"
+jupyter-core = ">=4.12,<5.0.dev0 || >=5.1.dev0"
 traitlets = ">=5.1"
 
 [package.extras]
@@ -3039,18 +3039,18 @@ files = [
 
 [[package]]
 name = "parso"
-version = "0.8.3"
+version = "0.8.4"
 description = "A Python Parser"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "parso-0.8.3-py2.py3-none-any.whl", hash = "sha256:c001d4636cd3aecdaf33cbb40aebb59b094be2a74c556778ef5576c175e19e75"},
-    {file = "parso-0.8.3.tar.gz", hash = "sha256:8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0"},
+    {file = "parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18"},
+    {file = "parso-0.8.4.tar.gz", hash = "sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d"},
 ]
 
 [package.extras]
-qa = ["flake8 (==3.8.3)", "mypy (==0.782)"]
-testing = ["docopt", "pytest (<6.0.0)"]
+qa = ["flake8 (==5.0.4)", "mypy (==0.971)", "types-setuptools (==67.2.0.1)"]
+testing = ["docopt", "pytest"]
 
 [[package]]
 name = "particle"
@@ -4474,6 +4474,20 @@ numpy = "*"
 smpl_doc = "*"
 
 [[package]]
+name = "snakeviz"
+version = "2.2.0"
+description = "A web-based viewer for Python profiler output"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "snakeviz-2.2.0-py2.py3-none-any.whl", hash = "sha256:569e2d71c47f80a886aa6e70d6405cb6d30aa3520969ad956b06f824c5f02b8e"},
+    {file = "snakeviz-2.2.0.tar.gz", hash = "sha256:7bfd00be7ae147eb4a170a471578e1cd3f41f803238958b6b8efcf2c698a6aa9"},
+]
+
+[package.dependencies]
+tornado = ">=2.0"
+
+[[package]]
 name = "sniffio"
 version = "1.3.1"
 description = "Sniff out which async library your code is running under"
@@ -5100,4 +5114,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "c24aac638f5a444af02705abdcb034e4c190354b70559a8fbd1e0ac4f29112a1"
+content-hash = "e25ae74a28934d692bb305f5b68ce45e8685b043e0da7901b703cfc34fc1632a"

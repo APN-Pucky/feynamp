@@ -1,4 +1,4 @@
-from .amplitude import feynman_diagram_to_string
+from .amplitude import complex_conjugate, feynman_diagram_to_string
 from .log import debug
 from .propagator import find_propagator_in_model, get_propagator_math
 from .vertex import find_vertex_in_model, get_vertex_math
@@ -31,7 +31,7 @@ def get_color_average(fds):
     for leg in fds[0].get_incoming():
         if leg.pdgid == 21:
             r += ["1/8"]
-        elif leg.pdgid in range(1, 7) or -leg.pdgid in range(1, 17):
+        elif leg.pdgid in range(1, 7) or -leg.pdgid in range(1, 7):
             r += ["1/3"]
         elif leg.pdgid == 22:
             r += ["1"]
