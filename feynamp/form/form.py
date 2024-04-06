@@ -2,13 +2,9 @@ import os
 import re
 import subprocess
 import tempfile
-from concurrent.futures import ThreadPoolExecutor
-from multiprocessing.pool import ThreadPool
 
 import form
 from pqdm.threads import pqdm
-
-from feynamp.log import debug
 
 count = 0
 dummy = 0
@@ -63,15 +59,6 @@ def run_parallel_new(
         run_bare,
         n_jobs=threads,
     )
-    # with ThreadPoolExecutor(max_workers=threads) as executor:
-    #    return list(executor.map(run_bare, ["" + init + f"Local TMP = {var};" + cmds for var in variables]))
-    #    for i,r  in enumerate(executor.map(run_bare, ["" + init + f"Local TMP = {var};" + cmds for var in variables])):
-    #        print(r)
-    #    return ""
-    #    print("premap")
-    #    results = executor.map(run, ["" + init + f"Local TMP = {var};" + cmds for var in variables])
-    #    print("postmap")
-    return list(results)
 
 
 def run_parallel_v1(

@@ -9,7 +9,7 @@ from feynmodel.feyn_model import FeynModel
 
 import feynamp.amplitude as amplitude
 from feynamp import get_color_average, get_spin_average
-from feynamp.form.color import apply_color_parallel, get_color
+from feynamp.form.color import apply_color_parallel
 from feynamp.form.lorentz import get_gammas, get_metrics, get_polarisation_sums
 from feynamp.form.momentum import (
     apply,
