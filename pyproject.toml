@@ -8,6 +8,7 @@ repository = "https://github.com/APN-Pucky/feynamp"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pqdm = "*"
 sympy = "*"
 python-form = "*"
 

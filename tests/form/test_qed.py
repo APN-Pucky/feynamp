@@ -12,9 +12,6 @@ from xsdata.formats.dataclass.parsers import XmlParser
 import feynamp
 from feynamp.form import compute_squared
 
-logger = logging.getLogger("feynamp")
-logger.setLevel(logging.DEBUG)
-
 
 def test_compton():
     fm = load_ufo_model("ufo_sm")

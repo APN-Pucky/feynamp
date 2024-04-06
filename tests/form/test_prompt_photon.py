@@ -1,3 +1,5 @@
+import logging
+
 import equation_database.isbn_9780201483628 as ref
 import equation_database.isbn_9780511628788 as ref2
 import sympy
@@ -9,6 +11,8 @@ from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 from feynamp.form import compute_squared
+
+logging.getLogger("feynamp").setLevel(logging.DEBUG)
 
 
 def test_prompt_photon():

@@ -10,7 +10,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
 from feynamp.amplitude import square
-from feynamp.form.color import get_color
+from feynamp.form.color import apply_color
 from feynamp.form.lorentz import get_gammas
 from feynamp.form.momentum import (
     apply,
@@ -45,9 +45,10 @@ def test_form_qqb_qqb():
 
     s2 = square([fd1, fd2], fm, tag=False)
 
+    s2 = apply_color(s2)
+
     fs = ""
     fs += get_gammas()
-    fs += get_color()
     fs += get_kinematics()
     fs += get_onshell(fd1, fm)
     fs += get_mandelstamm_2_to_2(fd2, fm, replace_u=True)
@@ -109,6 +110,12 @@ def test_form_qqb_qqb_automatic():
 
     fds = [fml.diagrams[2], fml.diagrams[-1]]
 
-    ret = feynamp.form.compute_squared(fds, fm).subs("Nc", "3").subs("Cf", "4/3")
+    ret = (
+        feynamp.form.compute_squared(fds, fm)
+        .subs("Nc", "3")
+        .subs("Cf", "4/3")
+        .subs("cA", "3")
+        .subs("cR", "4/3")
+    )
     g = Symbol("G")
     assert (ret / g**4).equals(ref.table_7_1_qqb_qqb)

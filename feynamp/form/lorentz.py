@@ -57,9 +57,6 @@ endrepeat;
 # TODO implement collecting of gammas and form calc solving of it
 # idea: GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
 gamma_collect = """
-repeat;
-id Metric(Mua?,Mub?) = d_(Mua,Mub);
-endrepeat;
 #do i = 1, 10
 once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
 repeat;
@@ -79,13 +76,31 @@ trace4, `i';
 #enddo
 """
 
+metrics = """
+* Simplify metrics, here let form handle it 
+repeat;
+id Metric(Mua?,Mub?) = d_(Mua,Mub);
+endrepeat;
+"""
+
+
+def get_metrics():
+    return metrics
+
+
+def apply_metrics(string_expr):
+    s = string_to_form(string_expr)
+    from .color import color_init
+
+    return run(init + color_init + f"Local TMP = {s};" + get_metrics())
+
 
 def get_gammas():
     return new_get_gammas()
 
 
 def new_get_gammas():
-    return get_dirac_trick() + gamma_collect
+    return get_dirac_trick() + get_metrics() + gamma_collect
 
 
 def get_gammas_v1():

@@ -9,8 +9,8 @@ from feynmodel.feyn_model import FeynModel
 
 import feynamp.amplitude as amplitude
 from feynamp import get_color_average, get_spin_average
-from feynamp.form.color import get_color
-from feynamp.form.lorentz import get_gammas, get_polarisation_sums
+from feynamp.form.color import apply_color_parallel
+from feynamp.form.lorentz import get_gammas, get_metrics, get_polarisation_sums
 from feynamp.form.momentum import (
     apply,
     apply_den,
@@ -32,10 +32,20 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
         ), "All FeynmanDiagrams must have the same external legs"
     s2 = amplitude.square_parallel(fds, fm, tag=tag)
     debug(f"{s2=}")
+
+    s2 = apply_color_parallel(s2)
+
     fs = ""
+    fs += get_metrics()
+    # fs += get_color()
+    # fs += get_kinematics()
+    # fs += get_onshell(fds, fm)
+    # fs += get_mandelstamm(fds, fm)
+    # This is where it gets expensive
     fs += get_polarisation_sums(fds, fm)
+    fs += get_kinematics()
+    fs += get_onshell(fds, fm)
     fs += get_gammas()
-    fs += get_color()
     fs += get_kinematics()
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)
