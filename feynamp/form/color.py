@@ -125,6 +125,15 @@ def get_color_v1():
     return color_sum + color_ids + old_color
 
 
+def get_color_ids():
+    return color_sum + colorh_ids
+
+
+def apply_color_ids(string_expr):
+    s = string_to_form(string_expr)
+    return run(init + colorh_init + f"Local TMP = {s};" + get_color_ids())
+
+
 def apply_color_parallel(string_exprs: List[str]):
     return run_parallel(
         init + colorh_init, get_color(), [string_to_form(a) for a in string_exprs]
