@@ -42,6 +42,35 @@ def feynman_diagram_to_string(feynman_diagram, feyn_model):
     return ret[0:-3]
 
 
+def sympyfy_amplitude(s: str):
+    """
+    Convert a string to a sympy expression.
+    """
+    import sympy
+
+    # s = re.sub(r"Metric\((.*?),(.*?)\)", r"g[\1,\2]", s)
+    s = s.replace("^", "**")
+    s = re.sub(r"f\((.*?),(.*?),(.*?)\)", r"f[\1,\2,\3]", s)
+    s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T[\1,\2,\3]", s)
+    s = re.sub(r"Mu", r"mu_", s)
+    s = re.sub(r"eps", r"epsilon_", s)
+    s = re.sub(r"Mom_([a-zA-Z]+)([0-9]+)", r"\1\2", s)
+    s = s.replace("complex(0,1)", "I")  # sympy uses I for imaginary unit
+    # find all Metric
+    found = re.findall(r"Metric\((.*?),(.*?)\)", s)
+    for f in found:
+        s = s.replace(f"Metric({f[0]},{f[1]})", f"g[{f[0]},{f[1]}]")
+    s = sympy.parse_expr(
+        s,
+        local_dict={
+            "f": sympy.IndexedBase("f"),
+            "T": sympy.IndexedBase("T"),
+            "g": sympy.IndexedBase("g"),
+        },
+    )
+    return s
+
+
 def multiply(
     lst_fd1: List[FeynmanDiagram], lst_fd2: List[FeynmanDiagram], feyn_model: FeynModel
 ):

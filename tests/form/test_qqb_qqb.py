@@ -10,7 +10,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 
 import feynamp
 from feynamp.amplitude import square
-from feynamp.form.color import apply_color, apply_color_parallel, get_color
+from feynamp.form.color import apply_color
 from feynamp.form.lorentz import get_gammas
 from feynamp.form.momentum import (
     apply,
