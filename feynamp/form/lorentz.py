@@ -88,6 +88,13 @@ def get_metrics():
     return metrics
 
 
+def apply_metrics(string_expr):
+    s = string_to_form(string_expr)
+    from .color import color_init
+
+    return run(init + color_init + f"Local TMP = {s};" + get_metrics())
+
+
 def get_gammas():
     return new_get_gammas()
 
