@@ -8,6 +8,7 @@ from feynml.leg import Leg
 from feynml.propagator import Propagator
 from feynml.vertex import Vertex
 
+from feynamp.log import debug, info
 from feynamp.momentum import insert_momentum
 from feynamp.util import safe_index_replace
 
@@ -38,7 +39,9 @@ def insert_lorentz_types(s: str, connections: List[Connector], vertex: Vertex):
             if c.id == g[1] or "In" + str(c.id) == g[1] or "Out" + str(c.id) == g[1]:
                 # TODO: is this correct?
                 if c.goes_into(vertex):
-                    repl = "P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + ")"
+                    repl = (
+                        "(P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                    )
                     break
                 else:
                     repl = (
@@ -85,6 +88,8 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
     assert len(v.color) == len(v.lorentz)
     cret = []
     lret = []
+    info(f"{v.color=}")
+    info(f"{v.lorentz=}")
     for j in range(len(v.color)):
         col = v.color[j]
         nid = generate_new_id()
@@ -107,7 +112,8 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
             col = insert_color_types(col)
         cret.append(col)
     for k in range(len(v.lorentz)):
-        lor = v.lorentz[j].structure
+        lor = v.lorentz[k].structure
+        debug(f"{lor=}")
         nid = generate_new_id()
         lor = safe_index_replace(lor, str(-1), str(nid))
         for i, vv in enumerate(v.particles):
@@ -127,10 +133,11 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
         if typed:
             lor = insert_lorentz_types(lor, v.connections, vertex)
         lret.append(lor)
-    ret = []
+    vertex_math = []
     for k, v in v.couplings.items():
-        ret.append((v.value, cret[k[0]], lret[k[1]]))
-    return ret
+        vertex_math.append((v.value, cret[k[0]], lret[k[1]]))
+    debug(f"{vertex_math=}")
+    return vertex_math
 
 
 def find_vertex_in_model(fd, vertex, model):
