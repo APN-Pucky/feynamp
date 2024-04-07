@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "feynamp"
-version = "0.0.5.12"
+version = "0.0.0"
 description = "Compute Feynman diagrams"
 authors = ["Alexander Puck Neuwirth <alexander@neuwirth-informatik.de>"]
 readme = "README.md"
