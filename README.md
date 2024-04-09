@@ -7,8 +7,11 @@
 
 ## Related
 
-* Mathematica: FormCalc, FeynCalc
-* Julia: https://arxiv.org/pdf/2310.07634.pdf
+* Mathematica:
+  * FormCalc https://feynarts.de/formcalc/
+  * FeynCalc https://feyncalc.github.io/
+* Julia:
+  * https://arxiv.org/pdf/2310.07634.pdf
 
 [pypi image]: https://badge.fury.io/py/feynamp.svg
 [pypi link]: https://pypi.org/project/feynamp/
