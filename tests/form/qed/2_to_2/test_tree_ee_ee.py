@@ -38,7 +38,7 @@ def test_eminus_eminus_to_eminus_eminus():
     Mass_Me, Mass_MM, ee,s,t,u = sympy.symbols("Mass_Me Mass_MM ee s t u")
 
     comp = 2 *ee**4* (s**2/t**2 + u**2/t**2 + s**2/u**2 + t**2/u**2) + 4 *ee**4* s**2/(t* u)
-    comp += 2*ee**4*(-4*Mass_Me**2*(s*(t**2+3*t*u+u**2)+t**3-2*t**2*u-2*t*u**2+u**3) + 8*Mass_Me**4*(t**2+t*u+u**2))/(s**2*t**2)
+    comp += 2*ee**4*(-4*Mass_Me**2*(s*(t**2+3*t*u+u**2)+t**3-2*t**2*u-2*t*u**2+u**3) + 8*Mass_Me**4*(t**2+t*u+u**2))/(u**2*t**2)
 
     assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(comp.subs({"Mass_Me": 0, "Mass_MM": 0}))
     assert res.equals(comp)
