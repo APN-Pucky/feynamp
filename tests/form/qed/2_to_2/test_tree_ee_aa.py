@@ -34,6 +34,7 @@ def test_eminus_eminus_to_eminus_eminus():
     Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")
 
     # https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-GaGa
+    # TODO find in literature and add to equation-database
     comp = (
         2
         * ee**4
