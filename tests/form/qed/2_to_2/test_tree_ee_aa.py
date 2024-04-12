@@ -31,7 +31,7 @@ def test_eminus_eminus_to_eminus_eminus():
     ret = compute_squared(fds, fm)
     res = sympy.simplify(ret.subs({"s": "-t-u+2*Mass_Me**2"}))
 
-    Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")
+    Mass_Me, ee, t, u = sympy.symbols("Mass_Me ee t u")
 
     # https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-GaGa
     # TODO find in literature and add to equation-database
