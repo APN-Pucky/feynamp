@@ -1,5 +1,3 @@
-import logging
-
 import sympy
 from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
@@ -8,7 +6,6 @@ from pyfeyn2.feynmandiagram import FeynML
 from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
-import feynamp
 from feynamp.form import compute_squared
 
 
@@ -34,7 +31,7 @@ def test_eminus_eminus_to_eminus_eminus():
     ret = compute_squared(fds, fm)
     res = sympy.simplify(ret.subs({"s": "-t-u+2*Mass_Me**2"}))
 
-    Mass_Me, Mass_MM, ee, s, t, u = sympy.symbols("Mass_Me Mass_MM ee s t u")
+    Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")
 
     # https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-GaGa
     comp = (
@@ -49,7 +46,5 @@ def test_eminus_eminus_to_eminus_eminus():
         / ((t - Mass_Me**2) ** 2 * (u - Mass_Me**2) ** 2)
     )
 
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
-        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
-    )
+    assert res.subs({"Mass_Me": 0}).equals(comp.subs({"Mass_Me": 0}))
     assert res.equals(comp)

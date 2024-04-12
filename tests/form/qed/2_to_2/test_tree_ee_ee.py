@@ -58,8 +58,12 @@ def test_eminus_eminus_to_eminus_eminus():
         / (u**2 * t**2)
     )
 
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
-        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
+    assert res.subs({"Mass_Me": 0,}).equals(
+        comp.subs(
+            {
+                "Mass_Me": 0,
+            }
+        )
     )
     assert res.equals(comp)
 
@@ -86,7 +90,7 @@ def test_eminus_eplus_to_eminus_eplus():
     ret = compute_squared(fds, fm)
     res = sympy.simplify(ret)
 
-    Mass_Me, Mass_MM, ee, s, t, u = sympy.symbols("Mass_Me Mass_MM ee s t u")
+    Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")
     # from https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-ElAel
     comp = (
         2 * ee**4 * (s**2 + u**2) / t**2
@@ -111,7 +115,11 @@ def test_eminus_eplus_to_eminus_eplus():
     )
     print(res.expand())
     print(comp.expand())
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
-        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
+    assert res.subs({"Mass_Me": 0,}).equals(
+        comp.subs(
+            {
+                "Mass_Me": 0,
+            }
+        )
     )
     assert res.equals(comp)
