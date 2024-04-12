@@ -25,6 +25,7 @@ from feynamp.log import debug
 
 
 def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
+    assert len(fds) > 0, "No FeynmanDiagrams to compute"
     dims = fds[0].get_externals_size()
     for fd in fds:
         assert (
