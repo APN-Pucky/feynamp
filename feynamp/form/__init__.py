@@ -25,6 +25,7 @@ from feynamp.log import debug
 
 
 def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
+    assert len(fds) > 0, "No FeynmanDiagrams to compute"
     dims = fds[0].get_externals_size()
     for fd in fds:
         assert (
@@ -45,7 +46,7 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
     fs += get_polarisation_sums(fds, fm)
     fs += get_kinematics()
     fs += get_onshell(fds, fm)
-    fs += get_gammas()
+    fs += get_gammas(fds, fm)
     fs += get_kinematics()
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)

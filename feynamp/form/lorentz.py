@@ -7,7 +7,7 @@ from feynmodel.feyn_model import FeynModel
 from feynamp.form.form import get_dummy_index, init, run, string_to_form
 from feynamp.leg import find_leg_in_model
 from feynamp.log import debug
-from feynamp.momentum import insert_momentum
+from feynamp.momentum import insert_mass, insert_momentum
 from feynamp.util import is_mass_zero
 
 gammas = """
@@ -95,21 +95,30 @@ def apply_metrics(string_expr):
     return run(init + color_init + f"Local TMP = {s};" + get_metrics())
 
 
-def get_gammas():
-    return new_get_gammas()
+def get_gammas(fds, model):
+    return get_gammas_v3(fds, model)
 
 
-def new_get_gammas():
-    return get_dirac_trick() + get_metrics() + gamma_collect
+def get_gammas_v3(fds, model):
+    return get_dirac_tricks(fds, model) + get_metrics() + gamma_collect
+
+
+def get_gammas_v2():
+    return get_dirac_trick_v1() + get_metrics() + gamma_collect
 
 
 def get_gammas_v1():
-    return get_polarisation_sum_v1() + get_dirac_trick() + gammas
+    return get_polarisation_sum_v1() + get_dirac_trick_v1() + gammas
 
 
 def apply_gammas(string_expr):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + get_gammas())
+
+
+def apply_gammas_v1(string_expr):
+    s = string_to_form(string_expr)
+    return run(init + f"Local TMP = {s};" + get_gammas_v1())
 
 
 def get_orthogonal_polarisation_momentum(
@@ -205,18 +214,38 @@ endrepeat;
 """
 
 
-def get_dirac_trick(N=10):
+def get_dirac_tricks(fds: List[FeynmanDiagram], model: FeynModel):
+    ret = ""
+    # TODO might want to loop over all fds?
+    for fd in [fds[0]]:
+        for l in fd.legs:
+            p = find_leg_in_model(fd, l, model)
+            mom = insert_momentum(l.momentum.name)
+            mass = insert_mass(string_to_form(p.mass.name))
+            if p.spin == 2:
+                dummy = get_dummy_index()
+                ret += f"""
+    once u(Spinc?,{mom})*ubar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) + GammaId(Spinc,Spina) * {mass};
+    """
+                dummy = get_dummy_index()
+                ret += f"""
+    once vbar(Spinc?,{mom})*v(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
+    """
+    return ret
+
+
+def get_dirac_trick_v1(N=10):
     ret = ""
     for i in range(N):
         dummy = get_dummy_index()
         dirac_trick = f"""
-    once u(Spinc?,Momb?)*ubar(Spina?,Momb?) = Gamma({dummy},Spinc,Spina) * P({dummy},Momb) + GammaId(Spinc,Spina) * P({dummy},Momb) * P({dummy},Momb);
+    once u(Spinc?,Momb?)*ubar(Spina?,Momb?) = Gamma({dummy},Spinc,Spina) * P({dummy},Momb) + GammaId(Spinc,Spina) *  P({dummy},Momb) * P({dummy},Momb);
     """
         ret += dirac_trick
     for i in range(N):
         dummy = get_dummy_index()
         dirac_trick = f"""
-    once vbar(Spinc?,Momb?)*v(Spina?,Momb?) = Gamma({dummy},Spinc,Spina) * P({dummy},Momb) - GammaId(Spinc,Spina) * P({dummy},Momb) * P({dummy},Momb);
+    once vbar(Spinc?,Momb?)*v(Spina?,Momb?) = Gamma({dummy},Spinc,Spina) * P({dummy},Momb) - GammaId(Spinc,Spina) *P({dummy},Momb) * P({dummy},Momb) ;
     """
         ret += dirac_trick
     return ret

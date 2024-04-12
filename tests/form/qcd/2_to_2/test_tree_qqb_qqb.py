@@ -11,7 +11,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 import feynamp
 from feynamp.amplitude import square
 from feynamp.form.color import apply_color
-from feynamp.form.lorentz import get_gammas
+from feynamp.form.lorentz import get_gammas_v1
 from feynamp.form.momentum import (
     apply,
     apply_den,
@@ -48,7 +48,7 @@ def test_form_qqb_qqb():
     s2 = apply_color(s2)
 
     fs = ""
-    fs += get_gammas()
+    fs += get_gammas_v1()
     fs += get_kinematics()
     fs += get_onshell(fd1, fm)
     fs += get_mandelstamm_2_to_2(fd2, fm, replace_u=True)

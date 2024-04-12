@@ -11,7 +11,7 @@ from sympy.parsing.sympy_parser import parse_expr
 import feynamp as fp
 import feynamp.form.momentum as m
 from feynamp.form.color import apply_color
-from feynamp.form.lorentz import apply_gammas
+from feynamp.form.lorentz import apply_gammas_v1
 from feynamp.momentum import set_missing_momenta
 
 
@@ -57,7 +57,7 @@ def test_qqb_qpqpb():
 
     m2c = apply_color(f"({ca})*({cb})")
 
-    m2cd = apply_gammas(m2c)
+    m2cd = apply_gammas_v1(m2c)
 
     m2cdm = m.apply_momenta(m2cd)
     m2cdmd = m.apply_denominators(m2cdm)

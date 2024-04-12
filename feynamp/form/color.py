@@ -114,10 +114,10 @@ endrepeat;
 
 def get_color():
     # return get_color_v1()
-    return get_color_new()
+    return get_color_v2()
 
 
-def get_color_new():
+def get_color_v2():
     return color_sum + colorh_ids + color + colorh_ids + rep(color_simplify)
 
 
