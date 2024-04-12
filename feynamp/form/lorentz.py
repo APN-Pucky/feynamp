@@ -112,6 +112,10 @@ def apply_gammas(string_expr):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + get_gammas())
 
+def apply_gammas_v1(string_expr):
+    s = string_to_form(string_expr)
+    return run(init + f"Local TMP = {s};" + get_gammas_v1())
+
 
 def get_orthogonal_polarisation_momentum(
     leg: Leg, fds: List[FeynmanDiagram], model: FeynModel
