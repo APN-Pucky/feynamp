@@ -1,6 +1,5 @@
 import logging
 
-import equation_database.isbn_9780471887416 as ref
 import sympy
 from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
@@ -35,14 +34,35 @@ def test_eminus_eminus_to_eminus_eminus():
     ret = compute_squared(fds, fm)
     res = sympy.simplify(ret)
 
-    Mass_Me, Mass_MM, ee,s,t,u = sympy.symbols("Mass_Me Mass_MM ee s t u")
+    Mass_Me, Mass_MM, ee, s, t, u = sympy.symbols("Mass_Me Mass_MM ee s t u")
 
     # from https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElEl-ElEl
-    comp = 2 *ee**4* (s**2/t**2 + u**2/t**2 + s**2/u**2 + t**2/u**2) + 4 *ee**4* s**2/(t* u)
-    comp += 2*ee**4*(-4*Mass_Me**2*(s*(t**2+3*t*u+u**2)+t**3-2*t**2*u-2*t*u**2+u**3) + 8*Mass_Me**4*(t**2+t*u+u**2))/(u**2*t**2)
+    comp = 2 * ee**4 * (
+        s**2 / t**2 + u**2 / t**2 + s**2 / u**2 + t**2 / u**2
+    ) + 4 * ee**4 * s**2 / (t * u)
+    comp += (
+        2
+        * ee**4
+        * (
+            -4
+            * Mass_Me**2
+            * (
+                s * (t**2 + 3 * t * u + u**2)
+                + t**3
+                - 2 * t**2 * u
+                - 2 * t * u**2
+                + u**3
+            )
+            + 8 * Mass_Me**4 * (t**2 + t * u + u**2)
+        )
+        / (u**2 * t**2)
+    )
 
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(comp.subs({"Mass_Me": 0, "Mass_MM": 0}))
+    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
+        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
+    )
     assert res.equals(comp)
+
 
 def test_eminus_eplus_to_eminus_eplus():
     fm = load_ufo_model("ufo_sm")
@@ -66,11 +86,32 @@ def test_eminus_eplus_to_eminus_eplus():
     ret = compute_squared(fds, fm)
     res = sympy.simplify(ret)
 
-    Mass_Me, Mass_MM, ee,s,t,u = sympy.symbols("Mass_Me Mass_MM ee s t u")
+    Mass_Me, Mass_MM, ee, s, t, u = sympy.symbols("Mass_Me Mass_MM ee s t u")
     # from https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-ElAel
-    comp = 2 *ee**4 *(s**2 + u**2)/t**2 + 4 *ee**4* u**2/(s*t) + 2*ee**4* (t**2 + u**2)/s**2
-    comp += 2*ee**4*(8*Mass_Me**4*(s**2+s*t+t**2) - 4*Mass_Me**2*(s**3+s**2*(u-2*t)+s*t*(3*u-2*t)+t**2*(t+u)))/(s**2*t**2)
+    comp = (
+        2 * ee**4 * (s**2 + u**2) / t**2
+        + 4 * ee**4 * u**2 / (s * t)
+        + 2 * ee**4 * (t**2 + u**2) / s**2
+    )
+    comp += (
+        2
+        * ee**4
+        * (
+            8 * Mass_Me**4 * (s**2 + s * t + t**2)
+            - 4
+            * Mass_Me**2
+            * (
+                s**3
+                + s**2 * (u - 2 * t)
+                + s * t * (3 * u - 2 * t)
+                + t**2 * (t + u)
+            )
+        )
+        / (s**2 * t**2)
+    )
     print(res.expand())
     print(comp.expand())
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(comp.subs({"Mass_Me": 0, "Mass_MM": 0}))
+    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
+        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
+    )
     assert res.equals(comp)

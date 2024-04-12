@@ -1,6 +1,5 @@
 import logging
 
-import equation_database.isbn_9780471887416 as ref
 import sympy
 from feynml.interface.qgraf import style
 from feynmodel.interface.qgraf import feynmodel_to_qgraf
@@ -33,12 +32,24 @@ def test_eminus_eminus_to_eminus_eminus():
     fds = fml.diagrams
 
     ret = compute_squared(fds, fm)
-    res = sympy.simplify(ret.subs({"s" : "-t-u+2*Mass_Me**2"}))
+    res = sympy.simplify(ret.subs({"s": "-t-u+2*Mass_Me**2"}))
 
-    Mass_Me, Mass_MM, ee,s,t,u = sympy.symbols("Mass_Me Mass_MM ee s t u")
+    Mass_Me, Mass_MM, ee, s, t, u = sympy.symbols("Mass_Me Mass_MM ee s t u")
 
     # https://feyncalc.github.io/FeynCalcExamplesMD/QED/Tree/ElAel-GaGa
-    comp = 2*ee**4*(Mass_Me**4*(3*t**2+14*t*u+3*u**2)- Mass_Me**2*(t**3+7*t**2*u+7*t*u**2+u**3) -6*Mass_Me**8 + t*u*(t**2+u**2))/((t-Mass_Me**2)**2*(u-Mass_Me**2)**2)
+    comp = (
+        2
+        * ee**4
+        * (
+            Mass_Me**4 * (3 * t**2 + 14 * t * u + 3 * u**2)
+            - Mass_Me**2 * (t**3 + 7 * t**2 * u + 7 * t * u**2 + u**3)
+            - 6 * Mass_Me**8
+            + t * u * (t**2 + u**2)
+        )
+        / ((t - Mass_Me**2) ** 2 * (u - Mass_Me**2) ** 2)
+    )
 
-    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(comp.subs({"Mass_Me": 0, "Mass_MM": 0}))
+    assert res.subs({"Mass_Me": 0, "Mass_MM": 0}).equals(
+        comp.subs({"Mass_Me": 0, "Mass_MM": 0})
+    )
     assert res.equals(comp)
