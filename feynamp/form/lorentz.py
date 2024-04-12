@@ -95,14 +95,17 @@ def apply_metrics(string_expr):
     return run(init + color_init + f"Local TMP = {s};" + get_metrics())
 
 
-def get_gammas(fds,model):
-    return get_gammas_v3(fds,model)
+def get_gammas(fds, model):
+    return get_gammas_v3(fds, model)
 
-def get_gammas_v3(fds,model):
-    return get_dirac_tricks(fds,model) + get_metrics() + gamma_collect
+
+def get_gammas_v3(fds, model):
+    return get_dirac_tricks(fds, model) + get_metrics() + gamma_collect
+
 
 def get_gammas_v2():
     return get_dirac_trick_v1() + get_metrics() + gamma_collect
+
 
 def get_gammas_v1():
     return get_polarisation_sum_v1() + get_dirac_trick_v1() + gammas
@@ -111,6 +114,7 @@ def get_gammas_v1():
 def apply_gammas(string_expr):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + get_gammas())
+
 
 def apply_gammas_v1(string_expr):
     s = string_to_form(string_expr)
@@ -210,8 +214,8 @@ endrepeat;
 """
 
 
-def get_dirac_tricks(fds : List[FeynmanDiagram], model: FeynModel):
-    ret= ""
+def get_dirac_tricks(fds: List[FeynmanDiagram], model: FeynModel):
+    ret = ""
     # TODO might want to loop over all fds?
     for fd in [fds[0]]:
         for l in fd.legs:
@@ -242,7 +246,7 @@ def get_dirac_trick_v1(N=10):
         dummy = get_dummy_index()
         dirac_trick = f"""
     once vbar(Spinc?,Momb?)*v(Spina?,Momb?) = Gamma({dummy},Spinc,Spina) * P({dummy},Momb) - GammaId(Spinc,Spina) *P({dummy},Momb) * P({dummy},Momb) ;
-    """ 
+    """
         ret += dirac_trick
     return ret
 
