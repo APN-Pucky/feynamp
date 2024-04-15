@@ -3486,13 +3486,13 @@ tests = ["black", "chardet", "tox"]
 
 [[package]]
 name = "pyfeyn2"
-version = "2.4.0"
+version = "2.4.1"
 description = "PyFeyn is a package which makes drawing Feynman diagrams simple and programmatic.  Feynman diagrams are important constructs in perturbative field theory, so being able to draw them in a programmatic fashion is important if attempting to enumerate a large number of diagram configurations is important. The output quality of PyFeyn diagrams (into PDF or EPS formats) is very high, and special effects can be obtained by using constructs from PyX, which PyFeyn is based around"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "pyfeyn2-2.4.0-py3-none-any.whl", hash = "sha256:af3b69c1a136b280185ce0ee4e19ac8ca8ab4b892fd8fdb722d79bad5c776258"},
-    {file = "pyfeyn2-2.4.0.tar.gz", hash = "sha256:7f54b42ccbc0ca7227cf689ec7c2c67a29b07c31cb26b459daa2c494f81adac7"},
+    {file = "pyfeyn2-2.4.1-py3-none-any.whl", hash = "sha256:717cb1fb77a324b5421908df18f51e06df5dd44318dcbd9822f81eca05829d73"},
+    {file = "pyfeyn2-2.4.1.tar.gz", hash = "sha256:ef2e0c87c768854028a3ec67d3d4f857c60e16fc6b37e26b07a1f389164073ba"},
 ]
 
 [package.dependencies]
