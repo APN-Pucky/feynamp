@@ -5,6 +5,8 @@
 [![test][a t image]][a t link]      [![Coverage Status][c t i]][c t l]  [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/b7192679265b441cb534c9dc06d1b350)](https://app.codacy.com/gh/APN-Pucky/feynamp/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)   [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b7192679265b441cb534c9dc06d1b350)](https://app.codacy.com/gh/APN-Pucky/feynamp/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 
+Convert [feynml](https://github.com/APN-Pucky/feynml) Feynman diagrams to [sympy](https://github.com/sympy/sympy) amplitudes. They can be evaluated via [matrixelement](https://github.com/APN-Pucky/matrixelement).
+
 ## Related
 
 * Mathematica:
