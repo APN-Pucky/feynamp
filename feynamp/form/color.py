@@ -1,6 +1,6 @@
 from typing import List
 
-from feynamp.form.form import init, run, run_parallel, string_to_form
+from feynamp.form.form import get_dummy_index, init, run, run_parallel, string_to_form
 
 from .colorh import colorh
 
@@ -112,9 +112,38 @@ endrepeat;
 """
 
 
-def get_color():
+repeat = rep
+
+
+def get_color(mom1=None, mom2=None):
     # return get_color_v1()
-    return get_color_v2()
+    return get_color_v2(mom1=mom1, mom2=mom2)
+
+
+def get_color_sum_v1(mom1=None, mom2=None):
+    ret = ""
+    if mom1 is not None and mom2 is not None:
+        # new index that is summed over
+        dummy = "Glu" + get_dummy_index()
+        ret += repeat(
+            f"""
+         id VA(Glua?,{mom1})*VA(Gluc?,{mom1}) = f(Glua,Gluc,{dummy});
+         id VA(Glua?,{mom2})*VA(Gluc?,{mom2}) = f(Glua,Gluc,{dummy});
+         id VC(Colora?,{mom1})*VC(Colorc?,{mom1}) = T(Colora,Colorc,{dummy});
+         id VC(Colora?,{mom2})*VC(Colorc?,{mom2}) = T(Colora,Colorc,{dummy});
+"""
+        )
+    return ret + color_sum
+
+
+def get_color_v3(mom1=None, mom2=None):
+    return (
+        get_color_sum_v1(mom1=mom1, mom2=mom2)
+        + colorh_ids
+        + color
+        + colorh_ids
+        + rep(color_simplify)
+    )
 
 
 def get_color_v2():
