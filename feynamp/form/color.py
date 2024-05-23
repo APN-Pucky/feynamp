@@ -117,7 +117,7 @@ repeat = rep
 
 def get_color(mom1=None, mom2=None):
     # return get_color_v1()
-    return get_color_v2(mom1=mom1, mom2=mom2)
+    return get_color_v3(mom1=mom1, mom2=mom2)
 
 
 def get_color_sum_v1(mom1=None, mom2=None):
