@@ -27,7 +27,9 @@ from feynamp.log import debug
 
 
 def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
-    return compute_squared_correlated(fds, fm, leg1=None, leg2=None, tag=tag)
+    return compute_squared_correlated(
+        fds, fm, colore_leg1=None, color_leg2=None, tag=tag
+    )
 
 
 def compute_squared_correlated(
