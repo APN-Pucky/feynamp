@@ -6,12 +6,19 @@ def get_leg_math_string(leg, fd, model):
     return get_leg_math(leg, fd, model)
 
 
+def get_leg_momentum(leg):
+    if leg is None:
+        return None
+    if leg.momentum is None or leg.momentum.name is None:
+        raise ValueError("Momentum not set for particle")
+    mom = insert_momentum(leg.momentum.name)
+    return mom
+
+
 def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
     p = find_leg_in_model(fd, leg, model)
-    if p.particle.momentum is None or p.particle.momentum.name is None:
-        raise ValueError("Momentum not set for particle")
+    mom = get_leg_momentum(leg)
     ret = ""
-    mom = insert_momentum(p.particle.momentum.name)
     # give particles color vectors to sum over them in the end (or better average)
     # TODO this could be also done as incoming vs outcoming
     if p.color == 8:

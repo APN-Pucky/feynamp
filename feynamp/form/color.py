@@ -163,9 +163,11 @@ def apply_color_ids(string_expr):
     return run(init + colorh_init + f"Local TMP = {s};" + get_color_ids())
 
 
-def apply_color_parallel(string_exprs: List[str]):
+def apply_color_parallel(string_exprs: List[str], mom1=None, mom2=None):
     return run_parallel(
-        init + colorh_init, get_color(), [string_to_form(a) for a in string_exprs]
+        init + colorh_init,
+        get_color(mom1, mom2),
+        [string_to_form(a) for a in string_exprs],
     )
 
 
