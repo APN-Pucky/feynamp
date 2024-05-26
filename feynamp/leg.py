@@ -15,6 +15,35 @@ def get_leg_momentum(leg):
     return mom
 
 
+def color_vector_to_operator(color_vector):
+    if color_vector == "VA":
+        return "f"
+    if color_vector == "VC":
+        return "T"
+    return None
+
+
+def color_vector_to_index(color_vector):
+    if color_vector == "VA":
+        return "Glu"
+    if color_vector == "VC":
+        return "Color"
+    return None
+
+
+def get_color_vector(fd, leg, model):
+    p = find_leg_in_model(fd, leg, model)
+    # give particles color vectors to sum over them in the end (or better average)
+    # TODO this could be also done as incoming vs outcoming
+    if p.color == 8:
+        # if particle is a gluon give it a adjoint color function
+        return "VA"
+    if p.color == 3 or p.color == -3:
+        # if particle is a quark give it a fundamental color function
+        return "VC"
+    return None
+
+
 def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
     p = find_leg_in_model(fd, leg, model)
     mom = get_leg_momentum(leg)

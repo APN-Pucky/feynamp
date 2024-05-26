@@ -1,6 +1,13 @@
 from typing import List
 
 from feynamp.form.form import get_dummy_index, init, run, run_parallel, string_to_form
+from feynamp.leg import (
+    color_vector_to_index,
+    color_vector_to_operator,
+    get_color_operator,
+    get_color_vector,
+    get_leg_momentum,
+)
 
 from .colorh import colorh
 
@@ -13,7 +20,7 @@ AutoDeclare Index Glu=NA;
 color_init = """
 AutoDeclare Index Color;
 AutoDeclare Index Glu;
-Tensors f(antisymmetric);
+Tensors f(antisymmetric), colorcorrelation;
 CFunctions T;
 Symbols NA,I2R;
 """
@@ -118,6 +125,40 @@ repeat = rep
 def get_color(mom1=None, mom2=None):
     # return get_color_v1()
     return get_color_v3(mom1=mom1, mom2=mom2)
+
+
+def get_full_color_correlation_matrix(fds, legs, model):
+    left = ""
+    right = ""
+    vec = []
+    ops = []
+    ind = []
+    ind1 = []
+    ind2 = []
+    mom = []
+    for i in range(len(legs)):
+        vec += get_color_vector(fds[0], legs[i], model)
+        mom += get_leg_momentum(legs[i])
+        ops += color_vector_to_operator(vec[i])
+        ind += color_vector_to_index(vec[i])
+        ind1 += str(ind[i]) + get_dummy_index()
+        ind2 += str(ind[i]) + get_dummy_index()
+    for i in range(len(legs)):
+        if vec[i] is not None:
+            i1 = ind1[i]
+            i2 = ind2[i]
+            left += f"{vec[i]}({i1}?,{mom[i]})*{vec[i]}({i2}?,{mom[i]})*"
+            for j in range(i + 1, len(legs)):
+                if vec[j] is not None:
+                    dummy = "Glu" + get_dummy_index()
+                    j1 = ind1[j]
+                    j2 = ind2[j]
+                    deltas = "*"
+                    for k in range(len(legs)):
+                        if vec[k] is not None and i != k and j != k:
+                            deltas += f"d_({ind1[k]},{ind2[k]})*"
+                    right += f"colorcorrelation({legs[i].id},{legs[j].id})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
+    return f" id {left[:-1]} = {right[:-1]};"
 
 
 def get_color_sum_v1(mom1=None, mom2=None):
