@@ -14,6 +14,7 @@ Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart;
 AutoDeclare Index Mu,Spin,Pol,Propagator;
 AutoDeclare Symbol Mass,fd,mss,mst,msu;
 AutoDeclare Vector Mom;
+Tensors colorcorrelation;
 Tensors Metric(symmetric),df(symmetric),da(symmetric),Identity(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
 CFunctions Den,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,GammaId, GammaCollect, GammaIdCollect;
@@ -21,23 +22,30 @@ Indices a,o,n,m,tm,tn,beta,b,m,betap,alphap,a,alpha,ind,delta,k,j,l,c,d,e;
 """
 
 
-def get_dummy_index():
+def get_dummy_index(underscore=True, questionmark=True):
     global dummy
     dummy = dummy + 1
-    return f"N{dummy}_?"
+    return f"N{dummy}" + ("_" if underscore else "") + ("?" if questionmark else "")
 
 
 def string_to_form(s):
-    s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*(\2))", s)
-    # s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
-    s = s.replace("Gamma_Id", "GammaId")
-    s = s.replace("u_bar", "ubar")
-    s = s.replace("v_bar", "vbar")
-    s = s.replace("eps_star", "epsstar")
-    s = s.replace("Identity", "df")  # TODO check if this holds or also happens for anti
-    s = s.replace("ZERO", "0")
-    s = s.replace(".*", "*")  # handle decimals
-    s = s.replace(".)", ")")  # handle decimals
+    try:
+        s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*(\2))", s)
+        # s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
+        s = s.replace("Gamma_Id", "GammaId")
+        s = s.replace("u_bar", "ubar")
+        s = s.replace("v_bar", "vbar")
+        s = s.replace("eps_star", "epsstar")
+        s = s.replace(
+            "Identity", "df"
+        )  # TODO check if this holds or also happens for anti
+        s = s.replace("ZERO", "0")
+        s = s.replace(".*", "*")  # handle decimals
+        s = s.replace(".)", ")")  # handle decimals
+    except Exception as e:
+        print("Error in string_to_form", e)
+        print(s)
+        raise e
     return s
 
 

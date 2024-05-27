@@ -26,26 +26,19 @@ from feynamp.log import debug
 # TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s
 
 
-def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
-    return compute_squared_correlated(
-        fds, fm, color_leg1=None, color_leg2=None, tag=tag
-    )
+# def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
+#    return compute_squared_correlated(
+#        fds, fm, colorcorrelated=False, tag=tag
+#    )
 
 
-def compute_squared_correlated(
+def compute_squared(
     fds: List[FeynmanDiagram],
     fm: FeynModel,
-    color_leg1: Leg,
-    color_leg2: Leg,
+    colorcorrelated=False,
     tag=False,
 ):
     assert len(fds) > 0, "No FeynmanDiagrams to compute"
-    assert not (
-        color_leg1 is not None and color_leg2 is None
-    ), "If you want to color correlate legs, you need to provide both"
-    assert not (
-        color_leg1 is None and color_leg2 is not None
-    ), "If you want to color correlate legs, you need to provide both"
     dims = fds[0].get_externals_size()
     for fd in fds:
         assert (
@@ -55,7 +48,7 @@ def compute_squared_correlated(
     debug(f"{s2=}")
 
     s2 = apply_color_parallel(
-        s2, get_leg_momentum(color_leg1), get_leg_momentum(color_leg2)
+        s2, fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
     )
 
     fs = ""
