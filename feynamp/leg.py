@@ -23,11 +23,36 @@ def color_vector_to_operator(color_vector):
     return None
 
 
+def color_vector_to_id(color_vector):
+    if color_vector == "VA":
+        return "da"
+    if color_vector == "VC":
+        return "df"
+    return None
+
+
 def color_vector_to_index(color_vector):
     if color_vector == "VA":
         return "Glu"
     if color_vector == "VC":
         return "Color"
+    return None
+
+
+def is_swapped_color_vector(fd, leg, model):
+    p = find_leg_in_model(fd, leg, model)
+    if leg.is_incoming():
+        if p.color == 3:
+            return False
+        if p.color == -3:
+            return True
+    elif leg.is_outgoing():
+        if p.color == 3:
+            return True
+        if p.color == -3:
+            return False
+    # TODO how sort for gluons?
+    raise ValueError("Color vector not implemented")
     return None
 
 

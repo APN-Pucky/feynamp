@@ -2,10 +2,12 @@ from typing import List
 
 from feynamp.form.form import get_dummy_index, init, run, run_parallel, string_to_form
 from feynamp.leg import (
+    color_vector_to_id,
     color_vector_to_index,
     color_vector_to_operator,
     get_color_vector,
     get_leg_momentum,
+    is_swapped_color_vector,
 )
 from feynamp.log import debug
 
@@ -43,6 +45,10 @@ endrepeat;
 """
 
 colorh_ids = """
+* https://www.nikhef.nl/~form/maindir/packages/color/color.pdf
+* Appendix D
+id d33(cOlpR1,cOlpR2) = I2R^3/(2*Nc)*(Nc^2-1)*(Nc^2-4);
+id d44(cOlpR1,cOlpR2) = I2R^4/(6*Nc^2)*(Nc^2-1)*(Nc^4-6*Nc^2+18);
 repeat;
 * remove df(k,j)
    id df(k?,l?)*df(l?,j?)=df(k,j);
@@ -140,33 +146,45 @@ def get_full_color_correlation_matrix(fds, legs, model):
     ind1 = []
     ind2 = []
     mom = []
+    swap = []
+    ids = []
     for i in range(len(legs)):
+        swap += [is_swapped_color_vector(fds[0], legs[i], model)]
         vec += [get_color_vector(fds[0], legs[i], model)]
+        ids += [color_vector_to_id(vec[i])]
         mom += [get_leg_momentum(legs[i])]
         ops += [color_vector_to_operator(vec[i])]
         ind += [color_vector_to_index(vec[i])]
-        ind1 += [str(ind[i]) + get_dummy_index(underscore=False, questionmark=False)]
+        ind1 += [str(ind[i]) + legs[i].id]
         ind2 += [str(ind[i]) + get_dummy_index(underscore=False, questionmark=False)]
+    dummy = "Glu" + get_dummy_index(underscore=False, questionmark=False)
     for i in range(len(legs)):
         if vec[i] is not None:
-            i1 = ind1[i]
-            i2 = ind2[i]
-            left += f"{vec[i]}({i1}?,{mom[i]})*{vec[i]}({i2}?,{mom[i]})*"
+            i1 = ind1[i] + " "
+            i2 = ind2[i] + "?"
+            if swap[i]:
+                i1, i2 = i2, i1
+            left += f"{vec[i]}({i1},{mom[i]})*{vec[i]}({i2},{mom[i]})*"
+            i1, i2 = i1[:-1], i2[:-1]
             for j in range(i + 1, len(legs)):
                 if vec[j] is not None:
-                    dummy = "Glu" + get_dummy_index(
-                        underscore=False, questionmark=False
-                    )
+
                     j1 = ind1[j]
                     j2 = ind2[j]
+                    if swap[j]:
+                        j1, j2 = j2, j1
                     deltas = "*"
                     for k in range(len(legs)):
                         if vec[k] is not None and i != k and j != k:
-                            deltas += f"d_({ind1[k]},{ind2[k]})*"
-                    right += f"colorcorrelation({mom[i]},{mom[j]})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j2},{j1},{dummy}){deltas[:-1]}+"
-    return f"""
+                            deltas += f"{ids[k]}({ind1[k]},{ind2[k]})*"
+                    right += f"\ncolorcorrelation({mom[i]},{mom[j]})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
+                    # right += f"\n{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
+                    # right += f"\ncolorcorrelation({mom[i]},{mom[j]})*d_({i1},{i2})*d_({j1},{j2}){deltas[:-1]}+"
+    ret = f"""
     id {left[:-1]} = {right[:-1]};
     """
+    print(ret)
+    return ret
 
 
 def get_color_sum_v1(mom1=None, mom2=None):
