@@ -10,6 +10,7 @@ from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 from feynamp.form import compute_squared
+from feynamp.test.colorcorrelation import assert_colorcorrelation
 
 logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
@@ -35,3 +36,5 @@ def test_colorcorrelation_ee_qq():
     born = compute_squared(fds, fm, colorcorrelated=False)
     cc = compute_squared(fds, fm, colorcorrelated=True)
     assert (cc / born).simplify().equals(sympy.parse_expr("Cf*colorcorrelation(p3,p4)"))
+
+    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)

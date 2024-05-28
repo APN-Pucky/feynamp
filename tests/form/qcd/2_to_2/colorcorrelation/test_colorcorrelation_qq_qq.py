@@ -10,6 +10,7 @@ from pyqgraf import qgraf
 from xsdata.formats.dataclass.parsers import XmlParser
 
 from feynamp.form import compute_squared
+from feynamp.test.colorcorrelation import assert_colorcorrelation
 
 logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
@@ -40,6 +41,8 @@ def test_colorcorrelation_qq_photon_qq():
         .equals("Cf*(colorcorrelation(p1, p2) + colorcorrelation(p3, p4))")
     )
 
+    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+
 
 def test_colorcorrelation_qq_gluon_qq():
     fm = load_ufo_model("ufo_sm")
@@ -65,7 +68,9 @@ def test_colorcorrelation_qq_gluon_qq():
         .simplify()
         .equals(
             sympy.parse_expr(
-                "Cf*colorcorrelation(p1, p2) + Cf*colorcorrelation(p3, p4) - Nc*colorcorrelation(p1, p2)/2 + Nc*colorcorrelation(p1, p3)/4 - Nc*colorcorrelation(p1, p4)/4 - Nc*colorcorrelation(p2, p3)/4 + Nc*colorcorrelation(p2, p4)/4 - Nc*colorcorrelation(p3, p4)/2 + Nc**2*colorcorrelation(p1, p3)/(8*Cf) + Nc**2*colorcorrelation(p1, p4)/(8*Cf) + Nc**2*colorcorrelation(p2, p3)/(8*Cf) + Nc**2*colorcorrelation(p2, p4)/(8*Cf) - 5*colorcorrelation(p1, p3)/(8*Cf) - 5*colorcorrelation(p1, p4)/(8*Cf) - 5*colorcorrelation(p2, p3)/(8*Cf) - 5*colorcorrelation(p2, p4)/(8*Cf) + colorcorrelation(p1, p3)/(2*Cf*Nc**2) + colorcorrelation(p1, p4)/(2*Cf*Nc**2) + colorcorrelation(p2, p3)/(2*Cf*Nc**2) + colorcorrelation(p2, p4)/(2*Cf*Nc**2)"
+                "Cf*colorcorrelation(p1, p2) + Cf*colorcorrelation(p3, p4) - Nc*colorcorrelation(p1, p2)/2 + Nc*colorcorrelation(p1, p3)/4 + Nc*colorcorrelation(p1, p4)/4 + Nc*colorcorrelation(p2, p3)/4 + Nc*colorcorrelation(p2, p4)/4 - Nc*colorcorrelation(p3, p4)/2 + Nc**2*colorcorrelation(p1, p3)/(8*Cf) - Nc**2*colorcorrelation(p1, p4)/(8*Cf) - Nc**2*colorcorrelation(p2, p3)/(8*Cf) + Nc**2*colorcorrelation(p2, p4)/(8*Cf) - 5*colorcorrelation(p1, p3)/(8*Cf) + 5*colorcorrelation(p1, p4)/(8*Cf) + 5*colorcorrelation(p2, p3)/(8*Cf) - 5*colorcorrelation(p2, p4)/(8*Cf) + colorcorrelation(p1, p3)/(2*Cf*Nc**2) - colorcorrelation(p1, p4)/(2*Cf*Nc**2) - colorcorrelation(p2, p3)/(2*Cf*Nc**2) + colorcorrelation(p2, p4)/(2*Cf*Nc**2)"
             )
         )
     )
+
+    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)

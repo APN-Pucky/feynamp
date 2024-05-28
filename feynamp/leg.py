@@ -18,9 +18,17 @@ def get_leg_momentum(leg):
     return mom
 
 
+def color_vector_to_casimir(color_vector: str) -> str:
+    if color_vector == "VA":
+        return "Ca"
+    if color_vector == "VC":
+        return "Cf"
+    return None
+
+
 def color_vector_to_operator(color_vector):
     if color_vector == "VA":
-        return "f"
+        return "complex(0,1)*f"
     if color_vector == "VC":
         return "T"
     return None

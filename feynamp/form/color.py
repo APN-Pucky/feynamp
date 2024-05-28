@@ -153,7 +153,7 @@ def get_full_color_correlation_matrix(fds, legs, model, s2):
         vec += [get_color_vector(fds[0], legs[i], model)]
         ids += [color_vector_to_id(vec[i])]
         mom += [get_leg_momentum(legs[i])]
-        ops += [color_vector_to_operator(vec[i])]
+        ops += [("(-1)*" if swap[i] else "") + str(color_vector_to_operator(vec[i]))]
         ind += [color_vector_to_index(vec[i])]
         ind1 += [str(ind[i]) + legs[i].id]
         ind2 += [str(ind[i]) + get_dummy_index(underscore=False, questionmark=False)]
@@ -180,8 +180,9 @@ def get_full_color_correlation_matrix(fds, legs, model, s2):
                     right += f"\ncolorcorrelation({mom[i]},{mom[j]})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
                     # right += f"\n{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
                     # right += f"\ncolorcorrelation({mom[i]},{mom[j]})*d_({i1},{i2})*d_({j1},{j2}){deltas[:-1]}+"
+    # The minus sign below is from https://arxiv.org/pdf/1002.2581 Eq. 2.6
     ret = f"""
-    id {left[:-1]} = {right[:-1]};
+    id {left[:-1]} = -({right[:-1]});
     """
     print(ret)
     return ret
