@@ -38,6 +38,7 @@ def compute_squared(
     colorcorrelated=False,
     spincorrelated=False,
     tag=False,
+    drop_ms_prefix=False,
 ):
     assert len(fds) > 0, "No FeynmanDiagrams to compute"
     dims = fds[0].get_externals_size()
@@ -76,6 +77,9 @@ def compute_squared(
         get_onshell(fds, fm) + get_mandelstamm(fds, fm),
     )
     debug(f"{rr=}")
+
+    if drop_ms_prefix:
+        rr = rr.replace("ms_s", "s").replace("ms_u", "u").replace("ms_t", "t")
 
     ret = form.sympyfy(
         rr

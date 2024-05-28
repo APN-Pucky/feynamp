@@ -31,15 +31,11 @@ def assert_colorcorrelation(sympy_expr, fds, model):
                     momi = get_leg_momentum(legs[k])
                     momj = get_leg_momentum(legs[l])
                     sum = sum.replace(
-                        sympy.parse_expr(
-                            f"colorcorrelation({momi},{momj})".replace("Mom_", "")
-                        ),
+                        sympy.parse_expr(f"colorcorrelation({momi},{momj})"),
                         0,
                     )
                     sum = sum.replace(
-                        sympy.parse_expr(
-                            f"colorcorrelation({momj},{momi})".replace("Mom_", "")
-                        ),
+                        sympy.parse_expr(f"colorcorrelation({momj},{momi})"),
                         0,
                     )
             # replace all remaining colorcorrelation(mom,mom) with 0

@@ -39,7 +39,7 @@ def test_ee_qqg():
     fd1, fd2 = np.array(fml.diagrams)[[f.has_pdgid(22) for f in fml.diagrams]]
     fds = [fd1, fd2]
 
-    ret = compute_squared(fds, fm, tag=False)
+    ret = compute_squared(fds, fm, tag=False, drop_ms_prefix=True)
 
     # ret.subs("Nc","3").subs("Cf","4/3").subs("s34","-t13-t23-s35").subs("Mass_Me" , 0).simplify()
 

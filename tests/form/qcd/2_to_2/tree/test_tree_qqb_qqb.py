@@ -112,6 +112,7 @@ def test_form_qqb_qqb_automatic():
 
     ret = (
         feynamp.form.compute_squared(fds, fm)
+        .subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
         .subs("Nc", "3")
         .subs("Cf", "4/3")
         .subs("cA", "3")

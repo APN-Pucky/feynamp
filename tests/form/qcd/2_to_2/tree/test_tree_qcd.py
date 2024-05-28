@@ -36,7 +36,9 @@ def test_compton():
     # for fd in fds:
     #    fd.render(render="ascii")
 
-    ret = compute_squared(fds, fm, tag=True)
+    ret = compute_squared(fds, fm, tag=True).subs(
+        {"ms_s": "s", "ms_t": "t", "ms_u": "u"}
+    )
     res = sympy.simplify(
         ret.subs(
             {

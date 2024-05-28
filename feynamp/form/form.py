@@ -166,7 +166,8 @@ def sympyfy(string_expr):
             # .replace("ms_t", "t")
         )
     )
-    return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
+    return ret
+    # return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
 
 
 def sympy_to_form_string(sympy_expr):

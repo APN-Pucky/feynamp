@@ -31,7 +31,7 @@ def test_prompt_photon():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret.subs({"s": "-u-t", "Nc": 3, "Cf": "4/3", "ee": 1, "G": 1}))
 
     assert res.equals(
@@ -60,7 +60,7 @@ def test_crossed_prompt_photon():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret.subs({"s": "-u-t", "Nc": 3, "Cf": "4/3"}))
 
     # We have to multiply by two here since

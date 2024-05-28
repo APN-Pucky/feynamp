@@ -32,7 +32,12 @@ def test_qqb_gg():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm).subs("Nc", "3").subs("Cf", "4/3")
+    ret = (
+        compute_squared(fds, fm)
+        .subs("Nc", "3")
+        .subs("Cf", "4/3")
+        .subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
+    )
 
     g = sympy.Symbol("G")
 
