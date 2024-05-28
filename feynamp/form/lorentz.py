@@ -145,32 +145,35 @@ def get_polarisation_sums(
         legs = fds[0].legs
         left = ""
         right = ""
-        mom = []
+        moms = []
         ind1 = []
         ind2 = []
         isvec = []
+        ops = []
+        antiops = []
         for i, leg in enumerate(legs):
-            mom += [get_leg_momentum(leg)]
+            moms += [get_leg_momentum(leg)]
+            ops += ["eps" if leg.is_outgoing() else "epsstar"]
+            antiops += ["epsstar" if leg.is_outgoing() else "eps"]
             ind1 += [f"Pol{leg.id}"]
             ind2 += [f"Pol{get_dummy_index(underscore=False, questionmark=False)}"]
             isvec += [is_vector(fds[0], leg, model)]
         for i, legi in enumerate(legs):
             if isvec[i]:
-                mom = mom[i]
                 i1 = ind1[i]
                 i2 = ind2[i]
-                left += f"VPol({i1},{mom})*VPol({i2},{mom})*"
+                left += f"VPol({i1},{moms[i]})*VPol({i2}?,{moms[i]})*"
                 deltas = "*"
                 for k in range(len(legs)):
-                    if isvec[k] and k != i and k != j:
+                    if isvec[k] and k != i:
                         deltas += f"d_({ind1[k]},{ind2[k]})*"
-                right += f"\nspincorrelation({mom[i]},MuMu,MuNu)*epsstar(MuMu,{i1},{mom})*eps(MuNu,{i2},{mom}){deltas[:-1]}+"
+                right += f"\nspincorrelation({moms[i]},scMuMu,scMuNu)*{ops[i]}(MuMu,{i1},{moms[i]})*{antiops[i]}(MuNu,{i2},{moms[i]}){deltas[:-1]}+"
         if right == "" or left == "":
             # There is nothing to correlate => force the result to be 0
             pol_sums += "id PREFACTOR = 0;"
         else:
             pol_sums += f"""
-        id {left} = ({right});
+        id {left[:-1]} = ({right[:-1]});
         """
             print(f"{pol_sums=}")
     else:
@@ -264,11 +267,11 @@ def get_dirac_tricks(fds: List[FeynmanDiagram], model: FeynModel):
             mom = insert_momentum(l.momentum.name)
             mass = insert_mass(string_to_form(p.mass.name))
             if p.spin == 2:
-                dummy = get_dummy_index()
+                dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
     once u(Spinc?,{mom})*ubar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) + GammaId(Spinc,Spina) * {mass};
     """
-                dummy = get_dummy_index()
+                dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
     once vbar(Spinc?,{mom})*v(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
     """
