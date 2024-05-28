@@ -64,9 +64,9 @@ def test_form_qqb_qqb():
             rr.replace("Mom_", "")
             .replace(".", "_")
             .replace("^", "**")
-            .replace("mss", "s")
-            .replace("msu", "u")
-            .replace("mst", "t")
+            .replace("ms_s", "s")
+            .replace("ms_u", "u")
+            .replace("ms_t", "t")
         )
     )
     # here we use the tags to set the right relative sign

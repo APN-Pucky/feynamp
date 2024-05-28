@@ -1,15 +1,13 @@
-from typing import List
-
-from feynml.leg import Leg
-
 from feynamp import sympy
 from feynamp.leg import color_vector_to_casimir, get_color_vector, get_leg_momentum
 
 
-def assert_colorcorrelation(sympy_expr, fd, legs: List[Leg], model):
+def assert_colorcorrelation(sympy_expr, fds, model):
     """
     sympy_expr: sympy expression of cc/born
     """
+    fd = fds[0]
+    legs = fd.legs
     for j in range(len(legs)):
         vec = get_color_vector(fd, legs[j], model)
         if vec is not None:
@@ -20,15 +18,11 @@ def assert_colorcorrelation(sympy_expr, fd, legs: List[Leg], model):
                 momj = get_leg_momentum(legs[j])
                 # colorcorrelation is symmetric, and we only have sorted vertices
                 sum = sum.replace(
-                    sympy.parse_expr(
-                        f"colorcorrelation({momi},{momj})".replace("Mom_", "")
-                    ),
+                    sympy.parse_expr(f"colorcorrelation({momi},{momj})"),
                     1,
                 )
                 sum = sum.replace(
-                    sympy.parse_expr(
-                        f"colorcorrelation({momj},{momi})".replace("Mom_", "")
-                    ),
+                    sympy.parse_expr(f"colorcorrelation({momj},{momi})"),
                     1,
                 )
             # TODO can be optimized

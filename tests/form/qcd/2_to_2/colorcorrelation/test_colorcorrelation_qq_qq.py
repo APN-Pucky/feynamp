@@ -41,7 +41,7 @@ def test_colorcorrelation_qq_photon_qq():
         .equals("Cf*(colorcorrelation(p1, p2) + colorcorrelation(p3, p4))")
     )
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)
 
 
 def test_colorcorrelation_qq_gluon_qq():
@@ -73,4 +73,4 @@ def test_colorcorrelation_qq_gluon_qq():
         )
     )
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)

@@ -77,13 +77,12 @@ def compute_squared(
     )
     debug(f"{rr=}")
 
-    ret = sympy.parse_expr(
-        rr.replace("Mom_", "")
-        .replace(".", "_")
+    ret = form.sympyfy(
+        rr
+        # .replace("Mom_", "")
+        # .replace("ms_s", "s")
+        # .replace("ms_u", "u")
+        # .replace("ms_t", "t")
         .replace("PREFACTOR", "1")
-        .replace("^", "**")
-        .replace("mss", "s")
-        .replace("msu", "u")
-        .replace("mst", "t")
     ) * sympy.parse_expr("*".join([*get_color_average(fds), *get_spin_average(fds)]))
     return ret

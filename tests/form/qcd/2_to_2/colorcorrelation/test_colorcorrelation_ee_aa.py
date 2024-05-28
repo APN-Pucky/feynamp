@@ -37,4 +37,4 @@ def test_colorcorrelation_ee_qq():
     cc = compute_squared(fds, fm, colorcorrelated=True)
     assert (cc / born).simplify().equals(sympy.parse_expr("0"))
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)
