@@ -73,9 +73,9 @@ def test_qqb_qpqpb():
             rrr.replace("Mom_", "")
             .replace(".", "_")
             .replace("^", "**")
-            .replace("mss", "s")
-            .replace("msu", "u")
-            .replace("mst", "t")
+            .replace("ms_s", "s")
+            .replace("ms_u", "u")
+            .replace("ms_t", "t")
         )
     )
     ret = (

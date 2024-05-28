@@ -6,18 +6,24 @@ import tempfile
 import form
 from pqdm.threads import pqdm
 
+from feynamp.leg import get_leg_momentum
+
 count = 0
 dummy = 0
 # TODO auto generate symbols
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart,PREFACTOR;
 AutoDeclare Index Mu,Spin,Pol,Propagator;
-AutoDeclare Symbol Mass,fd,mss,mst,msu;
+AutoDeclare Symbol Mass,fd;
+* Mandelstamm
+AutoDeclare Symbol ms;
+* Momentum
 AutoDeclare Vector Mom;
-Tensors colorcorrelation;
+Tensors colorcorrelation,spincorrelation;
+Index scMuMu,scMuNu;
 Tensors Metric(symmetric),df(symmetric),da(symmetric),Identity(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
-CFunctions Den,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,GammaId, GammaCollect, GammaIdCollect;
+CFunctions Den,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,VPol,GammaId, GammaCollect, GammaIdCollect;
 Indices a,o,n,m,tm,tn,beta,b,m,betap,alphap,a,alpha,ind,delta,k,j,l,c,d,e;
 """
 
@@ -152,12 +158,17 @@ def sympyfy(string_expr):
 
     ret = simplify(
         parse_expr(
-            string_expr.replace("Mom_", "")
-            .replace(".", "_")
-            .replace("^", "**")
-            .replace("mss", "s")
-            .replace("msu", "u")
-            .replace("mst", "t")
+            string_expr
+            # .replace("Mom_", "")
+            .replace(".", "_").replace("^", "**")
+            # .replace("ms_s", "s")
+            # .replace("ms_u", "u")
+            # .replace("ms_t", "t")
         )
     )
-    return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
+    return ret
+    # return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
+
+
+def sympy_to_form_string(sympy_expr):
+    return str(sympy_expr).replace("**", "^")

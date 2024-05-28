@@ -180,11 +180,14 @@ def get_full_color_correlation_matrix(fds, legs, model, s2):
                     right += f"\ncolorcorrelation({mom[i]},{mom[j]})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
                     # right += f"\n{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
                     # right += f"\ncolorcorrelation({mom[i]},{mom[j]})*d_({i1},{i2})*d_({j1},{j2}){deltas[:-1]}+"
+    if left == "" or right == "":
+        # Nothing to color correlate => abort/return 0
+        return "id PREFACTOR = 0;"
     # The minus sign below is from https://arxiv.org/pdf/1002.2581 Eq. 2.6
     ret = f"""
     id {left[:-1]} = -({right[:-1]});
     """
-    print(ret)
+    # print(ret)
     return ret
 
 

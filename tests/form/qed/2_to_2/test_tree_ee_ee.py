@@ -31,7 +31,7 @@ def test_eminus_eminus_to_eminus_eminus():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret)
 
     Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")
@@ -87,7 +87,7 @@ def test_eminus_eplus_to_eminus_eplus():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret)
 
     Mass_Me, ee, s, t, u = sympy.symbols("Mass_Me ee s t u")

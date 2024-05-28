@@ -36,7 +36,7 @@ def test_gg_gg():
     # for fd in fds:
     #    fd.render(render="ascii")
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(
         ret.subs(
             {

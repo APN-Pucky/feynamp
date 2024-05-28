@@ -29,7 +29,7 @@ def test_compton():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret.subs({"Mass_Me": 0, "t": "-u-s", "ee": "e"}))
 
     assert res.equals(ref.equation_6_113)
@@ -54,7 +54,7 @@ def test_emu_emu():
     fml = parser.from_string(xml_string, FeynML)
     fds = fml.diagrams
 
-    ret = compute_squared(fds, fm)
+    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
     res = sympy.simplify(ret.subs({"Mass_Me": 0, "Mass_MM": 0, "ee": "e"}))
 
     assert res.equals(ref.equation_6_30)

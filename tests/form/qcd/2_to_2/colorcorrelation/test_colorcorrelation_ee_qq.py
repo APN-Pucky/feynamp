@@ -35,6 +35,10 @@ def test_colorcorrelation_ee_qq():
     fds = [fml.diagrams[0]]
     born = compute_squared(fds, fm, colorcorrelated=False)
     cc = compute_squared(fds, fm, colorcorrelated=True)
-    assert (cc / born).simplify().equals(sympy.parse_expr("Cf*colorcorrelation(p3,p4)"))
+    assert (
+        (cc / born)
+        .simplify()
+        .equals(sympy.parse_expr("Cf*colorcorrelation(Mom_p3,Mom_p4)"))
+    )
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)
