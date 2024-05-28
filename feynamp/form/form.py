@@ -17,7 +17,7 @@ AutoDeclare Vector Mom;
 Tensors colorcorrelation;
 Tensors Metric(symmetric),df(symmetric),da(symmetric),Identity(symmetric);
 Function ProjM,ProjP,VF,xg,xgi,P,dg,dgi,xeg,xegi;
-CFunctions Den,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,GammaId, GammaCollect, GammaIdCollect;
+CFunctions Den,Denom,P,Gamma,u,v,ubar,vbar,eps,epsstar,VC,VA,VPol,GammaId, GammaCollect, GammaIdCollect;
 Indices a,o,n,m,tm,tn,beta,b,m,betap,alphap,a,alpha,ind,delta,k,j,l,c,d,e;
 """
 

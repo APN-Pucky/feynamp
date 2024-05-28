@@ -112,9 +112,9 @@ def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
 
     if p.spin == 3:
         if leg.is_incoming():
-            ret += f"eps(Mu{p.particle.id},Pol{p.particle.id},{mom})"
+            ret += f"eps(Mu{p.particle.id},Pol{p.particle.id},{mom})*VPol(Pol{p.particle.id},{mom})"
         else:
-            ret += f"eps_star(Mu{p.particle.id},Pol{p.particle.id},{mom})"
+            ret += f"eps_star(Mu{p.particle.id},Pol{p.particle.id},{mom})*VPol(Pol{p.particle.id},{mom})"
     if p.spin == 2:
         if not p.particle.is_anti():
             if leg.is_incoming():

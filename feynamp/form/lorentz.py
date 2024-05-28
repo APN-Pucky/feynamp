@@ -138,7 +138,11 @@ def get_orthogonal_polarisation_momentum(
 
 
 def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
-    pol_sums = ""
+    pol_sums = """
+    repeat;
+    id VPol(Polb?,Moma?) * VPol(Pold?,Moma?) = d_(Polb,Pold);
+    endrepeat;
+    """
     # TODO might want to loop over all fds?
     for fd in [fds[0]]:
         for l in fd.legs:
@@ -162,21 +166,21 @@ def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
 
 def get_polarisation_sum_massive(mom_a):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc) + (P(Mul,{mom_a})*P(Muc,{mom_a}))*Den({mom_a}.{mom_a});
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Mul,Muc) + (P(Mul,{mom_a})*P(Muc,{mom_a}))*Den({mom_a}.{mom_a});
     """
     return pol_sum
 
 
 def get_polarisation_sum_feynman(mom_a):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc);
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Mul,Muc);
     """
     return pol_sum
 
 
 def get_polarisation_sum_physical(mom_a, mom_b):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) 
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Muc,Mul) 
     + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) 
     - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
     """
