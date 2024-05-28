@@ -1,6 +1,15 @@
 from typing import List
 
-from feynamp.form.form import init, run, run_parallel, string_to_form
+from feynamp.form.form import get_dummy_index, init, run, run_parallel, string_to_form
+from feynamp.leg import (
+    color_vector_to_id,
+    color_vector_to_index,
+    color_vector_to_operator,
+    get_color_vector,
+    get_leg_momentum,
+    is_swapped_color_vector,
+)
+from feynamp.log import debug
 
 from .colorh import colorh
 
@@ -13,7 +22,7 @@ AutoDeclare Index Glu=NA;
 color_init = """
 AutoDeclare Index Color;
 AutoDeclare Index Glu;
-Tensors f(antisymmetric);
+Tensors f(antisymmetric), colorcorrelation;
 CFunctions T;
 Symbols NA,I2R;
 """
@@ -36,6 +45,10 @@ endrepeat;
 """
 
 colorh_ids = """
+* https://www.nikhef.nl/~form/maindir/packages/color/color.pdf
+* Appendix D
+id d33(cOlpR1,cOlpR2) = I2R^3/(2*Nc)*(Nc^2-1)*(Nc^2-4);
+id d44(cOlpR1,cOlpR2) = I2R^4/(6*Nc^2)*(Nc^2-1)*(Nc^4-6*Nc^2+18);
 repeat;
 * remove df(k,j)
    id df(k?,l?)*df(l?,j?)=df(k,j);
@@ -112,9 +125,92 @@ endrepeat;
 """
 
 
-def get_color():
+repeat = rep
+
+
+def get_color(fds=None, legs=None, model=None, colorcorrelation=False, s2=None):
+    assert not colorcorrelation or (
+        fds is not None and legs is not None and model is not None
+    )
     # return get_color_v1()
-    return get_color_v2()
+    return get_color_v3(fds, legs, model, colorcorrelation=colorcorrelation, s2=s2)
+
+
+def get_full_color_correlation_matrix(fds, legs, model, s2):
+
+    left = ""
+    right = ""
+    vec = []
+    ops = []
+    ind = []
+    ind1 = []
+    ind2 = []
+    mom = []
+    swap = []
+    ids = []
+    for i in range(len(legs)):
+        swap += [is_swapped_color_vector(fds[0], legs[i], model, s2)]
+        vec += [get_color_vector(fds[0], legs[i], model)]
+        ids += [color_vector_to_id(vec[i])]
+        mom += [get_leg_momentum(legs[i])]
+        ops += [("(-1)*" if swap[i] else "") + str(color_vector_to_operator(vec[i]))]
+        ind += [color_vector_to_index(vec[i])]
+        ind1 += [str(ind[i]) + legs[i].id]
+        ind2 += [str(ind[i]) + get_dummy_index(underscore=False, questionmark=False)]
+    dummy = "Glu" + get_dummy_index(underscore=False, questionmark=False)
+    for i in range(len(legs)):
+        if vec[i] is not None:
+            i1 = ind1[i] + " "
+            i2 = ind2[i] + "?"
+            if swap[i]:
+                i1, i2 = i2, i1
+            left += f"{vec[i]}({i1},{mom[i]})*{vec[i]}({i2},{mom[i]})*"
+            i1, i2 = i1[:-1], i2[:-1]
+            for j in range(i + 1, len(legs)):
+                if vec[j] is not None:
+
+                    j1 = ind1[j]
+                    j2 = ind2[j]
+                    if swap[j]:
+                        j1, j2 = j2, j1
+                    deltas = "*"
+                    for k in range(len(legs)):
+                        if vec[k] is not None and i != k and j != k:
+                            deltas += f"{ids[k]}({ind1[k]},{ind2[k]})*"
+                    right += f"\ncolorcorrelation({mom[i]},{mom[j]})*{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
+                    # right += f"\n{ops[i]}({i1},{i2},{dummy})*{ops[j]}({j1},{j2},{dummy}){deltas[:-1]}+"
+                    # right += f"\ncolorcorrelation({mom[i]},{mom[j]})*d_({i1},{i2})*d_({j1},{j2}){deltas[:-1]}+"
+    # The minus sign below is from https://arxiv.org/pdf/1002.2581 Eq. 2.6
+    ret = f"""
+    id {left[:-1]} = -({right[:-1]});
+    """
+    print(ret)
+    return ret
+
+
+def get_color_sum_v1(mom1=None, mom2=None):
+    ret = ""
+    if mom1 is not None and mom2 is not None:
+        # new index that is summed over
+        dummy = "Glu" + get_dummy_index()
+        ret += repeat(
+            f"""
+         id VA(Glua?,{mom1})*VA(Gluc?,{mom1}) = f(Glua,Gluc,{dummy});
+         id VA(Glua?,{mom2})*VA(Gluc?,{mom2}) = f(Glua,Gluc,{dummy});
+         id VC(Colora?,{mom1})*VC(Colorc?,{mom1}) = T(Colora,Colorc,{dummy});
+         id VC(Colora?,{mom2})*VC(Colorc?,{mom2}) = T(Colora,Colorc,{dummy});
+"""
+        )
+    return ret + color_sum
+
+
+def get_color_v3(fds, legs, model, colorcorrelation=False, s2=None):
+    ret = ""
+    if colorcorrelation:
+        ret += get_full_color_correlation_matrix(fds, legs, model, s2=s2)
+    else:
+        ret += color_sum
+    return ret + colorh_ids + color + colorh_ids + rep(color_simplify)
 
 
 def get_color_v2():
@@ -134,9 +230,12 @@ def apply_color_ids(string_expr):
     return run(init + colorh_init + f"Local TMP = {s};" + get_color_ids())
 
 
-def apply_color_parallel(string_exprs: List[str]):
+def apply_color_parallel(string_exprs: List[str], **kwargs):
     return run_parallel(
-        init + colorh_init, get_color(), [string_to_form(a) for a in string_exprs]
+        init + colorh_init,
+        # we only forward one
+        get_color(s2=string_exprs[0], **kwargs),
+        [string_to_form(a) for a in string_exprs],
     )
 
 

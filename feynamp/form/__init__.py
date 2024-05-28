@@ -5,6 +5,7 @@ from typing import List
 import form
 import sympy
 from feynml.feynmandiagram import FeynmanDiagram
+from feynml.leg import Leg
 from feynmodel.feyn_model import FeynModel
 
 import feynamp.amplitude as amplitude
@@ -19,12 +20,24 @@ from feynamp.form.momentum import (
     get_mandelstamm,
     get_onshell,
 )
+from feynamp.leg import get_leg_momentum
 from feynamp.log import debug
 
 # TODO compute squared  functino which coutns legs!!"!!!" and picks right mandelstamm,s
 
 
-def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
+# def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
+#    return compute_squared_correlated(
+#        fds, fm, colorcorrelated=False, tag=tag
+#    )
+
+
+def compute_squared(
+    fds: List[FeynmanDiagram],
+    fm: FeynModel,
+    colorcorrelated=False,
+    tag=False,
+):
     assert len(fds) > 0, "No FeynmanDiagrams to compute"
     dims = fds[0].get_externals_size()
     for fd in fds:
@@ -34,7 +47,9 @@ def compute_squared(fds: List[FeynmanDiagram], fm: FeynModel, tag=False):
     s2 = amplitude.square_parallel(fds, fm, tag=tag)
     debug(f"{s2=}")
 
-    s2 = apply_color_parallel(s2)
+    s2 = apply_color_parallel(
+        s2, fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
+    )
 
     fs = ""
     fs += get_metrics()
