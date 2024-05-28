@@ -36,6 +36,7 @@ def compute_squared(
     fds: List[FeynmanDiagram],
     fm: FeynModel,
     colorcorrelated=False,
+    spincorrelated=False,
     tag=False,
 ):
     assert len(fds) > 0, "No FeynmanDiagrams to compute"
@@ -45,6 +46,8 @@ def compute_squared(
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
     s2 = amplitude.square_parallel(fds, fm, tag=tag)
+    # PREFACTOR is used to cancel caluclation by setting it to 0
+    s2 = f"PREFACTOR*({s2})"
     debug(f"{s2=}")
 
     s2 = apply_color_parallel(
@@ -58,7 +61,7 @@ def compute_squared(
     # fs += get_onshell(fds, fm)
     # fs += get_mandelstamm(fds, fm)
     # This is where it gets expensive
-    fs += get_polarisation_sums(fds, fm)
+    fs += get_polarisation_sums(fds, fm, spincorrelated=spincorrelated)
     fs += get_kinematics()
     fs += get_onshell(fds, fm)
     fs += get_gammas(fds, fm)
@@ -79,6 +82,7 @@ def compute_squared(
     ret = sympy.parse_expr(
         rr.replace("Mom_", "")
         .replace(".", "_")
+        .replace("PREFACTOR", "1")
         .replace("^", "**")
         .replace("mss", "s")
         .replace("msu", "u")

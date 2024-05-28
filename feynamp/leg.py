@@ -97,6 +97,14 @@ def get_color_vector(fd, leg, model):
     return None
 
 
+def is_vector(fd, leg, model):
+    """
+    This is used to determine if a leg gets a spin correlation or not.
+    """
+    p = find_leg_in_model(fd, leg, model)
+    return p.spin == 3
+
+
 def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
     p = find_leg_in_model(fd, leg, model)
     mom = get_leg_momentum(leg)

@@ -10,7 +10,7 @@ count = 0
 dummy = 0
 # TODO auto generate symbols
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart,PREFACTOR;
 AutoDeclare Index Mu,Spin,Pol,Propagator;
 AutoDeclare Symbol Mass,fd,mss,mst,msu;
 AutoDeclare Vector Mom;

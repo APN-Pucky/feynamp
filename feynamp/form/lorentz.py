@@ -5,7 +5,7 @@ from feynml.leg import Leg
 from feynmodel.feyn_model import FeynModel
 
 from feynamp.form.form import get_dummy_index, init, run, string_to_form
-from feynamp.leg import find_leg_in_model
+from feynamp.leg import find_leg_in_model, get_leg_momentum, is_vector
 from feynamp.log import debug
 from feynamp.momentum import insert_mass, insert_momentum
 from feynamp.util import is_mass_zero
@@ -137,12 +137,49 @@ def get_orthogonal_polarisation_momentum(
     raise ValueError("No orthogonal momentum found")
 
 
-def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
-    pol_sums = """
+def get_polarisation_sums(
+    fds: List[FeynmanDiagram], model: FeynModel, spincorrelated=False
+):
+    pol_sums = ""
+    if spincorrelated:
+        legs = fds[0].legs
+        left = ""
+        right = ""
+        mom = []
+        ind1 = []
+        ind2 = []
+        isvec = []
+        for i, leg in enumerate(legs):
+            mom += [get_leg_momentum(leg)]
+            ind1 += [f"Pol{leg.id}"]
+            ind2 += [f"Pol{get_dummy_index(underscore=False, questionmark=False)}"]
+            isvec += [is_vector(fds[0], leg, model)]
+        for i, legi in enumerate(legs):
+            if isvec[i]:
+                mom = mom[i]
+                i1 = ind1[i]
+                i2 = ind2[i]
+                left += f"VPol({i1},{mom})*VPol({i2},{mom})*"
+                deltas = "*"
+                for k in range(len(legs)):
+                    if isvec[k] and k != i and k != j:
+                        deltas += f"d_({ind1[k]},{ind2[k]})*"
+                right += f"\nspincorrelation({mom[i]},MuMu,MuNu)*epsstar(MuMu,{i1},{mom})*eps(MuNu,{i2},{mom}){deltas[:-1]}+"
+        if right == "" or left == "":
+            # There is nothing to correlate => force the result to be 0
+            pol_sums += "id PREFACTOR = 0;"
+        else:
+            pol_sums += f"""
+        id {left} = ({right});
+        """
+            print(f"{pol_sums=}")
+    else:
+        pol_sums += """
     repeat;
     id VPol(Polb?,Moma?) * VPol(Pold?,Moma?) = d_(Polb,Pold);
     endrepeat;
     """
+
     # TODO might want to loop over all fds?
     for fd in [fds[0]]:
         for l in fd.legs:
