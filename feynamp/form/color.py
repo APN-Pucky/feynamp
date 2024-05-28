@@ -128,15 +128,15 @@ endrepeat;
 repeat = rep
 
 
-def get_color(fds=None, legs=None, model=None, colorcorrelation=False):
+def get_color(fds=None, legs=None, model=None, colorcorrelation=False, s2=None):
     assert not colorcorrelation or (
         fds is not None and legs is not None and model is not None
     )
     # return get_color_v1()
-    return get_color_v3(fds, legs, model, colorcorrelation=colorcorrelation)
+    return get_color_v3(fds, legs, model, colorcorrelation=colorcorrelation, s2=s2)
 
 
-def get_full_color_correlation_matrix(fds, legs, model):
+def get_full_color_correlation_matrix(fds, legs, model, s2):
 
     left = ""
     right = ""
@@ -149,7 +149,7 @@ def get_full_color_correlation_matrix(fds, legs, model):
     swap = []
     ids = []
     for i in range(len(legs)):
-        swap += [is_swapped_color_vector(fds[0], legs[i], model)]
+        swap += [is_swapped_color_vector(legs[i], s2)]
         vec += [get_color_vector(fds[0], legs[i], model)]
         ids += [color_vector_to_id(vec[i])]
         mom += [get_leg_momentum(legs[i])]
@@ -203,10 +203,10 @@ def get_color_sum_v1(mom1=None, mom2=None):
     return ret + color_sum
 
 
-def get_color_v3(fds, legs, model, colorcorrelation=False):
+def get_color_v3(fds, legs, model, colorcorrelation=False, s2=None):
     ret = ""
     if colorcorrelation:
-        ret += get_full_color_correlation_matrix(fds, legs, model)
+        ret += get_full_color_correlation_matrix(fds, legs, model, s2=s2)
     else:
         ret += color_sum
     return ret + colorh_ids + color + colorh_ids + rep(color_simplify)
@@ -232,7 +232,8 @@ def apply_color_ids(string_expr):
 def apply_color_parallel(string_exprs: List[str], **kwargs):
     return run_parallel(
         init + colorh_init,
-        get_color(**kwargs),
+        # we only forward one
+        get_color(s2=string_exprs[0], **kwargs),
         [string_to_form(a) for a in string_exprs],
     )
 

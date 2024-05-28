@@ -1,3 +1,6 @@
+import re
+
+from feynamp.log import warning
 from feynamp.momentum import insert_momentum
 from feynamp.util import find_particle_in_model
 
@@ -39,21 +42,24 @@ def color_vector_to_index(color_vector):
     return None
 
 
-def is_swapped_color_vector(fd, leg, model):
-    p = find_leg_in_model(fd, leg, model)
-    if leg.is_incoming():
-        if p.color == 3:
-            return False
-        if p.color == -3:
-            return True
-    elif leg.is_outgoing():
-        if p.color == 3:
-            return True
-        if p.color == -3:
-            return False
-    # TODO how sort for gluons?
-    raise ValueError("Color vector not implemented")
-    return None
+def is_swapped_color_vector(leg, s2):
+    """
+    For colorcorrelations the chains of T's must be properly ordered so we check if they must be swapped
+
+    TODO: check this for gluons, maybe sign is wrong...
+    """
+    if re.search(r"T\(Color" + leg.id + r",.*?,.*?\)", s2):
+        return True
+    elif re.search(r"T\(.*?,Color" + leg.id + r",.*?\)", s2):
+        return False
+    elif re.search(r"f\(Glu" + leg.id + r",.*?,.*?\)", s2):
+        return True
+    elif re.search(r"f\(.*?,Glu" + leg.id + r",.*?\)", s2):
+        return False
+    elif re.search(r"f\(.*?,.*?,Glu" + leg.id + r"\)", s2):
+        warning("leg color third in f, check colorcorrelations")
+        return True
+    raise ValueError(f"Color vector for {leg} not found in squared amplitude")
 
 
 def get_color_vector(fd, leg, model):
