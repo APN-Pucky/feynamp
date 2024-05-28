@@ -45,9 +45,7 @@ def compute_squared(
         assert (
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
-    s2 = amplitude.square_parallel(fds, fm, tag=tag)
-    # PREFACTOR is used to cancel caluclation by setting it to 0
-    s2 = f"PREFACTOR*({s2})"
+    s2 = amplitude.square_parallel(fds, fm, tag=tag, prefactor=True)
     debug(f"{s2=}")
 
     s2 = apply_color_parallel(

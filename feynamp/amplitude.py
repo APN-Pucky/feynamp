@@ -92,7 +92,7 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False) -> st
 
 
 def square_parallel(
-    lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False
+    lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False, prefactor=False
 ) -> List[str]:
     """
     Squares the list of feynman diagrams taking the fermion sign into account.
@@ -122,7 +122,9 @@ def square_parallel(
             # if i == j:
             ttag = ""
             if tag:
-                ttag = f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+                ttag += f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
+            if prefactor:
+                ttag += "*PREFACTOR"
             ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
             debug(f"{ferm_fac=}")
             ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
