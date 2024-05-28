@@ -149,7 +149,7 @@ def get_full_color_correlation_matrix(fds, legs, model, s2):
     swap = []
     ids = []
     for i in range(len(legs)):
-        swap += [is_swapped_color_vector(legs[i], s2)]
+        swap += [is_swapped_color_vector(fds[0], legs[i], model, s2)]
         vec += [get_color_vector(fds[0], legs[i], model)]
         ids += [color_vector_to_id(vec[i])]
         mom += [get_leg_momentum(legs[i])]
