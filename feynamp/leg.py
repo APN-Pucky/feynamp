@@ -28,7 +28,7 @@ def color_vector_to_casimir(color_vector: str) -> str:
 
 def color_vector_to_operator(color_vector):
     if color_vector == "VA":
-        return "complex(0,1)*f"
+        return "(-1)*i_*f"
     if color_vector == "VC":
         return "T"
     return None

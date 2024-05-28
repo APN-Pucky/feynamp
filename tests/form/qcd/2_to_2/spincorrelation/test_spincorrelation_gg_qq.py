@@ -17,13 +17,13 @@ logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
 
 
-def test_spincorrelation_ee_qq():
+def test_spincorrelation_gg_qq():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
 
     qgraf.install()
     xml_string = qgraf.run(
-        "e_minus[p1], e_plus[p2]",
+        "g[p1], g[p2]",
         "u[p3], u_bar[p4]",
         loops=0,
         loop_momentum="l",
@@ -34,8 +34,7 @@ def test_spincorrelation_ee_qq():
     parser = XmlParser()
     fml = parser.from_string(xml_string, FeynML)
     fds = [fml.diagrams[0]]
-    born = compute_squared(fds, fm)
-    cc = compute_squared(fds, fm, spincorrelated=True)
-    assert (cc / born).simplify().equals(sympy.parse_expr("0"))
+    born = compute_squared(fds, fm, colorcorrelated=False)
+    sc = compute_squared(fds, fm, spincorrelated=True)
 
-    assert_spincorrelation(cc / born, fds, fm)
+    assert_spincorrelation(sc / born, fds, fm)

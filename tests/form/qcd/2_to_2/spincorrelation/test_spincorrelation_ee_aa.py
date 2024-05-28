@@ -17,7 +17,7 @@ logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
 
 
-def test_colorcorrelation_ee_aa():
+def test_spincorrelation_ee_aa():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
 

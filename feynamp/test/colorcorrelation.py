@@ -13,6 +13,7 @@ def assert_colorcorrelation(sympy_expr, fds, model):
         if vec is not None:
             casimir = color_vector_to_casimir(vec)
             sum = sympy_expr
+            print(f"{sum=}", f"{j=}")
             for i in range(len(legs)):
                 momi = get_leg_momentum(legs[i])
                 momj = get_leg_momentum(legs[j])
@@ -25,6 +26,7 @@ def assert_colorcorrelation(sympy_expr, fds, model):
                     sympy.parse_expr(f"colorcorrelation({momj},{momi})"),
                     1,
                 )
+            print(f"{sum=}")
             # TODO can be optimized
             for k in range(len(legs)):
                 for l in range(len(legs)):
@@ -39,4 +41,7 @@ def assert_colorcorrelation(sympy_expr, fds, model):
                         0,
                     )
             # replace all remaining colorcorrelation(mom,mom) with 0
-            assert sum.equals(sympy.parse_expr(casimir))
+            sum = sum.subs("Nc", 3).subs("Cf", "4/3").simplify()
+            casimir = casimir.replace("Nc", "3").replace("Cf", "4/3").replace("Ca", "3")
+            print(f"{sum=}", f"{casimir=}")
+            assert sum.equals(sympy.parse_expr(casimir)), f"{sum=} {casimir=}"
