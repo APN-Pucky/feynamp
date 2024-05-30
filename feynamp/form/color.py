@@ -239,6 +239,7 @@ def apply_color_parallel(string_exprs: List[str], **kwargs):
         # we only forward one
         get_color(s2=string_exprs[0], **kwargs),
         [string_to_form(a) for a in string_exprs],
+        desc="Color",
     )
 
 

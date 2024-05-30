@@ -54,4 +54,4 @@ def test_gg_gg():
 
 
 if __name__ == "__main__":
-    test_compton()
+    test_gg_gg()

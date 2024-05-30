@@ -57,11 +57,11 @@ def string_to_form(s):
 
 def run_parallel(*args, **kwargs):
     # return run_parallel_v1(*args, **kwargs)
-    return run_parallel_new(*args, **kwargs)
+    return run_parallel_v2(*args, **kwargs)
 
 
-def run_parallel_new(
-    init, cmds, variables, show=False, keep_form_file=True, threads=None
+def run_parallel_v2(
+    init, cmds, variables, show=False, keep_form_file=True, threads=None, desc=None
 ):
     global count
     count = count + 1
@@ -72,6 +72,7 @@ def run_parallel_new(
         ["" + init + f"Local TMP = {var};" + cmds for var in variables],
         run_bare,
         n_jobs=threads,
+        desc=desc,
     )
 
 

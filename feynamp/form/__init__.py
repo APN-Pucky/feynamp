@@ -68,7 +68,7 @@ def compute_squared(
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)
 
-    rs = apply_parallel(s2, fs)
+    rs = apply_parallel(s2, fs, desc="Lorentz and kinematics")
     rs = " + ".join([f"({r})" for r in rs])
     debug(f"{rs=}")
 
@@ -76,7 +76,10 @@ def compute_squared(
         rs,
         get_onshell(fds, fm) + get_mandelstamm(fds, fm),
     )
+    print("len pre factorize", len(rr))
+    rr = apply(rr, "Factorize;")
     debug(f"{rr=}")
+    print("len post factorize", len(rr))
 
     if drop_ms_prefix:
         rr = rr.replace("ms_s", "s").replace("ms_u", "u").replace("ms_t", "t")
