@@ -15,7 +15,7 @@ python-form = "*"
 feynml = ">=0.2.26"
 #feynml = {path= "../feynml", develop = true }
 
-feynmodel = ">=0.0.5"
+feynmodel = ">=0.0.9"
 #feynmodel = {path= "../feynmodel", develop = true }
 
 [tool.poetry.group.test]

@@ -6,9 +6,10 @@ from feynmodel.feyn_model import FeynModel
 
 # from feynamp.form import *
 from feynamp.form.form import init, run, run_parallel, string_to_form
-from feynamp.leg import find_leg_in_model
+from feynamp.leg import find_leg_in_model, get_leg_momentum
 from feynamp.log import warning
 from feynamp.momentum import insert_mass, insert_momentum
+from feynamp.util import remove_duplicate_lines_from_string
 
 momenta = """
 repeat;
@@ -106,7 +107,8 @@ def get_mandelstamm(fds: List[FeynmanDiagram], model: FeynModel, **kwargs):
     elif fds[0].get_externals_size() == (2, 3):
         return get_mandelstamm_2_to_3(fds, model, **kwargs)
     else:
-        raise ValueError("Only 2 to 2 and 2 to 3 Mandelstamm are supported")
+        return get_mandelstamm_generic(fds, model, **kwargs)
+        # raise ValueError("Only 2 to 2 and 2 to 3 Mandelstamm are supported")
 
 
 def get_mandelstamm_2_to_2(
@@ -119,7 +121,7 @@ def get_mandelstamm_2_to_2(
 ):
     if isinstance(fds, FeynmanDiagram):
         warning(
-            "get_onshell is deprecated, use get_onshell with list of FeynmanDiagram"
+            "get_mandelstamm_2_to_2 is deprecated, use get_mandelstamm_2_to_2 with list of FeynmanDiagram"
         )
         fds = [fds]
     r = ""
@@ -170,7 +172,7 @@ def get_mandelstamm_2_to_3(
 ):
     if isinstance(fds, FeynmanDiagram):
         warning(
-            "get_onshell is deprecated, use get_onshell with list of FeynmanDiagram"
+            "get_mandelstamm_2_to_3  is deprecated, use get_mandelstamm_2_to_3 with list of FeynmanDiagram"
         )
         fds = [fds]
     r = ""
@@ -217,6 +219,35 @@ def get_mandelstamm_2_to_3(
         r += f"id {mom2}.{mom4} = -ms_t24/2+{mass2}^2/2+{mass4}^2/2;\n"
         r += f"id {mom2}.{mom5} = -ms_t25/2+{mass2}^2/2+{mass5}^2/2;\n"
 
+    return r
+
+
+def get_mandelstamm_generic(
+    fds: List[FeynmanDiagram],
+    model: FeynModel,
+    # , replace_s=False, replace_t=False, replace_u=False
+    **dead_kwargs,
+):
+    r = ""
+    # TOOD think if looping over fds makes sense?!?
+    fd = fds[0]
+    masses = []
+    for leg in fd.legs:
+        p = find_leg_in_model(fd, leg, model)
+        mass = insert_mass(string_to_form(p.mass.name))
+        masses.append(mass)
+    for i, legi in enumerate(fd.legs):
+        for j, legj in enumerate(fd.legs):
+            if i >= j:
+                continue
+            massi = masses[i]
+            momi = get_leg_momentum(legi)
+            massj = masses[j]
+            momj = get_leg_momentum(legj)
+            if legi.is_incoming() == legj.is_incoming():
+                r += f"id {momi}.{momj} = ms_s_{momi}_{momj}/2-{massi}^2/2-{massj}^2/2;\n"
+            else:
+                r += f"id {momi}.{momj} = -ms_t_{momi}_{momj}/2+{massi}^2/2+{massj}^2/2;\n"
     return r
 
 

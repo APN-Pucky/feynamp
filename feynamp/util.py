@@ -19,3 +19,7 @@ def find_particle_in_model(particle, model):
 
 def is_mass_zero(p: Particle):
     return p.mass.name == "ZERO" or float(p.mass.value) == 0.0
+
+
+def remove_duplicate_lines_from_string(string):
+    return "\n".join(list(set(string.split("\n"))))
