@@ -56,9 +56,9 @@ def apply_parallel(amps: List[str], operations: str, desc=None):
     return run_parallel(init, operations, [string_to_form(a) for a in amps], desc=desc)
 
 
-def apply(string_expr, str_a):
+def apply(string_expr, str_a, threads=1):
     s = string_to_form(string_expr)
-    return run(init + f"Local TMP = {s};" + str_a)
+    return run(init + f"Local TMP = {s};" + str_a, threads=threads)
 
 
 def apply_den(string_expr, str_f):
@@ -75,7 +75,7 @@ def apply_den(string_expr, str_f):
         new_gs = apply_parallel(res, str_f, desc="Denominators")
         # print("Dens: ", len(res), res)
         for og, g in zip(res, new_gs):
-            s = s.replace("Den(" + og + ")", "1/(" + g + ")")
+            s = s.replace("Den(" + og + ")", "((" + g + ")^-1)")
     return s
 
 

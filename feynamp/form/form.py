@@ -2,8 +2,10 @@ import os
 import re
 import subprocess
 import tempfile
+from typing import List
 
 import form
+import tqdm
 from pqdm.threads import pqdm
 
 from feynamp.leg import get_leg_momentum
@@ -55,9 +57,40 @@ def string_to_form(s):
     return s
 
 
+def apply_parallel_v3(amps: List[str], operations: str, desc=None):
+    return run_parallel_v3(
+        init, operations, [string_to_form(a) for a in amps], desc=desc
+    )
+
+
 def run_parallel(*args, **kwargs):
     # return run_parallel_v1(*args, **kwargs)
     return run_parallel_v2(*args, **kwargs)
+
+
+def run_parallel_v3(
+    init, cmds, variables, show=False, keep_form_file=True, threads=None, desc=None
+):
+    global count
+    count = count + 1
+    rets = []
+    if threads is None:
+        threads = os.cpu_count()
+    ret = pqdm(
+        [{"tuples": [("TMP", var)], "init": init, "code": cmds} for var in variables],
+        run_bare_multi,
+        n_jobs=threads,
+        desc=desc,
+        argument_type="kwargs",
+    )
+    # check if ret is error
+    if isinstance(ret, Exception):
+        raise ret
+    if isinstance(ret, List):
+        for r in ret:
+            if isinstance(r, Exception):
+                raise r
+    return ret
 
 
 def run_parallel_v2(
@@ -108,28 +141,46 @@ def run_parallel_v1(
 
 
 def run_bare(s, show=False, keep_form_file=True):
+    init = s.split("Local")[0]
+    local = s.split("Local")[1].split("=")[0].strip()
+    eq = s.split("Local")[1].split("=")[1].strip().split(";")[0]
+    code = ";".join("=".join(s.split("Local")[1].split("=")[1:]).split(";")[1:])
+    ret = run_bare_multi(
+        [(local, eq)],
+        init=init,
+        code=code,
+        show=show,
+        keep_form_file=keep_form_file,
+        end="print " + local + ";\n.sort\n.end",
+    )
+    if len(ret) != 1:
+        raise ValueError(f"Error1 in form output. found #{len(ret)} ")
+    if len(ret[0]) != 2:
+        raise ValueError(f"Error2 in form output. found #{len(ret[0])} ")
+    return ret[0][1]
+
+
+def run_bare_multi(tuples, init, code, show=False, keep_form_file=True, end=".end"):
     """Run it just as a subprocess"""
-    # print("Running bare form")
     # make temporary file
     with tempfile.NamedTemporaryFile(
         "w", suffix=".frm", delete=not keep_form_file
     ) as f:
-        local = s.split("Local")[1].split("=")[0].strip()
-        txt = s + "print " + local + ";.sort;"
+        txt = "Off Statistics;\n"
+        txt += init
+        for s in tuples:
+            txt += f"Local {s[0]} = {s[1]};\n"
+        txt += code
+        txt += end
         f.write(txt)
         # flush it
         f.flush()
         # run form on file and capture output
-        out = subprocess.check_output(["form", f.name])
-        res = re.findall(local + r"\s+=(.*?);", out.decode(), re.DOTALL)
-        if len(res) != 2:
-            raise ValueError(
-                f"Error in form output. found {len(res)} in {out.decode()}"
-            )
-        # print("bare form output", res.group(2))
-        # print("Finished bare form", res)
-        ret = res[1].replace("\n", "").replace(" ", "")
-        return ret
+        out = subprocess.check_output(["form", "-q", f.name]).decode()
+        sout = out.replace("\n", "").replace(" ", "")
+        res = re.findall(r"(.*?)=(.*?);", sout, re.DOTALL)
+        # print(res)
+        return res
 
 
 def run(s, show=False, keep_form_file=True, threads=1):
@@ -153,20 +204,36 @@ def run(s, show=False, keep_form_file=True, threads=1):
         return r
 
 
+def deoptimize(ret):
+    import sympy
+
+    symbols = []
+    for r in ret:
+        symbols += list(r[1].free_symbols)
+    sss = set(symbols)
+    ss = ",".join([str(s) for s in sss])
+    exec(f'{ss} = sympy.symbols("{ss}")')
+    for r in tqdm.tqdm(ret, desc="Deoptimizing"):
+        exec(f"{r[0]}={r[1]}")
+    return eval(str(ret[-1][0]))
+
+
 def sympyfy(string_expr):
     from sympy import simplify
     from sympy.parsing.sympy_parser import parse_expr
 
-    ret = simplify(
-        parse_expr(
-            string_expr
-            # .replace("Mom_", "")
-            .replace(".", "_").replace("^", "**")
-            # .replace("ms_s", "s")
-            # .replace("ms_u", "u")
-            # .replace("ms_t", "t")
-        )
+    # ret = simplify(
+    ret = parse_expr(
+        string_expr
+        # .replace("Mom_", "")
+        .replace(".", "_").replace("^", "**")
+        # .replace("ms_s", "s")
+        # .replace("ms_u", "u")
+        # .replace("ms_t", "t")
+        ,
+        evaluate=False,
     )
+    # )
     return ret
     # return simplify(ret.subs("Nc", "3").subs("Cf", "4/3"))
 
