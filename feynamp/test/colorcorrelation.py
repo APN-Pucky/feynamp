@@ -1,4 +1,5 @@
-from feynamp import sympy
+import sympy
+
 from feynamp.leg import color_vector_to_casimir, get_color_vector, get_leg_momentum
 
 

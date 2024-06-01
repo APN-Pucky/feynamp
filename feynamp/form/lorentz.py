@@ -95,7 +95,56 @@ def apply_metrics(string_expr):
 
 
 def get_gammas(fds, model):
-    return get_gammas_v3(fds, model)
+    return get_gammas_v4(fds, model)
+
+
+def get_gamma_collect(max_fermlines=10, pregroup=5):
+    pre = f"""
+id GammaId(Spin1?,Spin2?)*Gamma(Mua?,Spin2?,Spin3?) = Gamma(Mua,Spin1,Spin3);
+id GammaId(Spin3?,Spin1?)*Gamma(Mua?,Spin2?,Spin3?) = Gamma(Mua,Spin2,Spin1);
+id Gamma(Mu1?,Spin1?,Spin1?) = 0;
+"""
+    # We prelist some Gamma contractions instead of waiting for the slow, but any size GammaCollect
+    for i in range(2, pregroup):
+        lhs = "once "
+        rhs = f" g_({i},"
+        for j in range(1, i):
+            lhs += f"Gamma(Mu{j}?,Spin{j}?,Spin{j+1}?)*"
+            rhs += f"Mu{j},"
+        lhs += f"Gamma(Mu{i}?,Spin{i}?,Spin1?)"
+        rhs += f"Mu{i})"
+        # if i is even
+        if i % 2 == 0:
+            pre += f"{lhs} = {rhs};trace4, {i};\n"
+        else:
+            pre += f"{lhs} = 0;\n"
+
+    return (
+        pre
+        + f"""
+#do i = {pregroup}, {pregroup+max_fermlines}
+once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
+repeat;
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*Gamma(Mux?, Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus, Mux);
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*GammaId(Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus)*gi_(`i');
+endrepeat;
+id GammaCollect(`i',Spin1?,Spin1?,?mus) = g_(`i',?mus);
+trace4, `i';
+#enddo
+#do i = {pregroup+max_fermlines+1}, {pregroup+2*max_fermlines+1}
+once GammaId(Spin1?,Spin2?) = GammaIdCollect(`i',Spin1,Spin2);
+repeat;
+id GammaIdCollect(`i',Spin1?,Spin2?)*GammaId(Spin2?,Spin3?) = GammaIdCollect(`i',Spin1,Spin3)*gi_(`i');
+endrepeat;
+id GammaIdCollect(`i',Spin1?,Spin1?) = 1;
+trace4, `i';
+#enddo
+"""
+    )
+
+
+def get_gammas_v4(fds, model):
+    return get_dirac_tricks(fds, model) + get_metrics() + get_gamma_collect()
 
 
 def get_gammas_v3(fds, model):

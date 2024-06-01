@@ -1,4 +1,5 @@
-from feynamp import sympy
+import sympy
+
 from feynamp.form.form import sympy_to_form_string, sympyfy
 from feynamp.form.momentum import apply, get_kinematics, get_mandelstamm, get_onshell
 from feynamp.leg import (
