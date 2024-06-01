@@ -31,7 +31,7 @@ def test_qqb_ttbb():
     parser = XmlParser()
     fml = parser.from_string(xml_string, FeynML)
     # TODO uncomment
-    # compute_squared(fml.diagrams, fm, colorcorrelated=False, optimize=True,only_result=False)
+    # compute_squared(fml.diagrams, fm, colorcorrelated=False, optimize=False,only_result=False,just_strings=True)
 
 
 if __name__ == "__main__":
