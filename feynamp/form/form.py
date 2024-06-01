@@ -14,7 +14,7 @@ count = 0
 dummy = 0
 # TODO auto generate symbols
 init = """
-Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart,PREFACTOR;
+Symbols Pi,G,ZERO,Tr,Nc,Cf,CA,MC,ee,realpart,PREFACTOR,re,im;
 AutoDeclare Index Mu,Spin,Pol,Propagator;
 AutoDeclare Symbol Mass,fd;
 * Mandelstamm
@@ -38,7 +38,7 @@ def get_dummy_index(underscore=True, questionmark=True):
 
 def string_to_form(s):
     try:
-        s = re.sub(r"complex\((.*?),(.*?)\)", r"(\1+i_*(\2))", s)
+        s = re.sub(r"complex\((.*?),(.*?)\)", r"((\1)+i_*(\2))", s)
         # s = s.replace("complex(0,1)", "i_")  # form uses i_ for imaginary unit
         s = s.replace("Gamma_Id", "GammaId")
         s = s.replace("u_bar", "ubar")

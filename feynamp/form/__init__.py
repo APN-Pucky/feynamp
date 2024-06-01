@@ -42,6 +42,7 @@ def compute_squared(
     drop_ms_prefix=False,
     optimize=False,
     only_result=True,
+    re_for_interference=True,
 ):
     if optimize:
         assert not only_result
@@ -53,8 +54,10 @@ def compute_squared(
         assert (
             dims == fd.get_externals_size()
         ), "All FeynmanDiagrams must have the same external legs"
-    s2 = amplitude.square_parallel(fds, fm, tag=tag, prefactor=True)
-    debug(f"{s2=}")
+    s2 = amplitude.square_parallel(
+        fds, fm, tag=tag, prefactor=True, re_for_interference=re_for_interference
+    )
+    # debug(f"{s2=}")
 
     s2 = apply_color_parallel(
         s2, fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
@@ -77,7 +80,7 @@ def compute_squared(
 
     rs = apply_parallel(s2, fs, desc="Lorentz and kinematics")
     rs = " + ".join([f"({r})" for r in rs])
-    debug(f"{rs=}")
+    # debug(f"{rs=}")
 
     rr = apply_den(
         rs,
@@ -89,6 +92,10 @@ def compute_squared(
         [rr],
         f"""
     id PREFACTOR = {"*".join([*get_color_average(fds), *get_spin_average(fds)])};
+id re*i_ = 0;
+id im*i_ = 1;
+id re = 1;
+id im = 0;
     Format {"O4" if optimize else "O0"};
     print TMP;
     .end
