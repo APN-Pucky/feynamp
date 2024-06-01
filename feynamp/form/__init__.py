@@ -102,7 +102,7 @@ id im = 0;
     """,
         desc="Optimize",
     )[0]
-    debug(f"{rr=}")
+    # debug(f"{rr=}")
     print("len post Optimize", sum([len(relem) for relem in rr]))
 
     if drop_ms_prefix:
