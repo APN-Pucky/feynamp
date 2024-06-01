@@ -3,6 +3,8 @@ from feynml.id import generate_new_id
 from feynamp.momentum import insert_mass, insert_momentum
 from feynamp.util import find_particle_in_model
 
+from .log import debug
+
 
 def get_propagator_math_string(fd, prop, model):
     return get_propagator_math(fd, prop, model)
@@ -27,7 +29,14 @@ def get_propagator_math(fd, prop, model):
         ret += f"(-1)*complex(0,1)*Metric(MuIn{p.particle.id},MuOut{p.particle.id})*"
     elif p.spin == 2:  # TODO handle plus minus mass for fermions
         nid = generate_new_id()
-        ret += f"complex(0,1)*(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id})"
+        # if fermion flow against momentum get a minus sign
+        sign = "1"
+        if prop.is_fermion():
+            sign = "1"
+        else:
+            sign = "-1"
+        # debug(f"{sign=} {prop}")
+        ret += f"({sign})*complex(0,1)*(P(Mu{nid},{mom})*Gamma(Mu{nid},SpinIn{p.particle.id},SpinOut{p.particle.id})"
         ret += f" + {mass}*GammaId(SpinIn{p.particle.id},SpinOut{p.particle.id}))*"
     else:
         raise ValueError("Spin not set for particle")
