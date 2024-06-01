@@ -129,11 +129,13 @@ def get_orthogonal_polarisation_momentum(
             if (
                 is_mass_zero(p)
                 and fleg != leg
-                and leg.is_incoming() == fleg.is_incoming()
+                # This is to ensure that the momenta are orthogonal
+                # TODO check if this is really needed
+                # and leg.is_incoming() == fleg.is_incoming()
             ):
                 mom = insert_momentum(fleg.momentum.name)
                 return mom
-    raise ValueError("No orthogonal momentum found")
+    raise ValueError(f"No orthogonal momentum found for {leg=} in {fds[0].legs=}")
 
 
 def get_polarisation_sums(

@@ -153,6 +153,10 @@ def run_bare(s, show=False, keep_form_file=True):
         keep_form_file=keep_form_file,
         end="print " + local + ";\n.sort\n.end",
     )
+    del init
+    del local
+    del eq
+    del code
     if len(ret) != 1:
         raise ValueError(f"Error1 in form output. found #{len(ret)} ")
     if len(ret[0]) != 2:

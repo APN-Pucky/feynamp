@@ -52,8 +52,10 @@ def apply_denominators(string_expr):
     return run(init + f"Local TMP = {s};" + denominators)
 
 
-def apply_parallel(amps: List[str], operations: str, desc=None):
-    return run_parallel(init, operations, [string_to_form(a) for a in amps], desc=desc)
+def apply_parallel(amps: List[str], operations: str, desc=None, init_extra=""):
+    return run_parallel(
+        init + init_extra, operations, [string_to_form(a) for a in amps], desc=desc
+    )
 
 
 def apply(string_expr, str_a, threads=1):
@@ -87,7 +89,7 @@ def get_onshell(fds: List[FeynmanDiagram], model: FeynModel):
         fds = [fds]
     r = ""
     # TODO might be redundant
-    for fd in fds:
+    for fd in [fds[0]]:
         for l in fd.legs:
             p = find_leg_in_model(fd, l, model)
             mom = insert_momentum(l.momentum.name)
