@@ -131,9 +131,9 @@ def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
                 ret += f"u_bar(Spin{p.particle.id},{mom})"
         else:
             if leg.is_incoming():
-                ret += f"v(Spin{p.particle.id},{mom})"
-            else:
                 ret += f"v_bar(Spin{p.particle.id},{mom})"
+            else:
+                ret += f"v(Spin{p.particle.id},{mom})"
     return ret
 
 
