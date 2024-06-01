@@ -68,5 +68,6 @@ filterwarnings = [
     'ignore: pkg_resources is deprecated as an API:DeprecationWarning',
     'ignore: Deprecated call to:DeprecationWarning',
     "ignore: 'cgi' is deprecated:DeprecationWarning",
+    "ignore: 'pkgutil.get_loader' is deprecated:DeprecationWarning",
 ]
                   

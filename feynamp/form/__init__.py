@@ -10,7 +10,7 @@ from feynmodel.feyn_model import FeynModel
 
 import feynamp.amplitude as amplitude
 from feynamp import get_color_average, get_spin_average
-from feynamp.form.color import apply_color_parallel
+from feynamp.form.color import apply_color_parallel, colorh_init, get_color
 from feynamp.form.form import apply_parallel_v3
 from feynamp.form.lorentz import get_gammas, get_metrics, get_polarisation_sums
 from feynamp.form.momentum import (
@@ -43,6 +43,7 @@ def compute_squared(
     optimize=False,
     only_result=True,
     re_for_interference=True,
+    just_strings=False,
 ):
     if optimize:
         assert not only_result
@@ -59,11 +60,14 @@ def compute_squared(
     )
     # debug(f"{s2=}")
 
-    s2 = apply_color_parallel(
-        s2, fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
-    )
+    # s2 = apply_color_parallel(
+    #    s2, fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
+    # )
 
     fs = ""
+    fs += get_color(
+        s2=s2[0], fds=fds, legs=fds[0].legs, model=fm, colorcorrelation=colorcorrelated
+    )
     fs += get_metrics()
     # fs += get_color()
     # fs += get_kinematics()
@@ -78,7 +82,9 @@ def compute_squared(
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)
 
-    rs = apply_parallel(s2, fs, desc="Lorentz and kinematics")
+    rs = apply_parallel(
+        s2, fs, desc="Color and Lorentz and kinematics", init_extra=colorh_init
+    )
     rs = " + ".join([f"({r})" for r in rs])
     # debug(f"{rs=}")
 
@@ -110,6 +116,9 @@ id im = 0;
             (a, b.replace("ms_s", "s").replace("ms_u", "u").replace("ms_t", "t"))
             for a, b in rr
         ]
+
+    if just_strings:
+        return rr
 
     ret = [(form.sympyfy(r[0]), form.sympyfy(r[1])) for r in rr]
     if only_result:

@@ -8,7 +8,7 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from feynamp.form import compute_squared
 
 
-def test_qqb_ttbb():
+def test_gg_ttbbg():
     fm = load_ufo_model("ufo_sm")
     fm.remove_object(fm.get_particle("G0"))
     fm.remove_object(fm.get_particle("W+"))
@@ -20,8 +20,8 @@ def test_qqb_ttbb():
     qfm = feynmodel_to_qgraf(fm, True, False)
     qgraf.install()
     xml_string = qgraf.run(
-        "u[p1], u_bar[p2]",
-        "t[p3], t_bar[p4], b[p5], b_bar[p6]",
+        "g[p1], g[p2]",
+        "t[p3], t_bar[p4], b[p5], b_bar[p6], g[p7]",
         loops=0,
         loop_momentum="l",
         model=qfm,
@@ -31,8 +31,8 @@ def test_qqb_ttbb():
     parser = XmlParser()
     fml = parser.from_string(xml_string, FeynML)
     # TODO uncomment
-    # compute_squared(fml.diagrams, fm, colorcorrelated=False, optimize=False,only_result=False,just_strings=True)
+    # compute_squared(fml.diagrams, fm, colorcorrelated=False, optimize=True,only_result=False)
 
 
 if __name__ == "__main__":
-    test_qqb_ttbb()
+    test_gg_ttbbg()
