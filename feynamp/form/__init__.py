@@ -86,7 +86,7 @@ def compute_squared(
         rs,
         get_onshell(fds, fm) + get_mandelstamm(fds, fm),
     )
-    print("len pre factorize", len(rr))
+    print("len pre Optimize", len(rr))
     # TODO use #optimize from form
     rr = apply_parallel_v3(
         [rr],
@@ -100,10 +100,10 @@ id im = 0;
     print TMP;
     .end
     """,
-        desc="Factorize",
+        desc="Optimize",
     )[0]
     debug(f"{rr=}")
-    print("len post factorize", len(rr))
+    print("len post Optimize", sum([len(relem) for relem in rr]))
 
     if drop_ms_prefix:
         rr = [
