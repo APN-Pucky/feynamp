@@ -12,8 +12,25 @@ from feynamp.vertex import get_vertex_math_string
 
 def complex_conjugate(s: str):
     """"""
+    # TODO maybe move to form and let it do the swapping
     # return s
-    return re.sub(r"complex\((.*?),(.*?)\)", r"complex(\1,-\2)", s)
+    s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"TX_REP(\2,\1,\3)", s)
+    s = re.sub(r"Gamma\((.*?),(.*?),(.*?)\)", r"GammaX_REP(\1,\3,\2)", s)
+    s = re.sub(r"GammaId\((.*?),(.*?)\)", r"GammaIdX_REP(\2,\1)", s)
+    s = re.sub(r"eps\((.*?),(.*?),(.*?)\)", r"eps_starX_REP(\1,\2,\3)", s)
+    s = re.sub(r"eps_star\((.*?),(.*?),(.*?)\)", r"epsX_REP(\1,\2,\3)", s)
+    s = re.sub(r"u_bar\((.*?),(.*?)\)", r"uX_REP(\1,\2)", s)
+    s = re.sub(r"v_bar\((.*?),(.*?)\)", r"vX_REP(\1,\2)", s)
+    s = re.sub(r"u\((.*?),(.*?)\)", r"u_barX_REP(\1,\2)", s)
+    s = re.sub(r"v\((.*?),(.*?)\)", r"v_barX_REP(\1,\2)", s)
+    s = re.sub(r"complex\((.*?),(.*?)\)", r"complexX_REP(\1,-\2)", s)
+    # replace X with nothing
+    s = s.replace("X_REP(", "(")
+    return s
+
+
+def feynman_diagram_to_sympy_amplitude(feynman_diagram, feyn_model):
+    return sympyfy_amplitude(feynman_diagram_to_string(feynman_diagram, feyn_model))
 
 
 def feynman_diagram_to_string(feynman_diagram, feyn_model):
@@ -50,8 +67,11 @@ def sympyfy_amplitude(s: str):
 
     # s = re.sub(r"Metric\((.*?),(.*?)\)", r"g[\1,\2]", s)
     s = s.replace("^", "**")
+    s = re.sub(r"df\((.*?),(.*?)\)", r"delta[\1,\2]", s)
+    s = re.sub(r"da\((.*?),(.*?)\)", r"delta[\1,\2]", s)
     s = re.sub(r"f\((.*?),(.*?),(.*?)\)", r"f[\1,\2,\3]", s)
     s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T[\1,\2,\3]", s)
+    s = re.sub(r"Gamma\((.*?),(.*?),(.*?)\)", r"gamma[\1,\2,\3]", s)
     s = re.sub(r"Mu", r"mu_", s)
     s = re.sub(r"eps", r"epsilon_", s)
     s = re.sub(r"Mom_([a-zA-Z]+)([0-9]+)", r"\1\2", s)
@@ -64,6 +84,8 @@ def sympyfy_amplitude(s: str):
         s,
         local_dict={
             "f": sympy.IndexedBase("f"),
+            "delta": sympy.IndexedBase("delta"),
+            "gamma": sympy.IndexedBase("gamma"),
             "T": sympy.IndexedBase("T"),
             "g": sympy.IndexedBase("g"),
         },
@@ -92,7 +114,11 @@ def square(lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False) -> st
 
 
 def square_parallel(
-    lst_fd: List[FeynmanDiagram], feyn_model: FeynModel, tag=False, prefactor=False
+    lst_fd: List[FeynmanDiagram],
+    feyn_model: FeynModel,
+    tag=False,
+    prefactor=False,
+    re_for_interference=False,
 ) -> List[str]:
     """
     Squares the list of feynman diagrams taking the fermion sign into account.
@@ -108,7 +134,7 @@ def square_parallel(
     s = ""
     lst_fd1 = [feynman_diagram_to_string(fd, feyn_model) for fd in lst_fd]
     lst_fd2 = [
-        complex_conjugate(feynman_diagram_to_string(fd.conjugated(), feyn_model))
+        complex_conjugate(feynman_diagram_to_string(fd.copy(), feyn_model))
         for fd in lst_fd
     ]
     debug(f"{lst_fd1=}")
@@ -116,18 +142,22 @@ def square_parallel(
     ret_lst = []
     # TODO this could also be done in multiply by comparing the diagrams
     for i, sfd1 in enumerate(lst_fd1):
-        # TODO reenable loop from i
         for j, sfd2 in enumerate(lst_fd2):
+            if re_for_interference and j < i:
+                continue
             # TODO reenable
-            # if i == j:
             ttag = ""
             if tag:
                 ttag += f"*fd{lst_fd[i].id}*fd{lst_fd[j].id}*fd{lst_fd[i].id}fd{lst_fd[j].id}"
             if prefactor:
                 ttag += "*PREFACTOR"
             ferm_fac = lst_fd[i].get_fermion_factor(lst_fd[j])
-            debug(f"{ferm_fac=}")
-            ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
+            # debug(f"{i=} {j=} {ferm_fac=}")
+            if i == j or not re_for_interference:
+                ret_lst.append(f"({sfd1})*({sfd2}){ttag}*{ferm_fac}")
+            else:
+                ret_lst.append(f"2*re*(+{sfd1})*({sfd2}){ttag}*{ferm_fac}")
+                # pass
             # TODO reenable
             # elif i < j:
             #    ttag = ""

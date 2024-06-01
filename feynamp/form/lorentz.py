@@ -54,8 +54,7 @@ endrepeat;
 """
 
 
-# TODO implement collecting of gammas and form calc solving of it
-# idea: GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
+# GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
 gamma_collect = """
 #do i = 1, 10
 once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
@@ -212,6 +211,9 @@ def get_polarisation_sum_massive(mom_a):
 
 
 def get_polarisation_sum_feynman(mom_a):
+    """
+    Quantum field theory and the standard model Mathew D. Schwartz Eq. (13.112)
+    """
     pol_sum = f"""
     id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Mul,Muc);
     """
@@ -219,6 +221,9 @@ def get_polarisation_sum_feynman(mom_a):
 
 
 def get_polarisation_sum_physical(mom_a, mom_b):
+    """
+    Quantum field theory and the standard model Mathew D. Schwartz Eq. (25.120)
+    """
     pol_sum = f"""
     id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Muc,Mul) 
     + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) 
@@ -264,16 +269,16 @@ def get_dirac_tricks(fds: List[FeynmanDiagram], model: FeynModel):
     for fd in [fds[0]]:
         for l in fd.legs:
             p = find_leg_in_model(fd, l, model)
-            mom = insert_momentum(l.momentum.name)
-            mass = insert_mass(string_to_form(p.mass.name))
             if p.spin == 2:
+                mom = insert_momentum(l.momentum.name)
+                mass = insert_mass(string_to_form(p.mass.name))
                 dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
     once u(Spinc?,{mom})*ubar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) + GammaId(Spinc,Spina) * {mass};
     """
                 dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
-    once vbar(Spinc?,{mom})*v(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
+    once v(Spinc?,{mom})*vbar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
     """
     return ret
 
@@ -308,9 +313,3 @@ def apply_dirac_trick(string_expr):
 def apply_polarisation_sum(string_expr):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + get_polarisation_sum())
-
-
-# TODO: implement this use forms gamma algebra
-def replace_indices_by_line():
-    # return list of lines
-    pass

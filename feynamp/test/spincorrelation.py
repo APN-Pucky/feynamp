@@ -37,5 +37,6 @@ def assert_spincorrelation(sympy_expr, fds, model):
             fs += get_mandelstamm(fds, model)
 
             rr = apply(st, fs)
-            sr = sympyfy(rr)
+            sr = sympyfy(rr).simplify()
+            print(sr)
             assert sr == sympy.parse_expr("-1")

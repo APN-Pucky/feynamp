@@ -16,10 +16,10 @@ from feynamp.util import safe_index_replace
 def insert_color_types(s: str):
     """ """
     # We use the non greedy .*? to match multiple occurances individually
-    # s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Glu\1,Color\2,Color\3)", s)
-    # TODO do we want this? Or above
+    # First index is last for form color
     s = re.sub(r"T\((.*?),(.*?),(.*?)\)", r"T(Color\2,Color\3,Glu\1)", s)
     s = re.sub(r"f\((.*?),(.*?),(.*?)\)", r"f(Glu\1,Glu\2,Glu\3)", s)
+    # TODO why color what if glu?
     s = re.sub(r"Identity\((.*?),(.*?)\)", r"Identity(Color\1,Color\2)", s)
     return s
 
@@ -36,23 +36,29 @@ def insert_lorentz_types(s: str, connections: List[Connector], vertex: Vertex):
         # find connection with g[1] id in connections
         repl = None
         for c in connections:
+            # debug(f"{c.id=} {g}")
             if c.id == g[1] or "In" + str(c.id) == g[1] or "Out" + str(c.id) == g[1]:
                 # TODO: is this correct?
                 if c.goes_into(vertex):
+                    repl = (
+                        "(-P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                    )
+                    break
+                elif c.goes_out_of(vertex):
                     repl = (
                         "(P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
                     )
                     break
                 else:
-                    repl = (
-                        "(-P(Mu" + g[0] + "," + insert_momentum(c.momentum.name) + "))"
+                    raise Exception(
+                        f"Connection {c} not going into or out of vertex {vertex}"
                     )
-                    break
         if repl is None:
             raise Exception(
                 f"Connection with id {g[1]} not found in connections {connections}"
             )
-        s = s.replace("P(" + g[0] + "," + g[1] + ")", repl)
+        # debug(f"P({g[0]},{g[1]}) -> {repl=}")
+        s = s.replace(f"P({g[0]},{g[1]})", repl)
     return s
 
 
@@ -88,8 +94,8 @@ def get_vertex_math(fd, vertex, model, typed=True):  # TODO subst negative indic
     assert len(v.color) == len(v.lorentz)
     cret = []
     lret = []
-    info(f"{v.color=}")
-    info(f"{v.lorentz=}")
+    # debug(f"{v.color=}")
+    # debug(f"{v.lorentz=}")
     for j in range(len(v.color)):
         col = v.color[j]
         nid = generate_new_id()

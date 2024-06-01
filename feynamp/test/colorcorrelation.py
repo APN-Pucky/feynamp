@@ -28,6 +28,7 @@ def assert_colorcorrelation(sympy_expr, fds, model):
                 )
             print(f"{sum=}")
             # TODO can be optimized
+            # replace all remaining colorcorrelation(mom,mom) with 0
             for k in range(len(legs)):
                 for l in range(len(legs)):
                     momi = get_leg_momentum(legs[k])
@@ -40,7 +41,7 @@ def assert_colorcorrelation(sympy_expr, fds, model):
                         sympy.parse_expr(f"colorcorrelation({momj},{momi})"),
                         0,
                     )
-            # replace all remaining colorcorrelation(mom,mom) with 0
+            # Use numeric values for Nc, Ca, Cf to avoid having to simplify
             sum = sum.subs("Nc", 3).subs("Cf", "4/3").simplify()
             casimir = casimir.replace("Nc", "3").replace("Cf", "4/3").replace("Ca", "3")
             print(f"{sum=}", f"{casimir=}")

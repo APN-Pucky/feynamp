@@ -15,13 +15,13 @@ logger = logging.getLogger("feynamp")
 logger.setLevel(logging.DEBUG)
 
 
-def test_gg_gg():
+def test_qed_symmetry():
     fm = load_ufo_model("ufo_sm")
     qfm = feynmodel_to_qgraf(fm, True, False)
     qgraf.install()
     xml_string = qgraf.run(
-        "g[p1], g[p2]",
-        "g[p3], g[p4]",
+        "gamma[p1], gamma[p2]",
+        "e_minus[p3], e_plus[p4]",
         loops=0,
         loop_momentum="l",
         model=qfm,
@@ -36,7 +36,9 @@ def test_gg_gg():
     # for fd in fds:
     #    fd.render(render="ascii")
 
-    ret = compute_squared(fds, fm).subs({"ms_s": "s", "ms_t": "t", "ms_u": "u"})
+    ret = compute_squared(fds, fm, tag=True, re_for_interference=False).subs(
+        {"ms_s": "s", "ms_t": "t", "ms_u": "u"}
+    )
     res = sympy.simplify(
         ret.subs(
             {
@@ -44,14 +46,31 @@ def test_gg_gg():
                 "Nc": "3",
                 "Cf": "4/3",
                 "G": 1,
+                "fdDiagram1": 1,
+                "fdDiagram2": 1,
+                "fdDiagram3": 1,
+                "fdDiagram4": 1,
+                "fdDiagram1fdDiagram1": 0,
+                "fdDiagram1fdDiagram2": 1,
+                "fdDiagram2fdDiagram1": -1,
+                "fdDiagram1fdDiagram3": 0,
+                "fdDiagram3fdDiagram1": 0,
+                "fdDiagram1fdDiagram4": 0,
+                "fdDiagram4fdDiagram1": 0,
+                "fdDiagram2fdDiagram3": 0,
+                "fdDiagram3fdDiagram2": 0,
+                "fdDiagram2fdDiagram2": 0,
+                "fdDiagram2fdDiagram4": 0,
+                "fdDiagram4fdDiagram2": 0,
+                "fdDiagram3fdDiagram3": 0,
+                "fdDiagram3fdDiagram4": 0,
+                "fdDiagram4fdDiagram3": 0,
+                "fdDiagram4fdDiagram4": 0,
             }
         )
     )
-    # print(res.expand())
-    assert res.equals(
-        ref.table_7_1["gluon_gluon_to_gluon_gluon"].subs({"s": "-t-u"})
-    )  # result from
+    assert res.equals(0)
 
 
 if __name__ == "__main__":
-    test_gg_gg()
+    test_compton()
