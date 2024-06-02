@@ -38,10 +38,12 @@ def test_colorcorrelation_qq_photon_qq():
     assert (
         (cc / born)
         .simplify()
-        .equals("Cf*(colorcorrelation(p1, p2) + colorcorrelation(p3, p4))")
+        .equals(
+            "Cf*(colorcorrelation(Mom_p1, Mom_p2) + colorcorrelation(Mom_p3, Mom_p4))"
+        )
     )
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)
 
 
 def test_colorcorrelation_qq_gluon_qq():
@@ -68,9 +70,9 @@ def test_colorcorrelation_qq_gluon_qq():
         .simplify()
         .equals(
             sympy.parse_expr(
-                "Cf*colorcorrelation(p1, p2) + Cf*colorcorrelation(p3, p4) - Nc*colorcorrelation(p1, p2)/2 + Nc*colorcorrelation(p1, p3)/4 + Nc*colorcorrelation(p1, p4)/4 + Nc*colorcorrelation(p2, p3)/4 + Nc*colorcorrelation(p2, p4)/4 - Nc*colorcorrelation(p3, p4)/2 + Nc**2*colorcorrelation(p1, p3)/(8*Cf) - Nc**2*colorcorrelation(p1, p4)/(8*Cf) - Nc**2*colorcorrelation(p2, p3)/(8*Cf) + Nc**2*colorcorrelation(p2, p4)/(8*Cf) - 5*colorcorrelation(p1, p3)/(8*Cf) + 5*colorcorrelation(p1, p4)/(8*Cf) + 5*colorcorrelation(p2, p3)/(8*Cf) - 5*colorcorrelation(p2, p4)/(8*Cf) + colorcorrelation(p1, p3)/(2*Cf*Nc**2) - colorcorrelation(p1, p4)/(2*Cf*Nc**2) - colorcorrelation(p2, p3)/(2*Cf*Nc**2) + colorcorrelation(p2, p4)/(2*Cf*Nc**2)"
+                "Cf*colorcorrelation(Mom_p1, Mom_p2) + Cf*colorcorrelation(Mom_p3, Mom_p4) - Nc*colorcorrelation(Mom_p1, Mom_p2)/2 + Nc*colorcorrelation(Mom_p1, Mom_p3)/4 + Nc*colorcorrelation(Mom_p1, Mom_p4)/4 + Nc*colorcorrelation(Mom_p2, Mom_p3)/4 + Nc*colorcorrelation(Mom_p2, Mom_p4)/4 - Nc*colorcorrelation(Mom_p3, Mom_p4)/2 + Nc**2*colorcorrelation(Mom_p1, Mom_p3)/(8*Cf) - Nc**2*colorcorrelation(Mom_p1, Mom_p4)/(8*Cf) - Nc**2*colorcorrelation(Mom_p2, Mom_p3)/(8*Cf) + Nc**2*colorcorrelation(Mom_p2, Mom_p4)/(8*Cf) - 5*colorcorrelation(Mom_p1, Mom_p3)/(8*Cf) + 5*colorcorrelation(Mom_p1, Mom_p4)/(8*Cf) + 5*colorcorrelation(Mom_p2, Mom_p3)/(8*Cf) - 5*colorcorrelation(Mom_p2, Mom_p4)/(8*Cf) + colorcorrelation(Mom_p1, Mom_p3)/(2*Cf*Nc**2) - colorcorrelation(Mom_p1, Mom_p4)/(2*Cf*Nc**2) - colorcorrelation(Mom_p2, Mom_p3)/(2*Cf*Nc**2) + colorcorrelation(Mom_p2, Mom_p4)/(2*Cf*Nc**2)"
             )
         )
     )
 
-    assert_colorcorrelation(cc / born, fds[0], fds[0].legs, fm)
+    assert_colorcorrelation(cc / born, fds, fm)

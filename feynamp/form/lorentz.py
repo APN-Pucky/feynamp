@@ -5,7 +5,7 @@ from feynml.leg import Leg
 from feynmodel.feyn_model import FeynModel
 
 from feynamp.form.form import get_dummy_index, init, run, string_to_form
-from feynamp.leg import find_leg_in_model
+from feynamp.leg import find_leg_in_model, get_leg_momentum, is_vector
 from feynamp.log import debug
 from feynamp.momentum import insert_mass, insert_momentum
 from feynamp.util import is_mass_zero
@@ -54,8 +54,7 @@ endrepeat;
 """
 
 
-# TODO implement collecting of gammas and form calc solving of it
-# idea: GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
+# GammaCollect(1,spin1,spin2, mu,nu,...) run through and then apply to expression
 gamma_collect = """
 #do i = 1, 10
 once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
@@ -96,7 +95,56 @@ def apply_metrics(string_expr):
 
 
 def get_gammas(fds, model):
-    return get_gammas_v3(fds, model)
+    return get_gammas_v4(fds, model)
+
+
+def get_gamma_collect(max_fermlines=10, pregroup=5):
+    pre = f"""
+id GammaId(Spin1?,Spin2?)*Gamma(Mua?,Spin2?,Spin3?) = Gamma(Mua,Spin1,Spin3);
+id GammaId(Spin3?,Spin1?)*Gamma(Mua?,Spin2?,Spin3?) = Gamma(Mua,Spin2,Spin1);
+id Gamma(Mu1?,Spin1?,Spin1?) = 0;
+"""
+    # We prelist some Gamma contractions instead of waiting for the slow, but any size GammaCollect
+    for i in range(2, pregroup):
+        lhs = "once "
+        rhs = f" g_({i},"
+        for j in range(1, i):
+            lhs += f"Gamma(Mu{j}?,Spin{j}?,Spin{j+1}?)*"
+            rhs += f"Mu{j},"
+        lhs += f"Gamma(Mu{i}?,Spin{i}?,Spin1?)"
+        rhs += f"Mu{i})"
+        # if i is even
+        if i % 2 == 0:
+            pre += f"{lhs} = {rhs};trace4, {i};\n"
+        else:
+            pre += f"{lhs} = 0;\n"
+
+    return (
+        pre
+        + f"""
+#do i = {pregroup}, {pregroup+max_fermlines}
+once Gamma(Mux?,Spin1?,Spin2?) = GammaCollect(`i',Spin1,Spin2,Mux);
+repeat;
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*Gamma(Mux?, Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus, Mux);
+id GammaCollect(`i',Spin1?,Spin2?,?mus)*GammaId(Spin2?,Spin3?) = GammaCollect(`i',Spin1,Spin3, ?mus)*gi_(`i');
+endrepeat;
+id GammaCollect(`i',Spin1?,Spin1?,?mus) = g_(`i',?mus);
+trace4, `i';
+#enddo
+#do i = {pregroup+max_fermlines+1}, {pregroup+2*max_fermlines+1}
+once GammaId(Spin1?,Spin2?) = GammaIdCollect(`i',Spin1,Spin2);
+repeat;
+id GammaIdCollect(`i',Spin1?,Spin2?)*GammaId(Spin2?,Spin3?) = GammaIdCollect(`i',Spin1,Spin3)*gi_(`i');
+endrepeat;
+id GammaIdCollect(`i',Spin1?,Spin1?) = 1;
+trace4, `i';
+#enddo
+"""
+    )
+
+
+def get_gammas_v4(fds, model):
+    return get_dirac_tricks(fds, model) + get_metrics() + get_gamma_collect()
 
 
 def get_gammas_v3(fds, model):
@@ -130,15 +178,61 @@ def get_orthogonal_polarisation_momentum(
             if (
                 is_mass_zero(p)
                 and fleg != leg
-                and leg.is_incoming() == fleg.is_incoming()
+                # This is to ensure that the momenta are orthogonal
+                # TODO check if this is really needed
+                # and leg.is_incoming() == fleg.is_incoming()
             ):
                 mom = insert_momentum(fleg.momentum.name)
                 return mom
-    raise ValueError("No orthogonal momentum found")
+    raise ValueError(f"No orthogonal momentum found for {leg=} in {fds[0].legs=}")
 
 
-def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
+def get_polarisation_sums(
+    fds: List[FeynmanDiagram], model: FeynModel, spincorrelated=False
+):
     pol_sums = ""
+    if spincorrelated:
+        legs = fds[0].legs
+        left = ""
+        right = ""
+        moms = []
+        ind1 = []
+        ind2 = []
+        isvec = []
+        ops = []
+        antiops = []
+        for i, leg in enumerate(legs):
+            moms += [get_leg_momentum(leg)]
+            ops += ["eps" if leg.is_outgoing() else "epsstar"]
+            antiops += ["epsstar" if leg.is_outgoing() else "eps"]
+            ind1 += [f"Pol{leg.id}"]
+            ind2 += [f"Pol{get_dummy_index(underscore=False, questionmark=False)}"]
+            isvec += [is_vector(fds[0], leg, model)]
+        for i, legi in enumerate(legs):
+            if isvec[i]:
+                i1 = ind1[i]
+                i2 = ind2[i]
+                left += f"VPol({i1},{moms[i]})*VPol({i2}?,{moms[i]})*"
+                deltas = "*"
+                for k in range(len(legs)):
+                    if isvec[k] and k != i:
+                        deltas += f"d_({ind1[k]},{ind2[k]})*"
+                right += f"\nspincorrelation({moms[i]},scMuMu,scMuNu)*{ops[i]}(MuMu,{i1},{moms[i]})*{antiops[i]}(MuNu,{i2},{moms[i]}){deltas[:-1]}+"
+        if right == "" or left == "":
+            # There is nothing to correlate => force the result to be 0
+            pol_sums += "id PREFACTOR = 0;"
+        else:
+            pol_sums += f"""
+        id {left[:-1]} = ({right[:-1]});
+        """
+            print(f"{pol_sums=}")
+    else:
+        pol_sums += """
+    repeat;
+    id VPol(Polb?,Moma?) * VPol(Pold?,Moma?) = d_(Polb,Pold);
+    endrepeat;
+    """
+
     # TODO might want to loop over all fds?
     for fd in [fds[0]]:
         for l in fd.legs:
@@ -162,21 +256,27 @@ def get_polarisation_sums(fds: List[FeynmanDiagram], model: FeynModel):
 
 def get_polarisation_sum_massive(mom_a):
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc) + (P(Mul,{mom_a})*P(Muc,{mom_a}))*Den({mom_a}.{mom_a});
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Mul,Muc) + (P(Mul,{mom_a})*P(Muc,{mom_a}))*Den({mom_a}.{mom_a});
     """
     return pol_sum
 
 
 def get_polarisation_sum_feynman(mom_a):
+    """
+    Quantum field theory and the standard model Mathew D. Schwartz Eq. (13.112)
+    """
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Mul,Muc);
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Mul,Muc);
     """
     return pol_sum
 
 
 def get_polarisation_sum_physical(mom_a, mom_b):
+    """
+    Quantum field theory and the standard model Mathew D. Schwartz Eq. (25.120)
+    """
     pol_sum = f"""
-    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Pold?,{mom_a}) = -Metric(Muc,Mul) 
+    id epsstar(Muc?,Polb?,{mom_a}) * eps(Mul?,Polb?,{mom_a}) = -Metric(Muc,Mul) 
     + (P(Muc,{mom_a})*P(Mul,{mom_b}) +  P(Mul,{mom_a})*P(Muc,{mom_b}))*Den({mom_b}.{mom_a}) 
     - P(Muc,{mom_a})*P(Mul,{mom_a})*({mom_b}.{mom_b})*Den({mom_b}.{mom_a})*Den({mom_b}.{mom_a});
     """
@@ -220,16 +320,16 @@ def get_dirac_tricks(fds: List[FeynmanDiagram], model: FeynModel):
     for fd in [fds[0]]:
         for l in fd.legs:
             p = find_leg_in_model(fd, l, model)
-            mom = insert_momentum(l.momentum.name)
-            mass = insert_mass(string_to_form(p.mass.name))
             if p.spin == 2:
-                dummy = get_dummy_index()
+                mom = insert_momentum(l.momentum.name)
+                mass = insert_mass(string_to_form(p.mass.name))
+                dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
     once u(Spinc?,{mom})*ubar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) + GammaId(Spinc,Spina) * {mass};
     """
-                dummy = get_dummy_index()
+                dummy = "Mu" + get_dummy_index(questionmark=False, underscore=False)
                 ret += f"""
-    once vbar(Spinc?,{mom})*v(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
+    once v(Spinc?,{mom})*vbar(Spina?,{mom}) = Gamma({dummy},Spinc,Spina) * P({dummy},{mom}) - GammaId(Spinc,Spina) * {mass};
     """
     return ret
 
@@ -264,9 +364,3 @@ def apply_dirac_trick(string_expr):
 def apply_polarisation_sum(string_expr):
     s = string_to_form(string_expr)
     return run(init + f"Local TMP = {s};" + get_polarisation_sum())
-
-
-# TODO: implement this use forms gamma algebra
-def replace_indices_by_line():
-    # return list of lines
-    pass

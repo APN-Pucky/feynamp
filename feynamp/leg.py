@@ -28,7 +28,7 @@ def color_vector_to_casimir(color_vector: str) -> str:
 
 def color_vector_to_operator(color_vector):
     if color_vector == "VA":
-        return "complex(0,1)*f"
+        return "(-1)*i_*f"
     if color_vector == "VC":
         return "T"
     return None
@@ -97,6 +97,14 @@ def get_color_vector(fd, leg, model):
     return None
 
 
+def is_vector(fd, leg, model):
+    """
+    This is used to determine if a leg gets a spin correlation or not.
+    """
+    p = find_leg_in_model(fd, leg, model)
+    return p.spin == 3
+
+
 def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
     p = find_leg_in_model(fd, leg, model)
     mom = get_leg_momentum(leg)
@@ -112,9 +120,9 @@ def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
 
     if p.spin == 3:
         if leg.is_incoming():
-            ret += f"eps(Mu{p.particle.id},Pol{p.particle.id},{mom})"
+            ret += f"eps(Mu{p.particle.id},Pol{p.particle.id},{mom})*VPol(Pol{p.particle.id},{mom})"
         else:
-            ret += f"eps_star(Mu{p.particle.id},Pol{p.particle.id},{mom})"
+            ret += f"eps_star(Mu{p.particle.id},Pol{p.particle.id},{mom})*VPol(Pol{p.particle.id},{mom})"
     if p.spin == 2:
         if not p.particle.is_anti():
             if leg.is_incoming():
@@ -123,9 +131,9 @@ def get_leg_math(fd, leg, model):  # epsilons or u/v optionally also barred
                 ret += f"u_bar(Spin{p.particle.id},{mom})"
         else:
             if leg.is_incoming():
-                ret += f"v(Spin{p.particle.id},{mom})"
-            else:
                 ret += f"v_bar(Spin{p.particle.id},{mom})"
+            else:
+                ret += f"v(Spin{p.particle.id},{mom})"
     return ret
 
 
