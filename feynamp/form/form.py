@@ -57,6 +57,16 @@ def string_to_form(s):
     return s
 
 
+def apply_parallel_v4(amps: List[str], operations: str, init_extra="", **kwargs):
+    ret = run_bare_multi(
+        tuples=[(f"TMP{i}", string_to_form(a)) for i, a in enumerate(amps)],
+        code=operations,
+        init=init + init_extra,
+        threads=os.cpu_count(),
+    )
+    return [ret[i][1] for i in range(len(amps))]
+
+
 def apply_parallel_v3(amps: List[str], operations: str, desc=None):
     return run_parallel_v3(
         init, operations, [string_to_form(a) for a in amps], desc=desc
@@ -164,7 +174,16 @@ def run_bare(s, show=False, keep_form_file=True):
     return ret[0][1]
 
 
-def run_bare_multi(tuples, init, code, show=False, keep_form_file=True, end=".end"):
+def run_bare_multi(
+    tuples,
+    init,
+    code,
+    print=True,
+    show=False,
+    keep_form_file=True,
+    end=".end",
+    threads=1,
+):
     """Run it just as a subprocess"""
     # make temporary file
     with tempfile.NamedTemporaryFile(
@@ -175,12 +194,15 @@ def run_bare_multi(tuples, init, code, show=False, keep_form_file=True, end=".en
         for s in tuples:
             txt += f"Local {s[0]} = {s[1]};\n"
         txt += code
+        if print:
+            for s in tuples:
+                txt += f"print {s[0]};\n"
         txt += end
         f.write(txt)
         # flush it
         f.flush()
         # run form on file and capture output
-        out = subprocess.check_output(["form", "-q", f.name]).decode()
+        out = subprocess.check_output(["tform", f"-w{threads}", "-q", f.name]).decode()
         sout = out.replace("\n", "").replace(" ", "")
         res = re.findall(r"(.*?)=(.*?);", sout, re.DOTALL)
         # print(res)

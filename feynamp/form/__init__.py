@@ -11,7 +11,7 @@ from feynmodel.feyn_model import FeynModel
 import feynamp.amplitude as amplitude
 from feynamp import get_color_average, get_spin_average
 from feynamp.form.color import apply_color_parallel, colorh_init, get_color
-from feynamp.form.form import apply_parallel_v3
+from feynamp.form.form import apply_parallel_v3, apply_parallel_v4
 from feynamp.form.lorentz import get_gammas, get_metrics, get_polarisation_sums
 from feynamp.form.momentum import (
     apply,
@@ -82,11 +82,14 @@ def compute_squared(
     fs += get_onshell(fds, fm)
     fs += get_mandelstamm(fds, fm)
 
+    # This using form internal threads is slower
+    # rs = apply_parallel_v4(
+    # Using pqdm is faster (and gives ETA)
     rs = apply_parallel(
         s2, fs, desc="Color and Lorentz and kinematics", init_extra=colorh_init
     )
     rs = " + ".join([f"({r})" for r in rs])
-    # debug(f"{rs=}")
+    debug(f"{rs=}")
 
     rr = apply_den(
         rs,
@@ -103,8 +106,6 @@ id im*i_ = 1;
 id re = 1;
 id im = 0;
     Format {"O4" if optimize else "O0"};
-    print TMP;
-    .end
     """,
         desc="Optimize",
     )[0]

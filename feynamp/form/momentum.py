@@ -13,6 +13,11 @@ from feynamp.util import remove_duplicate_lines_from_string
 
 momenta = """
 repeat;
+    id P(Mu1?,Moma?) = Moma(Mu1);
+endrepeat;
+"""
+momenta_v1 = """
+repeat;
     id P(Mu1?,Moma?)*P(Mu1?,Momb?) = Moma.Momb;
 endrepeat;
 """
