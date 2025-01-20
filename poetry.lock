@@ -3665,19 +3665,23 @@ files = [
 
 [[package]]
 name = "pyqgraf"
-version = "0.0.15"
+version = "0.0.19"
 description = "PyQgraf is a Python wrapper for Qgraf, a Feynman diagram generator."
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = ">=3.8"
 files = [
-    {file = "pyqgraf-0.0.15-py3-none-any.whl", hash = "sha256:28c773e5f35be65bbb3fb05aa886041d457857ae9bde214f8649316264886bc3"},
-    {file = "pyqgraf-0.0.15.tar.gz", hash = "sha256:4e3e178b83b8748b8a023907ee153ce0f58bb34b0080982a515722c042e0a645"},
+    {file = "pyqgraf-0.0.19-py3-none-any.whl", hash = "sha256:bb2c0863464930b0afb42caae4aadf89c3226b2117a61417e0e7335b7f66c43d"},
+    {file = "pyqgraf-0.0.19.tar.gz", hash = "sha256:95bbc9571951e9201a7c6c2b5c31365ab05d1e39e49cd7de8bc6f73fa1d01dfc"},
 ]
 
 [package.dependencies]
 requests = "*"
 scikit-build = "*"
-smpl_io = "*"
+smpl-io = "*"
+
+[package.extras]
+dev = ["pre-commit"]
+test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "pytest"
