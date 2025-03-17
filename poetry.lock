@@ -1321,32 +1321,37 @@ numpy = ">=1.6"
 
 [[package]]
 name = "feynml"
-version = "0.2.26"
+version = "0.3.0"
 description = "Feynman diagram markup language"
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "feynml-0.2.26-py3-none-any.whl", hash = "sha256:84e67feb377bc9952558bd68a16184b027edcc4df3684663b997bdb5c36db3eb"},
-    {file = "feynml-0.2.26.tar.gz", hash = "sha256:c955b5a398165443a622e928077d3ef92c63f0371bc2aa84b139b4e0c6c3d548"},
+    {file = "feynml-0.3.0-py3-none-any.whl", hash = "sha256:d66bf1dc9be92a75ce90bffba919d1b795507b006b8aa15c467ea246bb4be53a"},
+    {file = "feynml-0.3.0.tar.gz", hash = "sha256:a0ba7f0a9e7931d70395388f5ee5aad8b74c9f4bf5d331a65c9da72dda73cebb"},
 ]
 
 [package.dependencies]
 cssselect = "*"
-cssutils = "*"
+cssutils = ">=2.10.2"
 deprecated = "*"
 deprecation = "*"
+networkx = "*"
 particle = "*"
 pyhepmc = {version = "*", optional = true, markers = "extra == \"interfaces\""}
 pylhe = {version = "*", optional = true, markers = "extra == \"interfaces\""}
 pyqgraf = {version = ">=0.0.3", optional = true, markers = "extra == \"interfaces\""}
-smpl_doc = ">=1.1.3,<2.0.0"
-smpl_io = ">=1.1.2,<2.0.0"
-smpl_util = ">=1.0.0,<2.0.0"
+smpl-doc = ">=1.1.3"
+smpl-io = ">=1.1.2"
+smpl-util = ">=1.0.0"
 xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
 
 [package.extras]
+dev = ["ipython", "jupyter", "jupyterlab", "pre-commit"]
+docs = ["sphinx"]
 interfaces = ["pyhepmc", "pylhe", "pyqgraf (>=0.0.3)"]
+lint = ["ruff"]
+test = ["feynmodel", "pyhepmc", "pylhe", "pyqgraf (>=0.0.3)", "pytest"]
 
 [[package]]
 name = "feynmodel"
@@ -3040,6 +3045,47 @@ files = [
     {file = "nest_asyncio-1.6.0-py3-none-any.whl", hash = "sha256:87af6efd6b5e897c81050477ef65c62e2b2f35d51703cae01aff2905b1852e1c"},
     {file = "nest_asyncio-1.6.0.tar.gz", hash = "sha256:6f172d5449aca15afd6c646851f4e31e02c598d553a667e38cafa997cfec55fe"},
 ]
+
+[[package]]
+name = "networkx"
+version = "3.1"
+description = "Python package for creating and manipulating graphs and networks"
+optional = false
+python-versions = ">=3.8"
+groups = ["main", "dev"]
+markers = "python_version <= \"3.11\""
+files = [
+    {file = "networkx-3.1-py3-none-any.whl", hash = "sha256:4f33f68cb2afcf86f28a45f43efc27a9386b535d567d2127f8f61d51dec58d36"},
+    {file = "networkx-3.1.tar.gz", hash = "sha256:de346335408f84de0eada6ff9fafafff9bcda11f0a0dfaa931133debb146ab61"},
+]
+
+[package.extras]
+default = ["matplotlib (>=3.4)", "numpy (>=1.20)", "pandas (>=1.3)", "scipy (>=1.8)"]
+developer = ["mypy (>=1.1)", "pre-commit (>=3.2)"]
+doc = ["nb2plots (>=0.6)", "numpydoc (>=1.5)", "pillow (>=9.4)", "pydata-sphinx-theme (>=0.13)", "sphinx (>=6.1)", "sphinx-gallery (>=0.12)", "texext (>=0.6.7)"]
+extra = ["lxml (>=4.6)", "pydot (>=1.4.2)", "pygraphviz (>=1.10)", "sympy (>=1.10)"]
+test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
+
+[[package]]
+name = "networkx"
+version = "3.4.2"
+description = "Python package for creating and manipulating graphs and networks"
+optional = false
+python-versions = ">=3.10"
+groups = ["main", "dev"]
+markers = "python_version >= \"3.12\""
+files = [
+    {file = "networkx-3.4.2-py3-none-any.whl", hash = "sha256:df5d4365b724cf81b8c6a7312509d0c22386097011ad1abe274afd5e9d3bbc5f"},
+    {file = "networkx-3.4.2.tar.gz", hash = "sha256:307c3669428c5362aab27c8a1260aa8f47c4e91d3891f48be0141738d8d053e1"},
+]
+
+[package.extras]
+default = ["matplotlib (>=3.7)", "numpy (>=1.24)", "pandas (>=2.0)", "scipy (>=1.10,!=1.11.0,!=1.11.1)"]
+developer = ["changelist (==0.5)", "mypy (>=1.1)", "pre-commit (>=3.2)", "rtoml"]
+doc = ["intersphinx-registry", "myst-nb (>=1.1)", "numpydoc (>=1.8.0)", "pillow (>=9.4)", "pydata-sphinx-theme (>=0.15)", "sphinx (>=7.3)", "sphinx-gallery (>=0.16)", "texext (>=0.6.7)"]
+example = ["cairocffi (>=1.7)", "contextily (>=1.6)", "igraph (>=0.11)", "momepy (>=0.7.2)", "osmnx (>=1.9)", "scikit-learn (>=1.5)", "seaborn (>=0.13)"]
+extra = ["lxml (>=4.6)", "pydot (>=3.0.1)", "pygraphviz (>=1.14)", "sympy (>=1.10)"]
+test = ["pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
 name = "nodeenv"
