@@ -150,48 +150,11 @@ def find_vertex_in_model(fd, vertex, model):
     """
     Finds the model vertex corresponding to the given FeynmanDiagram vertex
 
+    TODO: This function should be removed/deprecated.
+
     Note: Sorting is to check for the correct particles in a vertex given they can be in any order and have duplicates
     """
-    assert vertex in fd.vertices
-    cons = np.array(fd.get_connections(vertex))
-    # debug(f"{cons=}")
-    pdg_ids_list = []
-
-    # correct for incoming vs outgoing fermion struct
-    for c in cons:
-        p = c.pdgid
-        if c.is_any_fermion():
-            if c.goes_into(vertex):
-                p = -p
-        pdg_ids_list += [p]
-    pdg_ids_array = np.array(pdg_ids_list)
-
-    sort_mask = np.argsort(pdg_ids_array)
-    particles = pdg_ids_array[sort_mask]
-    scons = cons[sort_mask]
-    # debug(f"{scons=}")
-    ret = None
-    for v in model.vertices:
-        if len(v.particles) != len(particles):
-            continue
-        model_particle_ids = np.array([p.pdg_code for p in v.particles])
-        model_sort_mask = np.argsort(model_particle_ids)
-        # By sorting based on the indices we reproduce the order of the particles in the vertex
-        inverted_model_sort_mask = np.argsort(model_sort_mask)
-        sorted_model_particle_ids = model_particle_ids[model_sort_mask]
-        if np.array_equal(sorted_model_particle_ids, particles):
-            vc = []
-            for i, _ in enumerate(model_particle_ids):
-                con = scons[inverted_model_sort_mask[i]]
-                vc.append(con)
-            v.connections = vc
-            ret = v
-            break
-
-    # Make sure all connections are in the vertex
-    for c in cons:
-        assert c in ret.connections
-    # debug(f"{ret=}")
+    ret = fd.find_vertex_in_model(vertex, model)
     if ret is None:
         raise Exception(
             f"Vertex {vertex} with cons {cons} not found in model\n{pdg_ids_list=}"

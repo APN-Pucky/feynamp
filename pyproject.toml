@@ -12,7 +12,7 @@ pqdm = "*"
 sympy = "*"
 python-form = "*"
 
-feynml = ">=0.2.26"
+feynml = ">0.3.0"
 #feynml = {path= "../feynml", develop = true }
 
 feynmodel = ">=0.0.9"
