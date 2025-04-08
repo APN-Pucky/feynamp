@@ -1356,14 +1356,14 @@ test = ["pyhepmc", "pylhe", "pyqgraf (>=0.0.3)", "pytest"]
 
 [[package]]
 name = "feynmodel"
-version = "0.0.10"
+version = "0.0.11"
 description = "Models for constructing Feynman diagrams"
 optional = false
 python-versions = "<4.0,>=3.8"
 groups = ["main", "dev"]
 files = [
-    {file = "feynmodel-0.0.10-py3-none-any.whl", hash = "sha256:d1415149925444371624c69fbdf160a93ecd3c680d1e0f3f961fafe9ec2f7474"},
-    {file = "feynmodel-0.0.10.tar.gz", hash = "sha256:ed353bae2f49c1d511e613c89f9a18c7fa3bfa1b5c6c3e6189dcb2f0cc27e1f1"},
+    {file = "feynmodel-0.0.11-py3-none-any.whl", hash = "sha256:114847213e2331e4b50a82377b95e473a26545d5d89935244acc56989db45a9f"},
+    {file = "feynmodel-0.0.11.tar.gz", hash = "sha256:b34a8e11d601da32a72b92923ae7651e92f2eebc2d6af5b36f5d70394e8fd7cb"},
 ]
 
 [package.dependencies]
