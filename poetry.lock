@@ -24,6 +24,21 @@ test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypo
 trio = ["trio (>=0.23)"]
 
 [[package]]
+name = "apn-dot2tex"
+version = "2.11.10"
+description = "A Graphviz to LaTeX converter"
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "apn_dot2tex-2.11.10-py3-none-any.whl", hash = "sha256:fc1c7d5df1a622f3ba7a4a13c8fe8d62bf1d06483773d7270ed8f457a2affc0e"},
+    {file = "apn_dot2tex-2.11.10.tar.gz", hash = "sha256:e92c29ae40f42e03d275965866cb56fcac7ef43a117bfa4fca490b2f0eabd61d"},
+]
+
+[package.dependencies]
+pyparsing = "*"
+
+[[package]]
 name = "appnope"
 version = "0.1.4"
 description = "Disable App Nap on macOS >= 10.9"
@@ -1111,21 +1126,6 @@ untokenize = ">=0.1.1,<0.2.0"
 
 [package.extras]
 tomli = ["tomli (>=2.0.0,<3.0.0) ; python_version < \"3.11\""]
-
-[[package]]
-name = "dot2tex"
-version = "2.11.3"
-description = "A Graphviz to LaTeX converter"
-optional = false
-python-versions = "*"
-groups = ["dev"]
-files = [
-    {file = "dot2tex-2.11.3-py2.py3-none-any.whl", hash = "sha256:6a1f451823b27d331edca733c7f486a1849e97e77b4bafd562443f5c6e6583e2"},
-    {file = "dot2tex-2.11.3.tar.gz", hash = "sha256:299a2af05aee5bbe0257a562a506a93e279293d5c38f28d08ab8acb3233fe7ce"},
-]
-
-[package.dependencies]
-pyparsing = "*"
 
 [[package]]
 name = "dulwich"
@@ -3723,43 +3723,41 @@ tests = ["black", "chardet", "tox"]
 
 [[package]]
 name = "pyfeyn2"
-version = "2.4.2"
+version = "2.4.3"
 description = "PyFeyn is a package which makes drawing Feynman diagrams simple and programmatic.  Feynman diagrams are important constructs in perturbative field theory, so being able to draw them in a programmatic fashion is important if attempting to enumerate a large number of diagram configurations is important. The output quality of PyFeyn diagrams (into PDF or EPS formats) is very high, and special effects can be obtained by using constructs from PyX, which PyFeyn is based around"
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = ">=3.8"
 groups = ["dev"]
 files = [
-    {file = "pyfeyn2-2.4.2-py3-none-any.whl", hash = "sha256:fc2633ce8cf3d172a84ab4c08167d56aaef26d70d100e3e3b895d8b236d90e73"},
-    {file = "pyfeyn2-2.4.2.tar.gz", hash = "sha256:317bc89d7f65c9d86f7d36333c852964888bcb77c9d503be4e9c1347ad54bd20"},
+    {file = "pyfeyn2-2.4.3-py3-none-any.whl", hash = "sha256:b0e005651b8d60ac1a724658bd22f39dfd0cc54c3394f590c10a105b33746789"},
+    {file = "pyfeyn2-2.4.3.tar.gz", hash = "sha256:73fe604f62419fb8646ba7e7eb03b171a1c6cc149a216ba89e404914a8a3ce0a"},
 ]
 
 [package.dependencies]
+apn-dot2tex = ">=2.11.10"
 asciidraw = ">=0.1.2"
-colorama = "*"
-cssselect = "*"
-cssutils = "*"
-deprecated = "*"
-deprecation = "*"
-dot2tex = "*"
 feynman = ">=2.1"
-feynml = {version = ">=0.2.24", extras = ["interfaces"]}
+feynml = [
+    {version = "*"},
+    {version = ">=0.3.1", extras = ["interfaces"]},
+]
 graphviz = "*"
 iminuit = "*"
 ipyparallel = "*"
-matplotlib = ">=1.4.0,<4.0.0"
+matplotlib = "*"
 numpy = "*"
-particle = "*"
 pydot = "*"
 pygments = "*"
 pylatex = "*"
 pylatexenc = "*"
-pyx = ">=0.12,<1.0.0"
-smpl_doc = "*"
-smpl_io = "*"
-smpl_util = "*"
-termcolor = "*"
-Wand = "*"
-xsdata = {version = "*", extras = ["cli", "lxml", "soap"]}
+pyx = "*"
+wand = "*"
+
+[package.extras]
+dev = ["ipython", "jupyter", "jupyterlab", "pre-commit"]
+docs = ["jupyter-sphinx", "myst-parser", "nbsphinx", "sphinx (<8.0.0)", "sphinx-autobuild", "sphinx-math-dollar", "sphinx-rtd-theme", "sphinxcontrib-napoleon", "tomli"]
+lint = ["ruff"]
+test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "pygments"
